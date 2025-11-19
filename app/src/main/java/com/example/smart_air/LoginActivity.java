@@ -81,7 +81,7 @@ public class LoginActivity extends AppCompatActivity{
                             finish();  // prevent to go back to login page
 
                         } else {
-                            // 登录失败，根据 error code 判断原因
+                            // fail to login, analyze the reason
                             String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
 
                             switch (errorCode) {
