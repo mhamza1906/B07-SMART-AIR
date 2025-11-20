@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    package="com.example.smart_air">
 
     <application
         android:allowBackup="true"
@@ -10,6 +10,28 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Smart_air" />
+        android:theme="@style/Theme.Smart_air">
 
+        <!-- Initiate Activity : Login Page -->
+        <activity
+            android:name=".LoginActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Sign Up Activity if user does not have an account -->
+        <activity
+            android:name=".SignUpActivity"
+            android:exported="true"/>
+
+        <!-- Sign Up Activity if (Child) user wants to login with user name -->
+        <activity
+            android:name=".ChildLoginActivity"
+            android:exported="true"/>
+
+
+    </application>
 </manifest>
