@@ -32,11 +32,6 @@
             android:name=".ChildLoginActivity"
             android:exported="true"/>
 
-        <activity android:name=".ForgetPasswordActivity" android:exported="false" />
-
-        <activity android:name=".ResetPasswordActivity" android:exported="false" />
-
-
 
     </application>
 </manifest>
