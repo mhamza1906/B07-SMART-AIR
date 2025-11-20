@@ -29,6 +29,7 @@ public class LoginActivity extends AppCompatActivity {
         EditText passwordEditText = findViewById(R.id.passwordEditText);
         Button login_btn = findViewById(R.id.login_btn);
         Button sign_up_btn = findViewById(R.id.sign_up_btn);
+        Button childLoginBtn = findViewById(R.id.childLogin_btn);
 
         login_btn.setOnClickListener(v -> {
             String email = emailEditText.getText().toString().trim();
@@ -40,6 +41,16 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             loginUser(email, password);
+        });
+
+        childLoginBtn.setOnClickListener(v -> {
+            try {
+                Intent intent = new Intent(this, ChildLoginActivity.class);
+                startActivity(intent);
+            } catch (Exception e) {
+                Log.e("LoginActivity", "Failed to open ChildLoginActivity", e);
+                Toast.makeText(this, "Unable to open Child Login page.", Toast.LENGTH_SHORT).show();
+            }
         });
 
         sign_up_btn.setOnClickListener(v -> {
