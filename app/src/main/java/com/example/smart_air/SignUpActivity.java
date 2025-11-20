@@ -1,16 +1,14 @@
 package com.example.smart_air;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
+import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -19,8 +17,8 @@ import com.google.firebase.database.FirebaseDatabase;
 public class SignUpActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
-    private EditText emailEditText, passwordEditText, nameEditText;
-    private Button registerButton;
+    private EditText fNameEditText, lNameEditText, usernameEditText, emailEditText, passwordEditText;
+    private String selectedAccountType = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,61 +28,78 @@ public class SignUpActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
+        Spinner accountTypeSpinner = findViewById(R.id.accountTypeSpinner); // Corrected ID
+        fNameEditText = findViewById(R.id.fNameEditText);
+        lNameEditText = findViewById(R.id.lNameEditText);
+        usernameEditText = findViewById(R.id.usernameEditText);
         emailEditText = findViewById(R.id.emailEditText);
         passwordEditText = findViewById(R.id.passwordEditText);
-        nameEditText = findViewById(R.id.nameEditText);
-        registerButton = findViewById(R.id.registerButton);
+        Button registerButton = findViewById(R.id.registerButton);
 
-        registerButton.setOnClickListener(new View.OnClickListener() {
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                this,
+                R.array.accountType, // Corrected array name
+                android.R.layout.simple_spinner_item
+        );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        accountTypeSpinner.setAdapter(adapter);
+
+        // This listener has two methods, so it CANNOT be converted to a lambda.
+        accountTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onClick(View v) {
-                String email = emailEditText.getText().toString().trim();
-                String password = passwordEditText.getText().toString().trim();
-                String name = nameEditText.getText().toString().trim();
-
-                if (email.isEmpty() || password.isEmpty() || name.isEmpty()) {
-                    Toast.makeText(SignUpActivity.this, "Email and password cannot be empty.", Toast.LENGTH_SHORT).show();
-                    return;
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position > 0) {
+                    selectedAccountType = parent.getItemAtPosition(position).toString();
+                } else {
+                    selectedAccountType = "";
                 }
-
-                registerNewUser(email, password, name);
             }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                selectedAccountType = "";
+            }
+        });
+
+        // LAMBDA in use here
+        registerButton.setOnClickListener(v -> {
+            String fName = fNameEditText.getText().toString().trim();
+            String lName = lNameEditText.getText().toString().trim();
+            String username = usernameEditText.getText().toString().trim();
+            String email = emailEditText.getText().toString().trim();
+            String password = passwordEditText.getText().toString().trim();
+
+            if (fName.isEmpty() || lName.isEmpty() || username.isEmpty() || email.isEmpty() || password.isEmpty() || selectedAccountType.isEmpty()) {
+                Toast.makeText(SignUpActivity.this, "Please fill all fields and select an account type", Toast.LENGTH_LONG).show();
+                return;
+            }
+            registerNewUser(fName, lName, username, email, password, selectedAccountType);
         });
     }
 
-    private void registerNewUser(String email, String password, final String name) {
+    private void registerNewUser(final String fName, final String lName, final String username, final String email, final String password, final String accountType) {
+        // LAMBDA in use here
         mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // User registered successfully with Firebase Authentication
-                            FirebaseUser firebaseUser = mAuth.getCurrentUser();
-                            if (firebaseUser != null) {
-                                String userId = firebaseUser.getUid();
-                                // Create a User object (ensure you have this class as discussed)
-                                User newUser = new User(name, email);
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                        if (firebaseUser != null) {
+                            String userId = firebaseUser.getUid();
+                            User newUser = new User(fName, lName, email, username, accountType);
 
-                                // Save user data to Realtime Database
-                                mDatabase.child("users").child(userId).setValue(newUser)
-                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> databaseTask) {
-                                                if (databaseTask.isSuccessful()) {
-                                                    Toast.makeText(SignUpActivity.this, "Registration successful and profile saved!", Toast.LENGTH_SHORT).show();
-                                                    // Optionally, navigate to the main activity
-                                                    // startActivity(new Intent(SignUpActivity.this, MainActivity.class));
-                                                    // finish();
-                                                } else {
-                                                    Toast.makeText(SignUpActivity.this, "Registration successful, but failed to save profile: " + databaseTask.getException().getMessage(), Toast.LENGTH_LONG).show();
-                                                }
-                                            }
-                                        });
-                            }
-                        } else {
-                            // Registration failed
-                            Toast.makeText(SignUpActivity.this, "Registration failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                            // LAMBDA in use here
+                            mDatabase.child("users").child(userId).setValue(newUser)
+                                    .addOnCompleteListener(databaseTask -> {
+                                        if (databaseTask.isSuccessful()) {
+                                            Toast.makeText(SignUpActivity.this, "Registration successful!", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            String dbError = databaseTask.getException() != null ? databaseTask.getException().getMessage() : "DB error";
+                                            Toast.makeText(SignUpActivity.this, "Profile save failed: " + dbError, Toast.LENGTH_LONG).show();
+                                        }
+                                    });
                         }
+                    } else {
+                        String authError = task.getException() != null ? task.getException().getMessage() : "Auth error";
+                        Toast.makeText(SignUpActivity.this, "Registration failed: " + authError, Toast.LENGTH_LONG).show();
                     }
                 });
     }
