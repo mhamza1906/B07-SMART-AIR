@@ -1,56 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
     tools:context=".SignUpActivity">
 
-    <EditText
-        android:id="@+id/nameEditText"
-        android:layout_width="0dp"
+    <Spinner
+        android:id="@+id/accountTypeSpinner"
+        android:layout_width="320dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:autofillHints="name"
-        android:hint="@string/name"
-        android:inputType="textPersonName"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="60dp"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" /> <!-- FIX: Added horizontal constraints -->
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="SpeakableTextPresentCheck"/>
 
     <EditText
+        android:id="@+id/fNameEditText"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:autofillHints="givenName"
+        android:hint="@string/fName"
+        android:inputType="textPersonName"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/accountTypeSpinner"
+        tools:ignore="SpeakableTextPresentCheck"/>
+
+    <EditText
+        android:id="@+id/lNameEditText"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:autofillHints="familyName"
+        android:hint="@string/lName"
+        android:inputType="textPersonName"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fNameEditText"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <!-- FIX 1: This is now constrained below lNameEditText -->
+    <EditText
+        android:id="@+id/usernameEditText"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:autofillHints="username"
+        android:hint="@string/userName"
+        android:inputType="text"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lNameEditText"
+        tools:ignore="SpeakableTextPresentCheck"/>
+
+    <!-- FIX 2: This is now constrained below the new usernameEditText -->
+    <EditText
         android:id="@+id/emailEditText"
-        android:layout_width="0dp"
+        android:layout_width="320dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:autofillHints="emailAddress"
         android:hint="@string/email"
         android:inputType="textEmailAddress"
-        app:layout_constraintTop_toBottomOf="@+id/nameEditText"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" /> <!-- FIX: Added horizontal constraints -->
+        app:layout_constraintTop_toBottomOf="@+id/usernameEditText"
+        tools:ignore="SpeakableTextPresentCheck"/>
 
+    <!-- FIX 3: This is now constrained below the emailEditText -->
     <EditText
         android:id="@+id/passwordEditText"
-        android:layout_width="0dp"
+        android:layout_width="320dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:autofillHints="newPassword"
         android:hint="@string/password"
         android:inputType="textPassword"
-        app:layout_constraintTop_toBottomOf="@+id/emailEditText"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" /> <!-- FIX: Added horizontal constraints -->
+        app:layout_constraintTop_toBottomOf="@+id/emailEditText"
+        tools:ignore="SpeakableTextPresentCheck"/>
 
     <Button
         android:id="@+id/registerButton"
-        android:layout_width="0dp"
+        android:layout_width="320dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:minHeight="48dp"
         android:text="@string/register"
-        app:layout_constraintTop_toBottomOf="@+id/passwordEditText"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" /> <!-- FIX: Added horizontal constraints -->
+        app:layout_constraintTop_toBottomOf="@+id/passwordEditText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
