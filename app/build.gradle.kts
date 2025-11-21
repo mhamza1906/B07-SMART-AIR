@@ -36,10 +36,11 @@ android {
 }
 
 dependencies {
+    implementation(platform(libs.firebase.bom))
+
     implementation(libs.appcompat)
     implementation(libs.material)
-    implementation(libs.legacy.support.v4)
-    implementation(libs.recyclerview)
+    implementation(libs.google.firebase.firestore)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -47,4 +48,5 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.auth)
     implementation(libs.firebase.database)
+
 }
