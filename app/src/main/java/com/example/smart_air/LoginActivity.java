@@ -3,7 +3,9 @@ package com.example.smart_air;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import androidx.annotation.NonNull;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -11,33 +13,36 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 
 public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
-    private TextView forgotPasswordTextView;
+    TextView forgotPassword;
+    EditText emailEditText;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_login);
-        forgotPasswordTextView = findViewById(R.id.Credential_Recovery);
+        forgotPassword = (TextView) findViewById(R.id.Credential_Recovery);
 
-        forgotPasswordTextView.setOnClickListener(new View.OnClickListener() {
+        forgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, ForgetPasswordActivity.class);
-                startActivity(intent);
+            public void onClick(View view) {
+                resetPasswordUser();
             }
         });
 
         mAuth = FirebaseAuth.getInstance();
 
         // local variables: user inputs and buttons
-        EditText emailEditText = findViewById(R.id.emailEditText);
+        emailEditText = findViewById(R.id.emailEditText);
         EditText passwordEditText = findViewById(R.id.passwordEditText);
         Button login_btn = findViewById(R.id.login_btn);
         Button sign_up_btn = findViewById(R.id.sign_up_btn);
@@ -73,6 +78,26 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(this, "Unable to open Sign Up page.", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void resetPasswordUser() {
+        String email = emailEditText.getText().toString().trim();
+        if(TextUtils.isEmpty(email))
+        {
+            Toast.makeText(LoginActivity.this,"Please enter your email id",Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            FirebaseAuth.getInstance().sendPasswordResetEmail(email)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(LoginActivity.this, "Reset Email sent", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+        }
     }
 
     private void loginUser(String email, String password) {
