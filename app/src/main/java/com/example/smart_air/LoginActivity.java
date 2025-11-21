@@ -4,17 +4,23 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
+    TextView forgotPassword; // ← credential recovery
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +37,11 @@ public class LoginActivity extends AppCompatActivity {
         Button sign_up_btn = findViewById(R.id.sign_up_btn);
         Button childLoginBtn = findViewById(R.id.childLogin_btn);
 
+
+        // credential recovery button
+        forgotPassword = findViewById(R.id.Credential_Recovery);
+        forgotPassword.setOnClickListener( v -> resetPasswordUser(emailEditText));
+        
         login_btn.setOnClickListener(v -> {
             String email = emailEditText.getText().toString().trim();
             String password = passwordEditText.getText().toString().trim();
@@ -63,14 +74,67 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    // -----------------------------
+    // credential recovery functionality
+    private void resetPasswordUser(EditText emailEditText) {
+        String email = emailEditText.getText().toString().trim();
+        if(TextUtils.isEmpty(email)) {
+            Toast.makeText(LoginActivity.this,"Please enter your email id",Toast.LENGTH_SHORT).show();
+        } else {
+            FirebaseAuth.getInstance().sendPasswordResetEmail(email)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(LoginActivity.this, "Reset Email sent", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
+    }
+    // -----------------------------
+
+    private void switchToUserDashboard(String userId) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference userRef = db.collection("users").document(userId);
+
+        userRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful() && task.getResult().exists() && task.getResult() != null) {
+                String accountType = task.getResult().getString("accountType");
+
+                if (accountType != null) {
+                    switch (accountType) {
+                        case "Child":
+                            startActivity(new Intent(LoginActivity.this, ChildDashboardActivity.class));
+                            break;
+                        case "Parent":
+                            startActivity(new Intent(LoginActivity.this, ParentDashboardActivity.class));
+                            break;
+                        case "Healthcare Provider":
+                            startActivity(new Intent(LoginActivity.this, ProviderDashboardActivity.class));
+                            break;
+                        default:
+                            Toast.makeText(LoginActivity.this, "Unknown account type", Toast.LENGTH_SHORT).show();
+                            return;
+                    }
+                    finish(); // turn off LoginActivity
+                } else {
+                    Toast.makeText(LoginActivity.this, "Account type cannot found", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(LoginActivity.this, "Failed to retrieve user info", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private void loginUser(String email, String password) {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
-                        Toast.makeText(this, "Login successful!", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(this, MainActivity.class));
-                        finish();
-                    } else {
+                        FirebaseUser app_user = FirebaseAuth.getInstance().getCurrentUser();
+                        if (app_user != null){
+                            Toast.makeText(this, "Login successful!", Toast.LENGTH_SHORT).show();
+                            switchToUserDashboard(app_user.getUid());
+                        }
+                    }
+                    else {
                         Exception exception = task.getException();
                         String errorMsg = "Login failed.";
 

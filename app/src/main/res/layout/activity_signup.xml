@@ -4,14 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    android:background="@color/teal_200"
     tools:context=".SignUpActivity">
 
     <Spinner
         android:id="@+id/accountTypeSpinner"
-        android:layout_width="0dp"
+        android:layout_width="320dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="60dp"
         android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,7 +19,7 @@
 
     <EditText
         android:id="@+id/fNameEditText"
-        android:layout_width="0dp"
+        android:layout_width="320dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:autofillHints="givenName"
@@ -34,7 +33,7 @@
 
     <EditText
         android:id="@+id/lNameEditText"
-        android:layout_width="0dp"
+        android:layout_width="320dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:autofillHints="familyName"
@@ -49,7 +48,7 @@
     <!-- FIX 1: This is now constrained below lNameEditText -->
     <EditText
         android:id="@+id/usernameEditText"
-        android:layout_width="0dp"
+        android:layout_width="320dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:autofillHints="username"
@@ -64,7 +63,7 @@
     <!-- FIX 2: This is now constrained below the new usernameEditText -->
     <EditText
         android:id="@+id/emailEditText"
-        android:layout_width="0dp"
+        android:layout_width="320dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:autofillHints="emailAddress"
@@ -79,7 +78,7 @@
     <!-- FIX 3: This is now constrained below the emailEditText -->
     <EditText
         android:id="@+id/passwordEditText"
-        android:layout_width="0dp"
+        android:layout_width="320dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:autofillHints="newPassword"
@@ -93,7 +92,7 @@
 
     <Button
         android:id="@+id/registerButton"
-        android:layout_width="0dp"
+        android:layout_width="320dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:minHeight="48dp"
