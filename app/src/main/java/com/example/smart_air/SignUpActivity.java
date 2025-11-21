@@ -9,7 +9,10 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -72,8 +75,30 @@ public class SignUpActivity extends AppCompatActivity {
                 Toast.makeText(SignUpActivity.this, "Please fill all fields and select an account type", Toast.LENGTH_LONG).show();
                 return;
             }
-            registerNewUser(fName, lName, username, email, password, selectedAccountType);
+            checkUsernameUniqueness(username, fName, lName, email, password, selectedAccountType);
         });
+    }
+
+    private void checkUsernameUniqueness(String username, String fName, String lName, String email, String password, String accountType) {
+        mDatabase.child("Accounts")
+                .orderByChild("username")
+                .equalTo(username)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        String errorMessage = (task.getException() != null) ? task.getException().getMessage() : "Unknown error";
+                        Toast.makeText(SignUpActivity.this, "Error checking username: " + errorMessage, Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    if (task.getResult().exists()) {
+                        // username already exists
+                        Toast.makeText(SignUpActivity.this, "Username already exists, please make some changes", Toast.LENGTH_SHORT).show();
+                    } else {
+                        // username DNE
+                        registerNewUser(fName, lName, username, email, password, accountType);
+                    }
+                });
     }
 
     private void registerNewUser(final String fName, final String lName, final String username, final String email, final String password, final String accountType) {
@@ -98,8 +123,30 @@ public class SignUpActivity extends AppCompatActivity {
                                     });
                         }
                     } else {
-                        String authError = task.getException() != null ? task.getException().getMessage() : "Auth error";
-                        Toast.makeText(SignUpActivity.this, "Registration failed: " + authError, Toast.LENGTH_LONG).show();
+                        Exception authErrorInstance = task.getException();
+                        String errorCode = authErrorInstance instanceof FirebaseAuthException ? ((FirebaseAuthException) authErrorInstance).getErrorCode() : "Unknown authentication error";
+                        String authError = authErrorInstance != null ? authErrorInstance.getMessage() : "Unknown authentication error";
+                        if (authErrorInstance instanceof FirebaseNetworkException) {
+                            Toast.makeText(this, "Network error. Please check your connection.", Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                        switch (errorCode) {
+                            case "ERROR_INVALID_EMAIL":
+                                Toast.makeText(this, "Invalid email format", Toast.LENGTH_SHORT).show();
+                                break;
+
+                            case "ERROR_EMAIL_ALREADY_IN_USE":
+                                Toast.makeText(this, "Email already registered", Toast.LENGTH_SHORT).show();
+                                break;
+
+                            case "ERROR_WEAK_PASSWORD":
+                                Toast.makeText(this, "Password must be at least 6 characters", Toast.LENGTH_SHORT).show();
+                                break;
+
+                            default:
+                                Toast.makeText(SignUpActivity.this, "Registration failed: " + authError, Toast.LENGTH_LONG).show();
+                                break;
+                        }
                     }
                 });
     }
