@@ -27,9 +27,11 @@
         android:id="@+id/button5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
         android:text="Take Medicine"
-        tools:layout_editor_absoluteX="30dp"
-        tools:layout_editor_absoluteY="80dp" />
+        app:layout_constraintEnd_toStartOf="@+id/PEF Zone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/Emergency Triage Incident Log"
