@@ -13,7 +13,6 @@
     <string name="childSignInButtonWithParentName">"SIGN IN WITH YOUR PARENT ACCOUNT"</string>
     <string-array name="accountType">
         <item>Select Account Type</item>
-        <item>Child</item>
         <item>Parent</item>
         <item>Healthcare Provider</item>
     </string-array>

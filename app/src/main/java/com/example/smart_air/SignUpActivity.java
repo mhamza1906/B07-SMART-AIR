@@ -1,5 +1,6 @@
 package com.example.smart_air;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,6 +17,8 @@ import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class SignUpActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -80,7 +83,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void checkUsernameUniqueness(String username, String fName, String lName, String email, String password, String accountType) {
-        mDatabase.child("Accounts")
+        mDatabase.child("users")
                 .orderByChild("username")
                 .equalTo(username)
                 .get()
@@ -101,6 +104,36 @@ public class SignUpActivity extends AppCompatActivity {
                 });
     }
 
+    private void switchToTutorialSession(String userId) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference userRef = db.collection("users").document(userId);
+
+        userRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful() && task.getResult().exists() && task.getResult() != null) {
+                String accountType = task.getResult().getString("accountType");
+
+                if (accountType != null) {
+                    switch (accountType) {
+                        case "Parent":
+                            startActivity(new Intent(SignUpActivity.this, ParentTutorialActivity.class));
+                            break;
+                        case "Healthcare Provider":
+                            startActivity(new Intent(SignUpActivity.this, HealthcareProviderTutorialActivity.class));
+                            break;
+                        default:
+                            Toast.makeText(SignUpActivity.this, "Unknown account type", Toast.LENGTH_SHORT).show();
+                            return;
+                    }
+                    finish(); // turn off SignUpActivity
+                } else {
+                    Toast.makeText(SignUpActivity.this, "Account type cannot found", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(SignUpActivity.this, "Failed to retrieve user info", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private void registerNewUser(final String fName, final String lName, final String username, final String email, final String password, final String accountType) {
         // LAMBDA in use here
         mAuth.createUserWithEmailAndPassword(email, password)
@@ -116,6 +149,7 @@ public class SignUpActivity extends AppCompatActivity {
                                     .addOnCompleteListener(databaseTask -> {
                                         if (databaseTask.isSuccessful()) {
                                             Toast.makeText(SignUpActivity.this, "Registration successful!", Toast.LENGTH_SHORT).show();
+                                            switchToTutorialSession(userId);
                                         } else {
                                             String dbError = databaseTask.getException() != null ? databaseTask.getException().getMessage() : "DB error";
                                             Toast.makeText(SignUpActivity.this, "Profile save failed: " + dbError, Toast.LENGTH_LONG).show();
