@@ -75,7 +75,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     // -----------------------------
-    // credential recovery 功能
+    // credential recovery functionality
     private void resetPasswordUser(EditText emailEditText) {
         String email = emailEditText.getText().toString().trim();
         if(TextUtils.isEmpty(email)) {
