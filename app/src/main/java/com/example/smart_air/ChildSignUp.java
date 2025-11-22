@@ -10,8 +10,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 public class ChildSignUp extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -77,10 +75,7 @@ public class ChildSignUp extends AppCompatActivity {
                 });
     }
     private void switchToTutorialSession(String userId) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference userRef = db.collection("users").document(userId);
-
-        userRef.get().addOnCompleteListener(task -> {
+        mDatabase.child("users").child(userId).get().addOnCompleteListener(task -> {
             if (task.isSuccessful() && task.getResult().exists()) {
                 startActivity(new Intent(ChildSignUp.this, ChildTutorialActivity.class));
                 finish(); // turn off ChildSignUp
