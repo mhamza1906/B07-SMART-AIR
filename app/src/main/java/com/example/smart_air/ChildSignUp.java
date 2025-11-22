@@ -42,12 +42,12 @@ public class ChildSignUp extends AppCompatActivity {
 
             // Since children don't have emails, we can generate a "fake" one for Firebase Auth
             // This email is ONLY for the authentication system and won't be stored in the database
-            String sanitizedUsername = username.replaceAll("[^a-zA-Z0-9]", "");
-            if (sanitizedUsername.isEmpty()) {
-                Toast.makeText(ChildSignUp.this, "Username must contain at least one letter or number", Toast.LENGTH_LONG).show();
+            if (!username.matches("[^a-zA-Z0-9+_.-]+$")) {
+                Toast.makeText(ChildSignUp.this, "Username can only contain letters, numbers and the symbols: + - _ .", Toast.LENGTH_LONG).show();
                 return;
             }
-            String fakeEmailForAuth = sanitizedUsername.toLowerCase() + "@child.smart-air.com";
+
+            String fakeEmailForAuth = username.toLowerCase() + "@child.smart-air.com";
             checkUsernameUniqueness(username, fName, lName, fakeEmailForAuth, password);
 
         });
