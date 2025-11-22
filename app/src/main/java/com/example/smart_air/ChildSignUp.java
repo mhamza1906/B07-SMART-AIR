@@ -77,14 +77,8 @@ public class ChildSignUp extends AppCompatActivity {
 
         userRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful() && task.getResult().exists() && task.getResult() != null) {
-                String accountType = task.getResult().getString("accountType");
-
-                if (accountType != null) {
-                    startActivity(new Intent(ChildSignUp.this, ChildTutorialActivity.class));
-                    finish(); // turn off ChildSignUp
-                } else {
-                    Toast.makeText(ChildSignUp.this, "Account type cannot found", Toast.LENGTH_SHORT).show();
-                }
+                startActivity(new Intent(ChildSignUp.this, ChildTutorialActivity.class));
+                finish(); // turn off ChildSignUp
             } else {
                 Toast.makeText(ChildSignUp.this, "Failed to retrieve user info", Toast.LENGTH_SHORT).show();
             }
