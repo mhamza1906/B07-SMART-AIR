@@ -14,6 +14,13 @@ public class User {
         this.email = email;
         this.username = username;
         this.accountType = accountType;
+    }
 
+    public User(String fName, String lName, String username) {
+        this.fName = fName;
+        this.lName = lName;
+        this.username = username;
+        this.email = null;
+        this.accountType = "Child";
     }
 }
