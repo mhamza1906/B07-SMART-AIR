@@ -44,7 +44,12 @@ public class ChildSignUp extends AppCompatActivity {
 
             // Since children don't have emails, we can generate a "fake" one for Firebase Auth
             // This email is ONLY for the authentication system and won't be stored in the database
-            String fakeEmailForAuth = username.toLowerCase() + "@child.smart_air.com";
+            String sanitizedUsername = username.replaceAll("[^a-zA-Z0-9]", "");
+            if (sanitizedUsername.isEmpty()) {
+                Toast.makeText(ChildSignUp.this, "Username must contain at least one letter or number", Toast.LENGTH_LONG).show();
+                return;
+            }
+            String fakeEmailForAuth = sanitizedUsername.toLowerCase() + "@child.smart-air.com";
             checkUsernameUniqueness(username, fName, lName, fakeEmailForAuth, password);
 
         });
@@ -76,7 +81,7 @@ public class ChildSignUp extends AppCompatActivity {
         DocumentReference userRef = db.collection("users").document(userId);
 
         userRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful() && task.getResult().exists() && task.getResult() != null) {
+            if (task.isSuccessful() && task.getResult().exists()) {
                 startActivity(new Intent(ChildSignUp.this, ChildTutorialActivity.class));
                 finish(); // turn off ChildSignUp
             } else {
