@@ -36,6 +36,10 @@
 
         <activity android:name=".ResetPasswordActivity" android:exported="false" />
 
+        <activity android:name=".ParentDashboardActivity" android:exported="false"/>
+
+        <activity android:name=".LinkChildActivity" android:exported="false"/>
+
 
 
     </application>

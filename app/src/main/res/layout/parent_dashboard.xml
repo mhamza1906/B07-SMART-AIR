@@ -26,7 +26,7 @@
         app:layout_constraintTop_toBottomOf="@+id/Home" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/linkchildbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -36,7 +36,7 @@
         app:layout_constraintTop_toBottomOf="@+id/ChildSummaries" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/signoutbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="4dp"
@@ -46,7 +46,7 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/sharebutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="132dp"
@@ -57,7 +57,7 @@
         app:layout_constraintTop_toBottomOf="@+id/button" />
 
     <Button
-        android:id="@+id/button13"
+        android:id="@+id/alertbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Alerts"
@@ -69,7 +69,7 @@
         app:layout_constraintVertical_bias="0.166" />
 
     <Button
-        android:id="@+id/button14"
+        android:id="@+id/addparentbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Add Another Parent"
@@ -80,7 +80,7 @@
         app:layout_constraintVertical_bias="0.59" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/schedulebutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
