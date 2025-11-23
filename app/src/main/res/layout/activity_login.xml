@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:padding="16dp"
     android:visibility="visible"
-    tools:context=".LoginActivity">
+    tools:context=".LoginActivityView">
 
     <!-- Email Input -->
     <EditText
@@ -85,6 +85,7 @@
         android:focusable="true"
         android:minHeight="48dp"
         android:text="@string/credentialRecovery"
+        android:visibility="gone"
         android:textColor="@color/blue_strong"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

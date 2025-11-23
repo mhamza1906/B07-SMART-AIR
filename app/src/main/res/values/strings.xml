@@ -10,7 +10,7 @@
     <string name="commonSignInButton">"SIGN IN"</string>
     <string name="credentialRecovery">"Forget Password?"</string>
     <string name="jumpIntoSignUp">"DON'T HAVE AN ACCOUNT?"</string>
-    <string name="childSignInButtonWithParentName">"SIGN IN WITH YOUR PARENT ACCOUNT"</string>
+    <string name="childSignInButtonWithParentName">"SIGN IN WITH YOUR USERNAME (CHILD)"</string>
     <string-array name="accountType">
         <item>Select Account Type</item>
         <item>Parent</item>

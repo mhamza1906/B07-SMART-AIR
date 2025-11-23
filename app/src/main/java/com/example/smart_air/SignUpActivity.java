@@ -15,10 +15,9 @@ import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 public class SignUpActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -105,12 +104,11 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void switchToTutorialSession(String userId) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference userRef = db.collection("users").document(userId);
 
-        userRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful() && task.getResult().exists() && task.getResult() != null) {
-                String accountType = task.getResult().getString("accountType");
+        mDatabase.child("users").child(userId).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful() && task.getResult().exists()) {
+                DataSnapshot snapshot = task.getResult();
+                String accountType = snapshot.child("accountType").getValue(String.class);
 
                 if (accountType != null) {
                     switch (accountType) {
