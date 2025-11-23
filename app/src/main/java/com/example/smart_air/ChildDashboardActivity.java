@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,11 +15,20 @@ public class ChildDashboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.child_dashboard);
 
+        String childId = getIntent().getStringExtra("childID");
+
+        if(childId == null) {
+            Toast.makeText(this,"User ID not found",Toast.LENGTH_SHORT).show();
+            finish();
+        }
+
         Button takeMedButton = (Button)findViewById(R.id.takemedbutton);
         takeMedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ChildDashboardActivity.this,TakeMedicineActivity.class));
+                Intent childTakeMed = new Intent(ChildDashboardActivity.this, TakeMedicineActivity.class);
+                childTakeMed.putExtra("childID",childId);
+                startActivity(childTakeMed);
             }
         });
 
@@ -26,7 +36,9 @@ public class ChildDashboardActivity extends AppCompatActivity {
         triageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ChildDashboardActivity.this,TriageActivity.class));
+                Intent childTriage = new Intent(ChildDashboardActivity.this, TriageActivity.class);
+                childTriage.putExtra("childID",childId);
+                startActivity(childTriage);
             }
         });
 
@@ -34,7 +46,9 @@ public class ChildDashboardActivity extends AppCompatActivity {
         streakButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ChildDashboardActivity.this,StreakActivity.class));
+                Intent childStreak = new Intent(ChildDashboardActivity.this, StreakActivity.class);
+                childStreak.putExtra("childID",childId);
+                startActivity(childStreak);
             }
         });
 
@@ -42,7 +56,9 @@ public class ChildDashboardActivity extends AppCompatActivity {
         checkInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ChildDashboardActivity.this,DailyCheckInActivity.class));
+                Intent childCheckIn = new Intent(ChildDashboardActivity.this, DailyCheckInActivity.class);
+                childCheckIn.putExtra("childID",childId);
+                startActivity(childCheckIn);
             }
         });
 
@@ -50,7 +66,9 @@ public class ChildDashboardActivity extends AppCompatActivity {
         childScheduleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ChildDashboardActivity.this,ChildScheduleActivity.class));
+                Intent childSchedule = new Intent(ChildDashboardActivity.this, ChildScheduleActivity.class);
+                childSchedule.putExtra("childID",childId);
+                startActivity(childSchedule);
             }
         });
 
@@ -58,7 +76,9 @@ public class ChildDashboardActivity extends AppCompatActivity {
         pefButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ChildDashboardActivity.this,PEFZoneActivity.class));
+                Intent childPEF = new Intent(ChildDashboardActivity.this, PEFZoneActivity.class);
+                childPEF.putExtra("childID",childId);
+                startActivity(childPEF);
             }
         });
 
@@ -66,7 +86,9 @@ public class ChildDashboardActivity extends AppCompatActivity {
         childSignOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ChildDashboardActivity.this, ChildSignOutActivity.class));
+                Intent childSignOut = new Intent(ChildDashboardActivity.this, ChildSignOutActivity.class);
+                childSignOut.putExtra("childID",childId);
+                startActivity(childSignOut);
             }
         });
     }
