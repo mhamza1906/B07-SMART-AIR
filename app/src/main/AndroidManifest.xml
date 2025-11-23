@@ -14,7 +14,7 @@
 
         <!-- Initiate Activity : Login Page -->
         <activity
-            android:name=".LoginActivity"
+            android:name=".LoginActivityView"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,14 +22,15 @@
             </intent-filter>
         </activity>
 
+
         <!-- Sign Up Activity if user does not have an account -->
         <activity
             android:name=".SignUpActivity"
             android:exported="true"/>
 
-        <!-- Sign Up Activity if (Child) user wants to login with user name -->
+        <!-- Child Login Activity if (Child) user wants to login with user name -->
         <activity
-            android:name=".ChildLoginActivity"
+            android:name=".ChildLoginActivityView"
             android:exported="true"/>
 
 
