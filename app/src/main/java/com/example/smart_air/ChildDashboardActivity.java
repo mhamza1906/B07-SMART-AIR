@@ -26,7 +26,7 @@ public class ChildDashboardActivity extends AppCompatActivity {
         triageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ChildDashboardActivity.this,TakeMedicineActivity.class));
+                startActivity(new Intent(ChildDashboardActivity.this,TriageActivity.class));
             }
         });
 
@@ -34,7 +34,7 @@ public class ChildDashboardActivity extends AppCompatActivity {
         streakButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ChildDashboardActivity.this,TakeMedicineActivity.class));
+                startActivity(new Intent(ChildDashboardActivity.this,StreakActivity.class));
             }
         });
 
@@ -42,7 +42,7 @@ public class ChildDashboardActivity extends AppCompatActivity {
         checkInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ChildDashboardActivity.this,TakeMedicineActivity.class));
+                startActivity(new Intent(ChildDashboardActivity.this,DailyCheckInActivity.class));
             }
         });
 
@@ -50,7 +50,7 @@ public class ChildDashboardActivity extends AppCompatActivity {
         childScheduleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ChildDashboardActivity.this,TakeMedicineActivity.class));
+                startActivity(new Intent(ChildDashboardActivity.this,ChildScheduleActivity.class));
             }
         });
 
@@ -58,7 +58,7 @@ public class ChildDashboardActivity extends AppCompatActivity {
         pefButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ChildDashboardActivity.this,TakeMedicineActivity.class));
+                startActivity(new Intent(ChildDashboardActivity.this,PEFZoneActivity.class));
             }
         });
 
@@ -66,7 +66,7 @@ public class ChildDashboardActivity extends AppCompatActivity {
         childSignOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ChildDashboardActivity.this,TakeMedicineActivity.class));
+                startActivity(new Intent(ChildDashboardActivity.this, ChildSignOutActivity.class));
             }
         });
     }
