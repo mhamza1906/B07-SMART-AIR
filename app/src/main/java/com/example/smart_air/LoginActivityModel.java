@@ -17,12 +17,28 @@ public class LoginActivityModel {
         mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
+    public DatabaseReference getUsersReference() {
+        return FirebaseDatabase.getInstance().getReference("users");
+    }
+
     public void setPresenter(LoginActivityPresenter presenter) {
         this.presenter = presenter;
     }
 
     public FirebaseUser getSuccessfulLoginUser() {
         return FirebaseAuth.getInstance().getCurrentUser();
+    }
+
+    public void getUserEmail(String email) {
+        getUsersReference()
+                .orderByChild("email")
+                .equalTo(email)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (presenter != null) {
+                        presenter.onCheckEmailComplete(task, email);
+                    }
+                });
     }
 
     public void signUserIn(String email, String password) {

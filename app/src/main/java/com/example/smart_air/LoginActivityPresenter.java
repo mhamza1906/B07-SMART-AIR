@@ -10,6 +10,7 @@ public class LoginActivityPresenter {
 
     private final LoginActivityView view;
     private final LoginActivityModel model;
+    private String pendingPassword;
 
     public LoginActivityPresenter(LoginActivityView view, LoginActivityModel model) {
         this.view = view;
@@ -19,8 +20,38 @@ public class LoginActivityPresenter {
 
     // Presenter calls Model to login
     public void loginUser(String email, String password) {
-        model.signUserIn(email, password);
+        pendingPassword = password;
+        model.getUserEmail(email);
     }
+
+    // check if email exists first
+
+    public void onCheckEmailComplete(Task<DataSnapshot> task, String email) {
+        if (!task.isSuccessful()) {
+            view.toastMessage("Fail to check email exist: " +
+                    (task.getException() != null ? task.getException().getMessage() : "unknown error"));
+            return;
+        }
+
+        boolean emailExists = false;
+        for (DataSnapshot snapshot : task.getResult().getChildren()) {
+            String dbEmail = snapshot.child("email").getValue(String.class);
+            if (dbEmail != null && dbEmail.equals(email)) {
+                emailExists = true;
+                break;
+            }
+        }
+
+        if (!emailExists) {
+            view.toastMessage("You don't have an account yet. Redirecting to Sign Up...");
+            view.redirectToSignUp();
+        } else {
+            // login if email exits
+            model.signUserIn(email, pendingPassword);
+            pendingPassword = null;
+        }
+    }
+
 
     // Presenter calls Model send password reset email
     public void handleCredentialRecoveryClick(String email) {
@@ -90,10 +121,6 @@ public class LoginActivityPresenter {
             String errorCode = ((FirebaseAuthException) exception).getErrorCode();
 
             switch (errorCode) {
-                case "ERROR_USER_NOT_FOUND":
-                    view.toastMessage("You don't have an account yet. Redirecting to Sign Up...");
-                    view.redirectToSignUp();
-                    return;
                 case "ERROR_INVALID_CREDENTIAL":
                     errorMsg = "Incorrect password. Please try again.";
                     view.showForgotPasswordLink();

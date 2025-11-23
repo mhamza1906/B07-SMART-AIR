@@ -16,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.lang.reflect.Method;
+import java.util.Collections;
 
 public class LoginActivityPresenterTest {
     @Mock
@@ -32,6 +33,12 @@ public class LoginActivityPresenterTest {
 
     @Mock
     private Task<DataSnapshot> mockDataSnapshotTask;
+
+    @Mock
+    DataSnapshot mockSnapshot;
+
+    @Mock
+    Task<DataSnapshot> mockTask;
 
 
     private LoginActivityPresenter presenter;
@@ -63,17 +70,17 @@ public class LoginActivityPresenterTest {
         verify(mockModel).getUserFromRTDB("user123");
     }
 
-    // 2. Login Failed: ERROR_USER_NOT_FOUND
+    // 2. Test getUserEmail specifically
     @Test
-    public void loginUser_ErrorUserNotFound_ShowsToastAndRedirects() {
-        FirebaseAuthException exception = mock(FirebaseAuthException.class);
-        when(exception.getErrorCode()).thenReturn("ERROR_USER_NOT_FOUND");
+    public void loginUser_callsModelGetUserEmail() {
+        String email = "test@example.com";
+        String password = "password123";
 
-        presenter.onSignInComplete(mockAuthTaskWithException(exception));
+        presenter.loginUser(email, password);
 
-        verify(mockView).toastMessage("You don't have an account yet. Redirecting to Sign Up...");
-        verify(mockView).redirectToSignUp();
+        verify(mockModel).getUserEmail(email);
     }
+
 
     // 3. Login Failed: ERROR_INVALID_CREDENTIAL
     @Test
@@ -335,18 +342,132 @@ public class LoginActivityPresenterTest {
         verify(mockView).startRecoveryCooldown();
     }
 
-    // 21. Test if Presenter calls the method for login in Model
+    // 21. onCheckEmailComplete: Email does not exist in database
+    // Simulates a task where no children are returned from the database query
+    // Expected behavior: View shows toast and redirects to Sign Up, Model.signUserIn is never called
+
 
     @Test
-    public void loginUser_CallsModelSignUserIn() {
-        String email = "test@example.com";
-        String password = "password123";
+    public void onCheckEmailComplete_emailNotExist_showsToastAndRedirect() {
+        presenter.loginUser("missing@example.com", "dummy");
 
-        // 调用 presenter.loginUser
-        presenter.loginUser(email, password);
+        when(mockTask.isSuccessful()).thenReturn(true);
+        DataSnapshot mockSnapshot = mock(DataSnapshot.class);
+        when(mockTask.getResult()).thenReturn(mockSnapshot);
+        when(mockTask.getResult().getChildren()).thenReturn(Collections.emptyList());
 
-        // 验证 model.signUserIn 被调用
-        verify(mockModel).signUserIn(email, password);
+        presenter.onCheckEmailComplete(mockTask, "missing@example.com");
+
+        verify(mockView).toastMessage("You don't have an account yet. Redirecting to Sign Up...");
+        verify(mockView).redirectToSignUp();
+        verify(mockModel, never()).signUserIn(anyString(), anyString());
+    }
+
+    // 22. onCheckEmailComplete: Email exists in database
+    // Simulates a task returning a child with matching email
+    // Expected behavior: Model.signUserIn is called, no redirect to Sign Up
+
+    @Test
+    public void onCheckEmailComplete_emailExists_callsSignUserIn() {
+        when(mockTask.isSuccessful()).thenReturn(true);
+        when(mockSnapshot.child("email")).thenReturn(mock(DataSnapshot.class));
+        when(mockSnapshot.child("email").getValue(String.class)).thenReturn("exists@example.com");
+        when(mockTask.getResult()).thenReturn(mock(DataSnapshot.class));
+        when(mockTask.getResult().getChildren()).thenReturn(Collections.singletonList(mockSnapshot));
+
+        presenter.loginUser("exists@example.com", "secret");
+
+        presenter.onCheckEmailComplete(mockTask, "exists@example.com");
+
+        verify(mockModel).signUserIn("exists@example.com", "secret");
+
+        verify(mockView, never()).redirectToSignUp();
+    }
+
+    // 23. onCheckEmailComplete: Task fails with exception
+    // Simulates a failed task where getException() is non-null
+    // Expected behavior: View shows toast with exception message, no redirect, no login
+
+    @Test
+    public void onCheckEmailComplete_taskFailed_showsFailToast() {
+        Exception ex = new Exception("Simulated failure");
+        when(mockTask.isSuccessful()).thenReturn(false);
+        when(mockTask.getException()).thenReturn(ex);
+
+        presenter.onCheckEmailComplete(mockTask, "any@example.com");
+
+        verify(mockView).toastMessage("Fail to check email exist: Simulated failure");
+        verify(mockView, never()).redirectToSignUp();
+        verify(mockModel, never()).signUserIn(anyString(), anyString());
+    }
+
+    // 24. onCheckEmailComplete: Task fails with null exception
+    // Simulates a failed task where getException() returns null
+    // Expected behavior: View shows toast with "unknown error", no redirect, no login
+
+    @Test
+    public void onCheckEmailComplete_taskFails_noException() {
+        when(mockTask.isSuccessful()).thenReturn(false);
+        when(mockTask.getException()).thenReturn(null);
+
+        presenter.onCheckEmailComplete(mockTask, "any@example.com");
+
+        verify(mockView).toastMessage("Fail to check email exist: unknown error");
+    }
+
+    // 25. onCheckEmailComplete: dbEmail is null
+    // Simulates a task where the child email field is null
+    // Expected behavior: View shows toast and redirects to Sign Up, login not called
+
+    @Test
+    public void onCheckEmailComplete_emailFieldNull_orMismatch() {
+
+        presenter.loginUser("exists@example.com", "secret");
+
+        when(mockTask.isSuccessful()).thenReturn(true);
+
+
+        DataSnapshot mockSnapshot = mock(DataSnapshot.class);
+        DataSnapshot mockChild = mock(DataSnapshot.class);
+        when(mockSnapshot.child("email")).thenReturn(mockChild);
+        when(mockChild.getValue(String.class)).thenReturn(null); // dbEmail 为 null
+
+        DataSnapshot mockResult = mock(DataSnapshot.class);
+        when(mockResult.getChildren()).thenReturn(Collections.singletonList(mockSnapshot));
+        when(mockTask.getResult()).thenReturn(mockResult);
+
+        presenter.onCheckEmailComplete(mockTask, "exists@example.com");
+
+
+        verify(mockView).toastMessage("You don't have an account yet. Redirecting to Sign Up...");
+        verify(mockView).redirectToSignUp();
+    }
+
+    // 26. onCheckEmailComplete: dbEmail is null but dbEmail not equal to input email
+    // Simulates a task where dbEmail is not null but does not match input email
+    // Expected behavior: treated as email not existing; view shows toast + redirect, login not called
+
+    @Test
+    public void onCheckEmailComplete_dbEmailNotEqual_emailExistsFalse() {
+        when(mockTask.isSuccessful()).thenReturn(true);
+
+        DataSnapshot mockSnapshot = mock(DataSnapshot.class);
+        DataSnapshot mockChild = mock(DataSnapshot.class);
+        when(mockSnapshot.child("email")).thenReturn(mockChild);
+
+        when(mockChild.getValue(String.class)).thenReturn("other@example.com");
+
+        DataSnapshot mockResult = mock(DataSnapshot.class);
+        when(mockResult.getChildren()).thenReturn(Collections.singletonList(mockSnapshot));
+        when(mockTask.getResult()).thenReturn(mockResult);
+
+        presenter.loginUser("other@example.com", "secret");
+
+        presenter.onCheckEmailComplete(mockTask, "exists@example.com");
+
+        verify(mockView).toastMessage("You don't have an account yet. Redirecting to Sign Up...");
+        verify(mockView).redirectToSignUp();
+        verify(mockModel, never()).signUserIn(anyString(), anyString());
     }
 
 
