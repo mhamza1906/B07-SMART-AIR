@@ -15,6 +15,13 @@
         <!-- Initiate Activity : Login Page -->
         <activity
             android:name=".LoginActivity"
+            android:exported="false" />
+
+        <!-- FIX 1: Make SignUpActivity the one and only LAUNCHER activity. -->
+        <!-- The <intent-filter> must be INSIDE the <activity> tag. -->
+        <!-- The exported flag for the launcher must be "true". -->
+        <activity
+            android:name=".SignUpActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,16 +29,17 @@
             </intent-filter>
         </activity>
 
-        <!-- Sign Up Activity if user does not have an account -->
-        <activity
-            android:name=".SignUpActivity"
-            android:exported="true"/>
-
         <!-- Sign Up Activity if (Child) user wants to login with user name -->
+        <!-- FIX 2: ChildLoginActivity has no intent filter and is not exported. -->
         <activity
             android:name=".ChildLoginActivity"
-            android:exported="true"/>
+            android:exported="false"/>
 
+        <!-- FIX 3: ChildSignUp has no intent filter and is not exported. -->
+        <!-- Also corrected the name to assume the file is ChildSignUp.java. -->
+        <activity
+            android:name=".ChildSignUp"
+            android:exported="false"/>
 
     </application>
 </manifest>
