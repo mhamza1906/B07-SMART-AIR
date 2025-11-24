@@ -33,6 +33,11 @@
             android:name=".ChildLoginActivityView"
             android:exported="true"/>
 
+        <!-- FIX 3: ChildSignUp has no intent filter and is not exported. -->
+        <!-- Also corrected the name to assume the file is ChildSignUp.java. -->
+        <activity
+            android:name=".ChildSignUp"
+            android:exported="false"/>
 
     </application>
 </manifest>
