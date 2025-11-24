@@ -50,4 +50,11 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.firebase.database)
 
+    // Unit Tests
+    testImplementation(libs.junit)
+    testImplementation(libs.mockito.core)
+
+    // Android Instrumentation Tests
+    androidTestImplementation(libs.ext.junit)
+    androidTestImplementation(libs.espresso.core)
 }

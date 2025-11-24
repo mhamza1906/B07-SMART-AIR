@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">smart_air</string>
     <string name="name">Name</string>
+    <string name="fName">First Name</string>
+    <string name="lName">Last Name</string>
     <string name="userName">"User Name"</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
@@ -8,5 +10,10 @@
     <string name="commonSignInButton">"SIGN IN"</string>
     <string name="credentialRecovery">"Forget Password?"</string>
     <string name="jumpIntoSignUp">"DON'T HAVE AN ACCOUNT?"</string>
-    <string name="childSignInButtonWithParentName">"SIGN IN WITH YOUR PARENT ACCOUNT"</string>
+    <string name="childSignInButtonWithParentName">"SIGN IN WITH YOUR USERNAME (CHILD)"</string>
+    <string-array name="accountType">
+        <item>Select Account Type</item>
+        <item>Parent</item>
+        <item>Healthcare Provider</item>
+    </string-array>
 </resources>
