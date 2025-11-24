@@ -8,7 +8,7 @@ material = "1.13.0"
 googleGmsPlugin = "4.4.4"
 firebaseBom = "34.6.0"
 firebaseFirestore = "26.0.2"
-mockito = "5.20.0"
+recyclerview = "1.4.0"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -22,6 +22,7 @@ firebase-auth = { group = "com.google.firebase", name = "firebase-auth" }
 firebase-database = { group = "com.google.firebase", name = "firebase-database" }
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito" }
 google-firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
+recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
 
 
 
