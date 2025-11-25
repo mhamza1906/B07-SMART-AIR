@@ -9,6 +9,9 @@ googleGmsPlugin = "4.4.4"
 firebaseBom = "34.6.0"
 firebaseFirestore = "26.0.2"
 recyclerview = "1.4.0"
+mockito = "5.20.0"
+activity = "1.12.0"
+constraintlayout = "2.2.1"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -23,6 +26,8 @@ firebase-database = { group = "com.google.firebase", name = "firebase-database" 
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito" }
 google-firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
 recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
+activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 
 
 

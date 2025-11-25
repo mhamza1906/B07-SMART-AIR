@@ -11,65 +11,87 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Smart_air">
-
-        <!-- Initiate Activity : Login Page -->
+        <activity
+            android:name=".HealthcareProviderTutorialActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ParentTutorialActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ChildTutorialActivity"
+            android:exported="false" /> <!-- Initiate Activity : Login Page -->
         <activity
             android:name=".LoginActivityView"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-
-        <!-- Sign Up Activity if user does not have an account -->
+        </activity> <!-- Sign Up Activity if user does not have an account -->
         <activity
             android:name=".SignUpActivity"
-            android:exported="true"/>
-
-        <!-- Child Login Activity if (Child) user wants to login with user name -->
+            android:exported="true" /> <!-- Child Login Activity if (Child) user wants to login with user name -->
         <activity
             android:name=".ChildLoginActivityView"
-            android:exported="true"/>
-
-        <activity android:name=".ForgetPasswordActivity" android:exported="false" />
-
-        <activity android:name=".ResetPasswordActivity" android:exported="false" />
-
-        <activity android:name=".ParentDashboardActivity" android:exported="false"/>
-
-        <activity android:name=".LinkChildActivity" android:exported="false"/>
-
-        <activity android:name=".ParentAlertActivity" android:exported="false"/>
-
-        <activity android:name=".ParentSignOutActivity" android:exported="false"/>
-
-        <activity android:name=".SharetoProviderActivity" android:exported="false"/>
-
-        <activity android:name=".AddParentActivity" android:exported="false"/>
-
-        <activity android:name=".ProviderDashboardActivity" android:exported="false"/>
-
-        <activity android:name=".ProviderSignOutActivity" android:exported="false"/>
-
-        <activity android:name=".ProviderNotifActivity" android:exported="false"/>
-
-        <activity android:name=".ChildDashboardActivity" android:exported="false"/>
-
-        <activity android:name=".ChildScheduleActivity" android:exported="false"/>
-
-        <activity android:name=".ChildSignOutActivity" android:exported="false"/>
-
-        <activity android:name=".DailyCheckInActivity" android:exported="false"/>
-
-        <activity android:name=".PEFZoneActivity" android:exported="false"/>
-
-        <activity android:name=".StreakActivity" android:exported="false"/>
-
-        <activity android:name=".TakeMedicineActivity" android:exported="false"/>
-
-        <activity android:name=".TriageActivity" android:exported="false"/>
-
+            android:exported="true" />
+        <activity
+            android:name=".ForgetPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ResetPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ParentDashboardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LinkChildActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ParentAlertActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ParentSignOutActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SharetoProviderActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AddParentActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProviderDashboardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProviderSignOutActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProviderNotifActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ChildDashboardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ChildScheduleActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ChildSignOutActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DailyCheckInActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PEFZoneActivity"
+            android:exported="false" />
+        <activity
+            android:name=".StreakActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TakeMedicineActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TriageActivity"
+            android:exported="false" />
     </application>
+
 </manifest>
