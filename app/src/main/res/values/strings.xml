@@ -11,6 +11,8 @@
     <string name="credentialRecovery">"Forget Password?"</string>
     <string name="jumpIntoSignUp">"DON'T HAVE AN ACCOUNT?"</string>
     <string name="childSignInButtonWithParentName">"SIGN IN WITH YOUR USERNAME (CHILD)"</string>
+    <string name="DOB">"Birthday (YYYY-MM-DD)"</string>
+    <string name="linkChildBtn">"LINK THIS CHILD"</string>
     <string-array name="accountType">
         <item>Select Account Type</item>
         <item>Parent</item>

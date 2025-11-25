@@ -358,7 +358,7 @@ public class LoginActivityPresenterTest {
 
         presenter.onCheckEmailComplete(mockTask, "missing@example.com");
 
-        verify(mockView).toastMessage("You don't have an account yet. Redirecting to Sign Up...");
+        verify(mockView).toastMessage("Your account is not found. Redirecting to Sign Up...");
         verify(mockView).redirectToSignUp();
         verify(mockModel, never()).signUserIn(anyString(), anyString());
     }
@@ -439,7 +439,7 @@ public class LoginActivityPresenterTest {
         presenter.onCheckEmailComplete(mockTask, "exists@example.com");
 
 
-        verify(mockView).toastMessage("You don't have an account yet. Redirecting to Sign Up...");
+        verify(mockView).toastMessage("Your account is not found. Redirecting to Sign Up...");
         verify(mockView).redirectToSignUp();
     }
 
@@ -465,9 +465,19 @@ public class LoginActivityPresenterTest {
 
         presenter.onCheckEmailComplete(mockTask, "exists@example.com");
 
-        verify(mockView).toastMessage("You don't have an account yet. Redirecting to Sign Up...");
+        verify(mockView).toastMessage("Your account is not found. Redirecting to Sign Up...");
         verify(mockView).redirectToSignUp();
         verify(mockModel, never()).signUserIn(anyString(), anyString());
+    }
+
+    // 27. Test invalid email input (a null email)
+
+    @Test
+    public void loginUser_nullEmail_showsToastAndDoesNotCallModel() {
+        presenter.loginUser(null, "pwd");
+
+        verify(mockView).toastMessage("Invalid email format.");
+        verify(mockModel, never()).getUserEmail(anyString());
     }
 
 

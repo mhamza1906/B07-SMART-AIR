@@ -9,6 +9,7 @@ googleGmsPlugin = "4.4.4"
 firebaseBom = "34.6.0"
 firebaseFirestore = "26.0.2"
 recyclerview = "1.4.0"
+mockito = "5.20.0"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }

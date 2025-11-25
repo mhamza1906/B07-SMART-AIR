@@ -33,9 +33,10 @@
             android:name=".ChildLoginActivityView"
             android:exported="true"/>
 
-        <activity android:name=".ForgetPasswordActivity" android:exported="false" />
+        <activity
+            android:name=".ChildSignUpActivity"
+            android:exported="true"/>
 
-        <activity android:name=".ResetPasswordActivity" android:exported="false" />
 
         <activity android:name=".ParentDashboardActivity" android:exported="false"/>
 
@@ -45,7 +46,7 @@
 
         <activity android:name=".ParentSignOutActivity" android:exported="false"/>
 
-        <activity android:name=".SharetoProviderActivity" android:exported="false"/>
+<!--        <activity android:name=".SharetoProviderActivity" android:exported="false"/>-->
 
         <activity android:name=".AddParentActivity" android:exported="false"/>
 
@@ -70,6 +71,7 @@
         <activity android:name=".TakeMedicineActivity" android:exported="false"/>
 
         <activity android:name=".TriageActivity" android:exported="false"/>
+
 
     </application>
 </manifest>
