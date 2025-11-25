@@ -76,7 +76,7 @@ public class ChildDashboardActivity extends AppCompatActivity {
         pefButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent childPEF = new Intent(ChildDashboardActivity.this, PEFZoneActivity.class);
+                Intent childPEF = new Intent(ChildDashboardActivity.this, InputPEFActivity.class);
                 childPEF.putExtra("childID",childId);
                 startActivity(childPEF);
             }

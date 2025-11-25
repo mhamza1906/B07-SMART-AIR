@@ -39,15 +39,14 @@
         <activity android:name=".AddParentActivity" android:exported="false"/>
         <activity android:name=".ProviderDashboardActivity" android:exported="false"/>
         <activity android:name=".ProviderSignOutActivity" android:exported="false"/>
-        <activity android:name=".ProviderNotifActivity" android_exported="false"/>
-        <activity android:name=".ChildDashboardActivity" android_exported="false"/>
-        <activity android:name=".ChildScheduleActivity" android_exported="false"/>
-        <activity android:name=".ChildSignOutActivity" android_exported="false"/>
-        <activity android:name=".DailyCheckInActivity" android_exported="false"/>
-        <activity android:name=".PEFZoneActivity" android_exported="false"/>
-        <activity android:name=".StreakActivity" android_exported="false"/>
-        <activity android:name=".TakeMedicineActivity" android_exported="false"/>
-        <activity android:name=".TriageActivity" android_exported="false"/>
+        <activity android:name=".ProviderNotifActivity" android:exported="false"/>
+        <activity android:name=".ChildDashboardActivity" android:exported="false"/>
+        <activity android:name=".ChildScheduleActivity" android:exported="false"/>
+        <activity android:name=".ChildSignOutActivity" android:exported="false"/>
+        <activity android:name=".DailyCheckInActivity" android:exported="false"/>
+        <activity android:name=".StreakActivity" android:exported="false"/>
+        <activity android:name=".TakeMedicineActivity" android:exported="false"/>
+        <activity android:name=".TriageActivity" android:exported="false"/>
 
     </application>
 </manifest>
