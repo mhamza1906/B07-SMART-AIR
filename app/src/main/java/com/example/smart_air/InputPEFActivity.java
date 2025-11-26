@@ -93,8 +93,8 @@ public class InputPEFActivity extends AppCompatActivity {
 
         userDocRef.get().addOnSuccessListener(userDoc -> {
             long pb = 0;
-            if (userDoc.exists() && userDoc.contains("pb")) {
-                pb = userDoc.getLong("pb");
+            if (userDoc.exists() && userDoc.contains("PB")) {
+                pb = userDoc.getLong("PB");
             }
             
 
@@ -148,7 +148,7 @@ public class InputPEFActivity extends AppCompatActivity {
                 DocumentSnapshot document = task.getResult();
                 if (!document.exists()) {
                     Map<String, Object> defaultPEF = new HashMap<>();
-                    defaultPEF.put("pb", 0);
+                    defaultPEF.put("PB", 0); // Corrected to uppercase 'PB'
 
                     userDocRef.set(defaultPEF).addOnSuccessListener(aVoid -> 
                         Toast.makeText(InputPEFActivity.this, "PEF node created for user.", Toast.LENGTH_SHORT).show()
@@ -156,7 +156,8 @@ public class InputPEFActivity extends AppCompatActivity {
                         Toast.makeText(InputPEFActivity.this, "Failed to create PEF node.", Toast.LENGTH_SHORT).show()
                     );
                 }
-            } else {
+            }
+            else {
                 Toast.makeText(InputPEFActivity.this, "Error checking user PEF data.", Toast.LENGTH_SHORT).show();
             }
         });
@@ -223,10 +224,12 @@ public class InputPEFActivity extends AppCompatActivity {
                 Long pb = snapshot.getLong("PB");
                 if (pb != null && pb > 0) {
                     pbViewer.setText("PB: " + pb);
-                } else {
+                }
+                else {
                     pbViewer.setText(getString(R.string.pb_pef));
                 }
-            } else {
+            }
+            else {
                 pbViewer.setText(getString(R.string.pb_pef));
             }
         });
