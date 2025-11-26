@@ -76,9 +76,30 @@ public class SignUpActivity extends AppCompatActivity {
                 Toast.makeText(SignUpActivity.this, "Please fill all fields and select an account type", Toast.LENGTH_LONG).show();
                 return;
             }
+
+            if (!checkPasswordStrength(password)){
+                passwordEditText.setError("Password must contain upper, lower, digit, !@#$%^&*(),.?\":{}|<>, and ≥ 8 chars");
+                return;
+            }
+
             checkUsernameUniqueness(username, fName, lName, email, password, selectedAccountType);
         });
     }
+
+    private boolean checkPasswordStrength(String password) {
+
+        if (password == null || password.isEmpty()) {
+            return false;
+        }
+        if (password.length() < 8) return false;
+        boolean hasUpper = password.matches(".*[A-Z].*");
+        boolean hasLower = password.matches(".*[a-z].*");
+        boolean hasDigit = password.matches(".*[0-9].*");
+        boolean hasSpecial = password.matches(".*[!@#$%^&*(),.?\":{}|<>].*");
+
+        return hasUpper && hasLower && hasDigit && hasSpecial;
+    }
+
 
     private void checkUsernameUniqueness(String username, String fName, String lName, String email, String password, String accountType) {
         mDatabase.child("users")

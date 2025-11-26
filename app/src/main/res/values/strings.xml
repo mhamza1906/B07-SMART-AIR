@@ -7,13 +7,32 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="register">Register</string>
+
+    <!-- Changes from your team -->
     <string name="commonSignInButton">"SIGN IN"</string>
     <string name="credentialRecovery">"Forget Password?"</string>
     <string name="jumpIntoSignUp">"DON'T HAVE AN ACCOUNT?"</string>
     <string name="childSignInButtonWithParentName">"SIGN IN WITH YOUR USERNAME (CHILD)"</string>
+    <string name="DOB">"Birthday (YYYY-MM-DD)"</string>
+    <string name="linkChildBtn">"LINK THIS CHILD"</string>
     <string-array name="accountType">
         <item>Select Account Type</item>
         <item>Parent</item>
         <item>Healthcare Provider</item>
     </string-array>
+
+    <!-- Your PEF feature strings -->
+    <string name="view_history">View History</string>
+    <string name="save_pef">Save</string>
+    <string name="enter_pef">Enter Pef:</string>
+    <string name="enter_pef_prompt">Enter Here</string>
+    <string name="pb_pef">PB: -</string>
+    <string name="today_pef_zone">Today\'s Zone:</string>
+    <string name="null_zone_percentage">-%</string>
+    <string name="no_zone_yet">no zone yet</string>
+    <string name="no_zone">no zone</string>
+    <string name="zone_percentage_symbol">%</string>
+    <string name="invalid_pef_entry">Invalid PEF Entry</string>
+    <string name="db_pef_error">Unable to read Database</string>
+    <string name="shared_with_provider">Shared with provider</string>
 </resources>

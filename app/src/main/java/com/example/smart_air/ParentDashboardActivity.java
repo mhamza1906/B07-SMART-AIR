@@ -26,7 +26,7 @@ public class ParentDashboardActivity extends AppCompatActivity {
         linkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent parentLink = new Intent(ParentDashboardActivity.this, LinkChildActivity.class);
+                Intent parentLink = new Intent(ParentDashboardActivity.this, ChildSignUpActivity.class);
                 parentLink.putExtra("parentID",parentId);
                 startActivity(parentLink);
             }
