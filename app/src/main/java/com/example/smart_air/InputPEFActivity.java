@@ -25,8 +25,6 @@ public class InputPEFActivity extends AppCompatActivity {
 
     private String userID;
     private FirebaseFirestore db;
-
-    // UI elements
     private EditText pefInput;
     private Button enterPEFBtn;
     private TextView todayZoneText;
@@ -41,10 +39,8 @@ public class InputPEFActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.child_pef);
 
-        // Initialize Firestore
         db = FirebaseFirestore.getInstance();
 
-        // Initialize UI elements
         pefInput = findViewById(R.id.pefinput);
         enterPEFBtn = findViewById(R.id.enterpefbtn);
         todayZoneText = findViewById(R.id.todayzone);
@@ -53,8 +49,8 @@ public class InputPEFActivity extends AppCompatActivity {
         percentView = findViewById(R.id.zone_percentage);
         sharedProviderText = findViewById(R.id.shared_provider_text);
 
-        // Get user ID from the intent
         userID = getIntent().getStringExtra("childID");
+
 
         if (userID != null && !userID.isEmpty()) {
             loadOrCreatePEFNode(userID);
@@ -94,14 +90,14 @@ public class InputPEFActivity extends AppCompatActivity {
         String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         DocumentReference todayLogRef = userDocRef.collection("log").document(today);
 
-        // Get PB first
+
         userDocRef.get().addOnSuccessListener(userDoc -> {
             long pb = 0;
             if (userDoc.exists() && userDoc.contains("pb")) {
                 pb = userDoc.getLong("pb");
             }
             
-            // Use PB or fallback for calculation
+
             final long finalPB;
             if (pb > 0) {
                 finalPB = pb;
@@ -109,14 +105,13 @@ public class InputPEFActivity extends AppCompatActivity {
                 finalPB = 900;
             }
 
-            // Now check today's log
+
             todayLogRef.get().addOnSuccessListener(logDoc -> {
                 long currentDailyHigh = 0;
                 if (logDoc.exists() && logDoc.contains("value")) {
                     currentDailyHigh = logDoc.getLong("value");
                 }
 
-                // Only update if the new value is higher
                 if (enteredValue > currentDailyHigh) {
                     int percent = (int) Math.round(((double) enteredValue / finalPB) * 100);
                     String zone;
@@ -128,15 +123,20 @@ public class InputPEFActivity extends AppCompatActivity {
                     updateData.put("value", enteredValue);
                     updateData.put("percent", percent);
                     updateData.put("zone", zone);
+                    if (!logDoc.exists()) {
+                        updateData.put("stored_PB", finalPB);
+                    }
 
                     todayLogRef.set(updateData, SetOptions.merge()).addOnSuccessListener(aVoid -> {
                         Toast.makeText(InputPEFActivity.this, "PEF value saved!", Toast.LENGTH_SHORT).show();
                         pefInput.setText("");
                     }).addOnFailureListener(e -> Toast.makeText(InputPEFActivity.this, "Failed to save PEF.", Toast.LENGTH_SHORT).show());
                 } else {
-                    // If the value is not higher, just clear the input without a message.
                     pefInput.setText("");
                 }
+
+
+
             }).addOnFailureListener(e -> Toast.makeText(InputPEFActivity.this, "Could not read daily log.", Toast.LENGTH_SHORT).show());
         }).addOnFailureListener(e -> Toast.makeText(InputPEFActivity.this, "Could not verify PB.", Toast.LENGTH_SHORT).show());
     }
@@ -237,7 +237,7 @@ public class InputPEFActivity extends AppCompatActivity {
 
         sharingRef.addSnapshotListener(this, (snapshot, e) -> {
             if (e != null) {
-                // Don't show an error toast for this, just make sure the text is hidden
+
                 sharedProviderText.setVisibility(View.GONE);
                 return;
             }
@@ -250,7 +250,7 @@ public class InputPEFActivity extends AppCompatActivity {
                     sharedProviderText.setVisibility(View.GONE);
                 }
             } else {
-                // Document doesn't exist, so it's not shared
+
                 sharedProviderText.setVisibility(View.GONE);
             }
         });

@@ -13,12 +13,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Smart_air">
 
-        <!-- YOUR NEW ACTIVITY (KEEP THIS) -->
+
         <activity
             android:name=".InputPEFActivity"
-            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"/>
+            android:exported="false"/>
 
-        <!-- YOUR TEAM'S LAUNCHER ACTIVITY (KEEP THIS) -->
+
         <activity
             android:name=".LoginActivityView"
             android:exported="true">
