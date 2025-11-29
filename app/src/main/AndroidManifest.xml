@@ -65,7 +65,7 @@
 
         <activity android:name=".DailyCheckInActivity" android:exported="false"/>
 
-        <activity android:name=".PEFZoneActivity" android:exported="false"/>
+        <activity android:name=".InputPEFActivity" android:exported="false"/>
 
         <activity android:name=".StreakActivity" android:exported="false"/>
 
@@ -78,6 +78,10 @@
         <activity android:name=".AchievementActivity" android:exported="true"/>
 
         <activity android:name=".ManageChildActivity" android:exported="true"/>
+
+        <activity
+            android:name=".TakeMedicineActivityPost"
+            android:exported="false" />
 
 
     </application>
