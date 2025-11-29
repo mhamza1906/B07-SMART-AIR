@@ -11,6 +11,24 @@
     <string name="credentialRecovery">"Forget Password?"</string>
     <string name="jumpIntoSignUp">"DON'T HAVE AN ACCOUNT?"</string>
     <string name="childSignInButtonWithParentName">"SIGN IN WITH YOUR PARENT ACCOUNT"</string>
+    <string name="breathingBreaks">"Are you able to talk without taking breaks to breathe?"</string>
+    <string name="hardToBreathe">"Does it feel like you have to work hard to breathe in?"</string>
+    <string name="lipColorChange">"Have you noticed any changes in the colour of your lips or eyebrows?"</string>
+    <string name="currentPEF">"What is your current PEF? (Optional)"</string>
+    <string name="rescueMed">"Have you taken rescue medication recently?"</string>
+    <string name="actionPlan">"Your action plan will appear here"</string>
+    <string name="emergencyCallButton">"CALL EMERGENCY SERVICES"</string>
+    <string name="howLongAgo">"How long ago? (e.g., 5 mins)"</string>
+    <string name="yes">"Yes"</string>
+    <string name="no">"No"</string>
+    <string name="triageMode">"Red Flag Symptoms"</string>
+    <string name="prompt_enter_current_pef">Please enter your current PEF to see your action plan.</string>
+    <string name="pb_not_set">Your PEF Personal Best is not set. Cannot determine action plan.</string>
+    <string name="green_zone">Green Zone: Your asthma is well-controlled. Continue your current medication plan.</string>
+    <string name="yellow_zone">Yellow Zone: Your asthma is worsening. Use your rescue inhaler as prescribed. Be cautious.</string>
+    <string name="red_zone">Red Zone: Medical alert! Use your rescue inhaler immediately. Your symptoms are severe.</string>
+
+
     <string-array name="accountType">
         <item>Select Account Type</item>
         <item>Parent</item>
