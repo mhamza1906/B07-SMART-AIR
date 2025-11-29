@@ -6,11 +6,13 @@ espressoCore = "3.7.0"
 appcompat = "1.7.1"
 material = "1.13.0"
 googleGmsPlugin = "4.4.4"
+# Using the newer version from your team
 firebaseBom = "34.6.0"
-firebaseFirestore = "26.0.2"
-recyclerview = "1.4.0"
+# Keeping the libraries your team added
 mockito = "5.20.0"
 activity = "1.12.0"
+# Keeping the versions for existing libraries
+recyclerview = "1.4.0"
 constraintlayout = "2.2.1"
 
 
@@ -24,14 +26,14 @@ firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.r
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth" }
 firebase-database = { group = "com.google.firebase", name = "firebase-database" }
+# Your addition for firestore
+firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore" }
+# Your team's additions for testing and activity
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito" }
-google-firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
-recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
 activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+# Existing libraries
+recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
-
-
-
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
