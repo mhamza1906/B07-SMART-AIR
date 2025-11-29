@@ -41,7 +41,7 @@ dependencies {
 
     implementation(libs.appcompat)
     implementation(libs.material)
-    implementation(libs.google.firebase.firestore)
+    implementation(libs.firebase.firestore)
     implementation(libs.recyclerview)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
