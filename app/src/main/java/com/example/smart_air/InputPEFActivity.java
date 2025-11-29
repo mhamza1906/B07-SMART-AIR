@@ -47,7 +47,7 @@ public class InputPEFActivity extends AppCompatActivity {
         pbViewer = findViewById(R.id.pbviewer);
         zoneColorView = findViewById(R.id.zonecolor);
         percentView = findViewById(R.id.zone_percentage);
-        sharedProviderText = findViewById(R.id.shared_provider_text);
+
 
         userID = getIntent().getStringExtra("childID");
 
@@ -56,7 +56,7 @@ public class InputPEFActivity extends AppCompatActivity {
             loadOrCreatePEFNode(userID);
             displayPB(userID);
             listenForTodayZone(userID);
-            listenForProviderSharingStatus(userID);
+
         } else {
             Toast.makeText(this, "User ID not found. Cannot load data.", Toast.LENGTH_LONG).show();
             finish();
@@ -96,7 +96,7 @@ public class InputPEFActivity extends AppCompatActivity {
             if (userDoc.exists() && userDoc.contains("PB")) {
                 pb = userDoc.getLong("PB");
             }
-            
+
 
             final long finalPB;
             if (pb > 0) {
@@ -136,7 +136,6 @@ public class InputPEFActivity extends AppCompatActivity {
                 }
 
 
-
             }).addOnFailureListener(e -> Toast.makeText(InputPEFActivity.this, "Could not read daily log.", Toast.LENGTH_SHORT).show());
         }).addOnFailureListener(e -> Toast.makeText(InputPEFActivity.this, "Could not verify PB.", Toast.LENGTH_SHORT).show());
     }
@@ -150,14 +149,13 @@ public class InputPEFActivity extends AppCompatActivity {
                     Map<String, Object> defaultPEF = new HashMap<>();
                     defaultPEF.put("PB", 0); // Corrected to uppercase 'PB'
 
-                    userDocRef.set(defaultPEF).addOnSuccessListener(aVoid -> 
-                        Toast.makeText(InputPEFActivity.this, "PEF node created for user.", Toast.LENGTH_SHORT).show()
-                    ).addOnFailureListener(e -> 
-                        Toast.makeText(InputPEFActivity.this, "Failed to create PEF node.", Toast.LENGTH_SHORT).show()
+                    userDocRef.set(defaultPEF).addOnSuccessListener(aVoid ->
+                            Toast.makeText(InputPEFActivity.this, "PEF node created for user.", Toast.LENGTH_SHORT).show()
+                    ).addOnFailureListener(e ->
+                            Toast.makeText(InputPEFActivity.this, "Failed to create PEF node.", Toast.LENGTH_SHORT).show()
                     );
                 }
-            }
-            else {
+            } else {
                 Toast.makeText(InputPEFActivity.this, "Error checking user PEF data.", Toast.LENGTH_SHORT).show();
             }
         });
@@ -224,38 +222,14 @@ public class InputPEFActivity extends AppCompatActivity {
                 Long pb = snapshot.getLong("PB");
                 if (pb != null && pb > 0) {
                     pbViewer.setText("PB: " + pb);
-                }
-                else {
+                } else {
                     pbViewer.setText(getString(R.string.pb_pef));
                 }
-            }
-            else {
+            } else {
                 pbViewer.setText(getString(R.string.pb_pef));
             }
         });
     }
-
-    private void listenForProviderSharingStatus(String userID) {
-        final DocumentReference sharingRef = db.collection("shared-with-provider").document(userID);
-
-        sharingRef.addSnapshotListener(this, (snapshot, e) -> {
-            if (e != null) {
-
-                sharedProviderText.setVisibility(View.GONE);
-                return;
-            }
-
-            if (snapshot != null && snapshot.exists()) {
-                Boolean isShared = snapshot.getBoolean("PEF");
-                if (isShared != null && isShared) {
-                    sharedProviderText.setVisibility(View.VISIBLE);
-                } else {
-                    sharedProviderText.setVisibility(View.GONE);
-                }
-            } else {
-
-                sharedProviderText.setVisibility(View.GONE);
-            }
-        });
-    }
 }
+
+
