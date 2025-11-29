@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navPB"
+        android:icon="@drawable/configure_personal_best"
+        android:title="@string/configure_pb" />
+
+    <item
+        android:id="@+id/navSchedule"
+        android:icon="@drawable/create_schedule"
+        android:title="@string/create_schedule" />
+
+    <item
+        android:id="@+id/navInventory"
+        android:icon="@drawable/manage_inventory"
+        android:title="@string/manage_inventory" />
+
+    <item
+        android:id="@+id/navRewards"
+        android:icon="@drawable/configure_rewards"
+        android:title="@string/configure_rewards" />
+
+</menu>

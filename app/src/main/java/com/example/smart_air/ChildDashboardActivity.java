@@ -23,30 +23,24 @@ public class ChildDashboardActivity extends AppCompatActivity {
         }
 
         Button takeMedButton = (Button)findViewById(R.id.takemedbutton);
-        takeMedButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent childTakeMed = new Intent(ChildDashboardActivity.this, TakeMedicineActivity.class);
-                childTakeMed.putExtra("childID",childId);
-                startActivity(childTakeMed);
-            }
+        takeMedButton.setOnClickListener(v -> {
+            Intent childTakeMed = new Intent(ChildDashboardActivity.this, TakeMedicineActivity.class);
+            childTakeMed.putExtra("childID",childId);
+            startActivity(childTakeMed);
         });
 
         Button triageButton = (Button)findViewById(R.id.triagebutton);
-        triageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent childTriage = new Intent(ChildDashboardActivity.this, TriageActivity.class);
-                childTriage.putExtra("childID",childId);
-                startActivity(childTriage);
-            }
+        triageButton.setOnClickListener(v -> {
+            Intent childTriage = new Intent(ChildDashboardActivity.this, TriageActivity.class);
+            childTriage.putExtra("childID",childId);
+            startActivity(childTriage);
         });
 
         Button streakButton = (Button)findViewById(R.id.streakbutton);
         streakButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent childStreak = new Intent(ChildDashboardActivity.this, StreakActivity.class);
+                Intent childStreak = new Intent(ChildDashboardActivity.this, AchievementActivity.class);
                 childStreak.putExtra("childID",childId);
                 startActivity(childStreak);
             }
