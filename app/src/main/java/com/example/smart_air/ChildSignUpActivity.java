@@ -160,8 +160,18 @@ public class ChildSignUpActivity extends AppCompatActivity {
                     String childID = firebaseUser.getUid();
 
                     // save child in Realtime Database
-                    User newChildUser = new User(fName, lName, username);
-                    mDatabase.child("users").child(childID).setValue(newChildUser)
+                    String registerDate = getTodayDate();
+
+                    Map<String, Object> userData = new HashMap<>();
+                    userData.put("fName", fName);
+                    userData.put("lName", lName);
+                    userData.put("username", username);
+                    userData.put("birthday", birthdayString);
+                    userData.put("accountType", "child");
+                    userData.put("registerDate", registerDate);
+                    userData.put("parentID", parentID);
+
+                    mDatabase.child("users").child(childID).setValue(userData)
                             .addOnCompleteListener(dbTask -> {
                                 if (!dbTask.isSuccessful()) {
                                     Toast.makeText(this, "Failed creating the child profile", Toast.LENGTH_LONG).show();
@@ -169,13 +179,19 @@ public class ChildSignUpActivity extends AppCompatActivity {
                                 }
 
                                 // save parent-child pair to Firestore
-                                saveChildToFirestore(childID, fName, lName, username);
+                                saveChildToFirestore(childID, fName, lName, username, registerDate);
                             });
                 });
     }
 
+    private String getTodayDate() {
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.US);
+        return sdf.format(new java.util.Date());
+    }
+
+
     // Write the parent-child pair into Firestore
-    private void saveChildToFirestore(String childID, String fName, String lName, String username) {
+    private void saveChildToFirestore(String childID, String fName, String lName, String username, String registerDate) {
 
         Map<String, Object> data = new HashMap<>();
         data.put("fName", fName);
@@ -184,6 +200,7 @@ public class ChildSignUpActivity extends AppCompatActivity {
         data.put("birthday", birthdayString);
         data.put("accountType", "child");
         data.put("childID", childID);
+        data.put("registerDate", registerDate);
 
         firestore.collection("parent-child")
                 .document(parentID)

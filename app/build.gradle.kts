@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.googleServices)
 
+
 }
 
 android {
@@ -40,13 +41,17 @@ dependencies {
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
     implementation(libs.appcompat)
     implementation(libs.material)
+    implementation(libs.firebase.firestore)
     implementation(libs.recyclerview)
-    implementation(libs.constraintlayout)
     implementation(libs.activity)
+    implementation(libs.constraintlayout)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.ext.junit)
+    androidTestImplementation(libs.espresso.core)
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.auth)
     implementation(libs.firebase.database)
-    implementation(libs.firebase.firestore)
+
 
     // Unit Tests
     testImplementation(libs.junit)
@@ -55,4 +60,10 @@ dependencies {
     // Android Instrumentation Tests
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+    // Glide（普通方式，不走 catalog）
+    //noinspection UseTomlInstead
+    implementation("com.github.bumptech.glide:glide:5.0.5")
+    //noinspection UseTomlInstead
+    annotationProcessor("com.github.bumptech.glide:compiler:5.0.5")
 }
