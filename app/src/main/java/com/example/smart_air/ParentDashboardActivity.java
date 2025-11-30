@@ -119,8 +119,8 @@ public class ParentDashboardActivity extends AppCompatActivity {
                         }
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             String childId = document.getId();
-                            String fname = document.getString("fname");
-                            String lname = document.getString("lname");
+                            String fname = document.getString("fName");
+                            String lname = document.getString("lName");
                             String birthday = document.getString("birthday");
 
                             List<String> nameParts = new ArrayList<>();
@@ -240,11 +240,16 @@ public class ParentDashboardActivity extends AppCompatActivity {
         myChildrenTab.setOnClickListener(v -> {
             childSummariesRecyclerView.setVisibility(View.VISIBLE);
             shareContentPlaceholder.setVisibility(View.GONE);
+            findViewById(R.id.btnSelectChild).setVisibility(View.VISIBLE);
+            findViewById(R.id.btnCreateChild).setVisibility(View.VISIBLE);
+
         });
 
         shareTab.setOnClickListener(v -> {
             childSummariesRecyclerView.setVisibility(View.GONE);
             shareContentPlaceholder.setVisibility(View.VISIBLE);
+            findViewById(R.id.btnSelectChild).setVisibility(View.GONE);
+            findViewById(R.id.btnCreateChild).setVisibility(View.GONE);
         });
     }
 
