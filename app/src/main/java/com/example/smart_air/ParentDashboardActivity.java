@@ -62,25 +62,9 @@ public class ParentDashboardActivity extends AppCompatActivity {
             }
         });
 
-        Button addparentButton = (Button)findViewById(R.id.addparentbutton);
-        addparentButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent parentAdd = new Intent(ParentDashboardActivity.this, AddParentActivity.class);
-                parentAdd.putExtra("parentID",parentId);
-                startActivity(parentAdd);
-            }
-        });
 
-        Button ScheduleButton = (Button)findViewById(R.id.schedulebutton);
-        ScheduleButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent parentSchedule = new Intent(ParentDashboardActivity.this, ParentScheduleActivity.class);
-                parentSchedule.putExtra("parentID",parentId);
-                startActivity(parentSchedule);
-            }
-        });
+
+
     }
 
 }
