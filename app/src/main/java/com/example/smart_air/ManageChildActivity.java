@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,17 +21,25 @@ import com.google.android.material.navigation.NavigationView;
 public class ManageChildActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
+    private String childID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.manage_child);
 
+        childID = getIntent().getStringExtra("childID");
+
+        if (childID == null || childID.isEmpty()) {
+            Toast.makeText(this,"User ID not found",Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
         drawerLayout = findViewById(R.id.drawerLayout);
         NavigationView navView = findViewById(R.id.navView);
         navView.setItemIconTintList(null);
         navView.setItemTextColor(ColorStateList.valueOf(Color.BLACK));
-
 
 
         findViewById(R.id.btnMenu).setOnClickListener(v ->
@@ -45,7 +54,8 @@ public class ManageChildActivity extends AppCompatActivity {
         });
 
 
-        loadPage(R.layout.manage_child_page, ConfigurePBActivity.class, "Configure Personal Best");
+        loadPage(R.layout.manage_child_page, ConfigurePBActivity.class,
+                "Press START to configure Personal Best (PB) for this child.");
     }
 
     private void handleMenuClick(@NonNull MenuItem item) {
@@ -55,29 +65,25 @@ public class ManageChildActivity extends AppCompatActivity {
         if (id == R.id.navPB) {
             loadPage(R.layout.manage_child_page,
                     ConfigurePBActivity.class,
-                    "Configure Personal Best");
+                    "Press START to configure Personal Best (PB) for this child.");
 
         } else if (id == R.id.navSchedule) {
             loadPage(R.layout.manage_child_page,
                     CreateScheduleActivity.class,
-                    "Create Schedule");
+                    "Press START to create planned controller schedule for this child.");
 
         } else if (id == R.id.navInventory) {
             loadPage(R.layout.manage_child_page,
                     ManageInventoryActivity.class,
-                    "Manage Inventory");
+                    "Press START to manage medicine inventory for this child.");
 
         } else if (id == R.id.navRewards) {
             loadPage(R.layout.manage_child_page,
                     ConfigureRewardsActivity.class,
-                    "Configure Rewards");
+                    "Press START to configure badges condition for this child.");
         }
     }
 
-
-    /**
-     * 将右侧内容替换为一个简单页面，并让 Start 按钮跳转到对应 Activity
-     */
     private void loadPage(int layoutResId, Class<?> targetActivity, String titleText) {
 
         View container = findViewById(R.id.rightContent);
@@ -92,6 +98,7 @@ public class ManageChildActivity extends AppCompatActivity {
 
         start.setOnClickListener(v -> {
             Intent intent = new Intent(this, targetActivity);
+            intent.putExtra("childID", childID);
             startActivity(intent);
         });
 

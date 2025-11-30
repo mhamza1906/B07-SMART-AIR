@@ -7,17 +7,16 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:paddingTop="32dp">
 
-        <!-- ───────────────────────────────
-             Row 1: Technique Streak
-             ─────────────────────────────── -->
-        <ImageView
+
+    <ImageView
             android:id="@+id/imgTechniqueStreak"
             android:layout_width="56dp"
             android:layout_height="56dp"
-            android:src="@drawable/technique_streak"
             android:contentDescription="@string/technique_streak_desc"
+            android:src="@drawable/empty_streak"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -26,23 +25,19 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="Consecutive Technique-Session Completed: 0"
             android:textSize="16sp"
             app:layout_constraintStart_toEndOf="@id/imgTechniqueStreak"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/imgTechniqueStreak"
             app:layout_constraintBottom_toBottomOf="@id/imgTechniqueStreak" />
 
-        <!-- ───────────────────────────────
-             Row 2: Controller Streak
-             Positioned 36dp below Row 1
-             ─────────────────────────────── -->
+        <!-- Controller Streak row -->
         <ImageView
             android:id="@+id/imgControllerStreak"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:layout_marginTop="36dp"
-            android:src="@drawable/controller_streak"
+            android:src="@drawable/empty_streak"
             android:contentDescription="@string/controller_streak_desc"
             app:layout_constraintTop_toBottomOf="@id/imgTechniqueStreak"
             app:layout_constraintStart_toStartOf="parent" />
@@ -52,58 +47,110 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="Consecutive Controller Days Completed: 0"
             android:textSize="16sp"
             app:layout_constraintStart_toEndOf="@id/imgControllerStreak"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/imgControllerStreak"
             app:layout_constraintBottom_toBottomOf="@id/imgControllerStreak" />
 
-        <!-- ───────────────────────────────
-             Row 3: Star Trio (Triangle)
-               BuddingStar = top vertex
-               ShiningStar = bottom-left
-               LuckyStar   = bottom-right
-             Positioned 36dp below Controller Row
-             ─────────────────────────────── -->
-        <!-- Top vertex -->
+
+        <!-- Budding Star -->
+        <TextView
+            android:id="@+id/titleBuddingStar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/imgControllerStreak"
+            app:layout_constraintStart_toStartOf="parent" />
+
         <ImageView
             android:id="@+id/imgBuddingStar"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
-            android:layout_marginTop="36dp"
-            android:src="@drawable/budding_star"
+            android:layout_width="88dp"
+            android:layout_height="88dp"
+            android:layout_marginTop="12dp"
+            android:src="@drawable/budding_star_empty"
             android:contentDescription="@string/budding_star_desc"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/imgControllerStreak"
+            app:layout_constraintTop_toBottomOf="@id/titleBuddingStar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- Bottom-left vertex -->
+        <TextView
+            android:id="@+id/txtBuddingStarDesc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textSize="14sp"
+            app:layout_constraintTop_toBottomOf="@id/imgBuddingStar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+
+        <!-- Shining Star -->
+        <TextView
+            android:id="@+id/titleShiningStar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/txtBuddingStarDesc"
+            app:layout_constraintStart_toStartOf="parent" />
+
         <ImageView
             android:id="@+id/imgShiningStar"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="48dp"
-            android:src="@drawable/shining_star"
+            android:layout_width="88dp"
+            android:layout_height="88dp"
+            android:layout_marginTop="12dp"
+            android:src="@drawable/shining_star_empty"
             android:contentDescription="@string/shining_star_desc"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/imgBuddingStar"
-            app:layout_constraintEnd_toStartOf="@id/imgBuddingStar" />
+            app:layout_constraintTop_toBottomOf="@id/titleShiningStar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- Bottom-right vertex -->
+        <TextView
+            android:id="@+id/txtShiningStarDesc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textSize="14sp"
+            app:layout_constraintTop_toBottomOf="@id/imgShiningStar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+
+        <!-- Lucky Star -->
+        <TextView
+            android:id="@+id/titleLuckyStar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/txtShiningStarDesc"
+            app:layout_constraintStart_toStartOf="parent" />
+
         <ImageView
             android:id="@+id/imgLuckyStar"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginStart="48dp"
-            android:src="@drawable/lucky_star"
+            android:layout_width="88dp"
+            android:layout_height="88dp"
+            android:layout_marginTop="12dp"
+            android:src="@drawable/lucky_star_empty"
             android:contentDescription="@string/lucky_star_desc"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/imgBuddingStar"
-            app:layout_constraintStart_toEndOf="@id/imgBuddingStar" />
+            app:layout_constraintTop_toBottomOf="@id/titleLuckyStar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/txtLuckyStarDesc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textSize="14sp"
+            app:layout_constraintTop_toBottomOf="@id/imgLuckyStar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

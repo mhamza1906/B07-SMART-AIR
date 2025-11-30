@@ -38,7 +38,7 @@ public class Step1Fragment extends Fragment {
                 .into(gif);
 
         // Start cooldown
-        CooldownHelper.startCooldown(8000, () -> cooler1 = true);
+        CooldownHelper.startCooldown(3000, () -> cooler1 = true);
 
         btnEmpty.setOnClickListener(view -> {
             if (!cooler1) {

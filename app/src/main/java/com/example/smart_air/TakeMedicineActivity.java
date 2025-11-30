@@ -26,13 +26,10 @@ public class TakeMedicineActivity extends AppCompatActivity {
 
     private String medType;
     private String childId;
-    private int preBreathRating;
     private FirebaseFirestore db;
 
-    private RadioGroup medTypeButton;
     private EditText preBreathRatingInput;
     private String date;
-    private Button continueButton;
 
 
     @Override
@@ -46,9 +43,9 @@ public class TakeMedicineActivity extends AppCompatActivity {
             return;
         }
         db = FirebaseFirestore.getInstance();
-        medTypeButton = findViewById(R.id.medicine_type);
+        RadioGroup medTypeButton = findViewById(R.id.medicine_type);
         preBreathRatingInput = findViewById(R.id.post_breath_rating_input);
-        continueButton = (Button)findViewById(R.id.continue_button);
+        Button continueButton = findViewById(R.id.continue_button);
 
         medTypeButton.setOnCheckedChangeListener((group, checkedId)->{
             RadioButton selectedButton = findViewById(checkedId);
@@ -58,10 +55,10 @@ public class TakeMedicineActivity extends AppCompatActivity {
 
         continueButton.setOnClickListener(v -> {
             Runnable navigateNext = () -> {
-                Intent switchTechniqueHelper = new Intent(TakeMedicineActivity.this, techniqueHelper.class);
+                Intent switchTechniqueHelper = new Intent(TakeMedicineActivity.this, TechniqueHelperActivity.class);
 
                 switchTechniqueHelper.putExtra("date", date);
-                switchTechniqueHelper.putExtra("child_id", childId);
+                switchTechniqueHelper.putExtra("childID", childId);
                 switchTechniqueHelper.putExtra("type", medType);
 
                 startActivity(switchTechniqueHelper);
@@ -87,6 +84,7 @@ public class TakeMedicineActivity extends AppCompatActivity {
             return;
         }
 
+        int preBreathRating;
         try {
             preBreathRating = Integer.parseInt(ratingStr);
         } catch (NumberFormatException e) {
@@ -109,7 +107,7 @@ public class TakeMedicineActivity extends AppCompatActivity {
         String todayDateStr = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         date = todayDateStr;
 
-        final DocumentReference todayLogRef = db.collection("medley").document(childId)
+        final DocumentReference todayLogRef = db.collection("medlog").document(childId)
                 .collection("log").document(todayDateStr);
 
 
@@ -120,12 +118,28 @@ public class TakeMedicineActivity extends AppCompatActivity {
             int nextDoseNum = 1;
             if (snapshot.exists()) {
                 Map<String, Object> dailyLog = snapshot.getData();
-                Map<String, Object> medicationMap = (Map<String, Object>) dailyLog.get(medType.toLowerCase());
-                if (medicationMap != null) {
-                    nextDoseNum = medicationMap.size() + 1;
+                if (dailyLog != null) {
+
+                    Object rawMedMap = dailyLog.get(medType.toLowerCase());
+
+                    if (rawMedMap instanceof Map<?, ?>) {
+
+                        Map<?, ?> genericMap = (Map<?, ?>) rawMedMap;
+
+                        Map<String, Object> medicationMap = new HashMap<>();
+
+                        for (Map.Entry<?, ?> entry : genericMap.entrySet()) {
+                            if (entry.getKey() instanceof String) {
+                                medicationMap.put((String) entry.getKey(), entry.getValue());
+                            }
+                        }
+
+                        nextDoseNum = medicationMap.size() + 1;
+                    }
+
                 }
             }
-            String newDoseKey = ".dose_" + nextDoseNum;
+            String newDoseKey = "dose_" + nextDoseNum;
 
             Map<String, Object> doseMap = new HashMap<>();
             doseMap.put(newDoseKey, newDoseData);
@@ -137,12 +151,10 @@ public class TakeMedicineActivity extends AppCompatActivity {
 
             return null;
         }).addOnSuccessListener(aVoid -> {
-            Toast.makeText(TakeMedicineActivity.this, "Medicine log saved successfully", Toast.LENGTH_SHORT).show();
+            Toast.makeText(TakeMedicineActivity.this, "Let's go!", Toast.LENGTH_SHORT).show();
             if (onSuccess != null) {
                 onSuccess.run();
             }
-        }).addOnFailureListener(e -> {
-            Toast.makeText(TakeMedicineActivity.this, "Failed to save medicine log: " + e.getMessage(), Toast.LENGTH_LONG).show();
-        });
+        }).addOnFailureListener(e -> Toast.makeText(TakeMedicineActivity.this, "Failed to save medicine log: " + e.getMessage(), Toast.LENGTH_LONG).show());
     }
 }

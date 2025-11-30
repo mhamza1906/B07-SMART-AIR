@@ -1,5 +1,7 @@
 package com.example.smart_air;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +19,15 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 public class StepRestFragment extends Fragment {
 
+    private TechniqueHelperActivity parent;
+
     private boolean cooler1 = false;  // 1 minute cooldown for "Another Puff"
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        parent = (TechniqueHelperActivity) context;
+    }
 
     @Nullable
     @Override
@@ -26,6 +36,7 @@ public class StepRestFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.technique_step_rest, container, false);
+
 
         ImageView gif = v.findViewById(R.id.imgTechniqueStepRest);
         Button btnAnother = v.findViewById(R.id.btnAnother);
@@ -50,7 +61,18 @@ public class StepRestFragment extends Fragment {
                     .loadFragment(new Step4Fragment());
         });
 
-        btnFinish.setOnClickListener(view -> ((TechniqueHelperActivity) requireActivity()).finishHelper());
+        btnFinish.setOnClickListener(view -> {
+
+            Intent finish = new Intent(parent, TakeMedicineActivityPost.class);
+
+            finish.putExtra("childID", parent.getChildID());
+            finish.putExtra("type", parent.getMedType());
+            finish.putExtra("date", parent.getDate());
+
+            startActivity(finish);
+
+            parent.finishHelper();
+        });
 
         return v;
     }

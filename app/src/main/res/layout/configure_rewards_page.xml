@@ -1,22 +1,179 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="24dp">
+    android:padding="16dp">
 
-    <TextView
-        android:id="@+id/txtRewardsTitle"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/configure_rewards"
-        android:textSize="28sp"
-        android:textStyle="bold" />
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
 
-    <Button
-        android:id="@+id/btnRewardsStart"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:text="@string/start_btn"
-        android:layout_marginTop="24dp"/>
-</LinearLayout>
+        <!-- ========== 1. BUDDING STAR ========== -->
+        <TextView
+            android:id="@+id/title_budding"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/badge_budding_star"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:layout_marginTop="24dp" />
+
+        <ImageView
+            android:id="@+id/img_budding"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_marginTop="12dp"
+            android:src="@drawable/budding_star"
+            android:contentDescription="@string/badge_budding_star" />
+
+        <TextView
+            android:id="@+id/budding_intro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/budding_intro"
+            android:textSize="15sp"
+            android:layout_marginTop="16dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="4dp">
+
+            <EditText
+                android:id="@+id/input_budding"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:text="@string/default_budding"
+                android:minHeight="48dp"
+                android:textSize="15sp"
+                android:gravity="center"
+                android:importantForAutofill="no"
+                android:hint="@string/default_budding" />
+
+            <TextView
+                android:id="@+id/budding_after"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/budding_after_n"
+                android:textSize="15sp"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
+
+
+        <!-- ========== 2. SHINING STAR ========== -->
+        <TextView
+            android:id="@+id/title_shining"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/badge_shining_star"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:layout_marginTop="36dp" />
+
+        <ImageView
+            android:id="@+id/img_shining"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_marginTop="12dp"
+            android:src="@drawable/shining_star"
+            android:contentDescription="@string/badge_shining_star" />
+
+        <TextView
+            android:id="@+id/shining_intro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/shining_intro"
+            android:textSize="15sp"
+            android:layout_marginTop="16dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="4dp">
+
+            <EditText
+                android:id="@+id/input_shining"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:text="@string/default_shining"
+                android:minHeight="48dp"
+                android:textSize="15sp"
+                android:gravity="center"
+                android:importantForAutofill="no"
+                android:hint="@string/default_shining" />
+
+            <TextView
+                android:id="@+id/shining_after"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/shining_after_n"
+                android:textSize="15sp"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
+
+
+        <!-- ========== 3. LUCKY STAR ========== -->
+        <TextView
+            android:id="@+id/title_lucky"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/badge_lucky_star"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:layout_marginTop="36dp" />
+
+        <ImageView
+            android:id="@+id/img_lucky"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_marginTop="12dp"
+            android:src="@drawable/lucky_star"
+            android:contentDescription="@string/badge_lucky_star" />
+
+        <TextView
+            android:id="@+id/lucky_intro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/lucky_intro"
+            android:textSize="15sp"
+            android:layout_marginTop="16dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="24dp">
+
+            <EditText
+                android:id="@+id/input_lucky"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:text="@string/default_lucky"
+                android:textSize="15sp"
+                android:gravity="center"
+                android:importantForAutofill="no"
+                android:hint="@string/default_lucky" />
+
+            <TextView
+                android:id="@+id/lucky_after"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lucky_after_n"
+                android:textSize="15sp"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

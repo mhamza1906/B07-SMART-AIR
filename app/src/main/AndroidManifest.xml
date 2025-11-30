@@ -38,7 +38,6 @@
             android:exported="true"/>
 
 
-
         <activity
             android:name=".ParentDashboardActivity"
             android:exported="true"
@@ -57,7 +56,7 @@
 
         <activity android:name=".ProviderNotifActivity" android:exported="false"/>
 
-        <activity android:name=".ChildDashboardActivity" android:exported="false"/>
+        <activity android:name=".ChildDashboardActivity" android:exported="true"/>
 
         <activity android:name=".ChildScheduleActivity" android:exported="false"/>
 
@@ -81,7 +80,10 @@
 
         <activity
             android:name=".TakeMedicineActivityPost"
-            android:exported="false" />
+            android:exported="true" />
+        <activity
+            android:name=".ConfigureRewardsActivity"
+            android:exported="true" />
 
 
     </application>

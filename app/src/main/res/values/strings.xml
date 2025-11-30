@@ -45,7 +45,7 @@
     <string name="technique_step7_prompt">"Remove the chamber from your mouth.\n
         Hold your breath for up to 10 seconds.\n
         Then breathe out slowly through your mouth.\n"</string>
-    <string name="technique_step_rest_prompt">"If you need another puff, wait with the cat for 1 minute,\n
+    <string name="technique_step_rest_prompt">"If you need another puff, wait with the cat for 1 minute,
         then proceed with the 'Another Puff' button.\n
         Or you can proceed with 'Finish Taking Medicine'."</string>
     <string name="technique_step_rest_button_another">"Another Puff"</string>
@@ -79,8 +79,7 @@
     <string name="sign_out_btn">"SIGN OFF"</string>
     <string name="display_email">Email: %1$s</string>
     <string name="display_username">Username: %1$s</string>
-    <string name="display_fName">First Name: %1$s</string>
-    <string name="display_lName">Last Name: %1$s</string>
+    <string name="display_full_name">Name: %1$s %2$s</string>
     <string name="page_my_children">"MY CHILDREN"</string>
     <string name="page_share">"SHARE"</string>
     <string name="select_child_hint">"Select a child"</string>
@@ -96,8 +95,6 @@
     <string name="start_btn">"START"</string>
     <string name="start_clicked_message">%1$s\n\nStart clicked (To Do)</string>
     <string name="menu">"Menu"</string>
-
-    <!-- Your PEF feature strings -->
     <string name="view_history">View History</string>
     <string name="save_pef">Save</string>
     <string name="enter_pef">Enter Pef:</string>
@@ -111,6 +108,50 @@
     <string name="invalid_pef_entry">Invalid PEF Entry</string>
     <string name="db_pef_error">Unable to read Database</string>
     <string name="shared_with_provider">Shared with provider</string>
-
+    <string name="medType">"Medicine Type"</string>
+    <string name="controller">"Controller"</string>
+    <string name="rescue">"Rescue"</string>
+    <string name="breath_rating">"Breath Rating"</string>
+    <string name="one_to_ten">"1–10"</string>
+    <string name="continue_btn">"CONTINUE"</string>
+    <string name="feeling">"How do you feel?"</string>
+    <string name="feeling_better">"Better"</string>
+    <string name="feeling_same">"Same"</string>
+    <string name="feeling_worse">"Worse"</string>
+    <string name="does_amount">"How many doses did you take?"</string>
+    <string name="finish_btn">"FINISH MEDICINE TAKING"</string>
+    <string name="does_amount_hint">"integer ≥ 1"</string>
+    <string name="manage_child_page_subtitle">"Title"</string>
+    <string name="badge_budding_star">"Badge: BUDDING STAR"</string>
+    <string name="badge_shining_star">"Badge: SHINING STAR"</string>
+    <string name="badge_lucky_star">"Badge: LUCKY STAR"</string>
+    <string name="budding_intro">"This badge is awarded to the child who perfectly completed the first"</string>
+    <string name="budding_after_n">"week(s) of Controllers according to your schedule."</string>
+    <string name="shining_intro">"This badge is awarded to the child who has completed"</string>
+    <string name="shining_after_n">"technique sessions for medicine taking."</string>
+    <string name="lucky_intro">"This badge is awarded to the child who has ≤"</string>
+    <string name="lucky_after_n">"rescue(s) in this month."</string>
+    <string name="default_budding">"1"</string>
+    <string name="default_shining">"10"</string>
+    <string name="default_lucky">"4"</string>
+    <string name="badge_budding_star_title">Badge: BUDDING STAR</string>
+    <string name="badge_shining_star_title">Badge: SHINING STAR</string>
+    <string name="badge_lucky_star_title">Badge: LUCKY STAR</string>
+    <string name="tech_streak_interrupted">"Your consecutive technique-helper usage days have been interrupted."</string>
+    <string name="tech_streak_unable_to_load">"Unable to load technique streak."</string>
+    <string name="tech_streak_success">"You have used the technique helper as planned for %1$d consecutive day(s). Great job!"</string>
+    <string name="controller_streak_interrupted">"Your consecutive planned controller days have been interrupted."</string>
+    <string name="controller_streak_unable_to_load">"Unable to load controller streak."</string>
+    <string name="controller_streak_success">"You have completed your planned controller days for %1$d day(s) in a row. Amazing!"</string>
+    <string name="budding_star_unlocked">"You perfectly completed your planned controller schedule for %1$d week(s). Budding Star unlocked!"</string>
+    <string name="budding_star_locked">"Complete your planned controller schedule perfectly for %1$d full week(s) to unlock the Budding Star badge."</string>
+    <string name="budding_star_load_error">"Unable to load controller history for Budding Star."</string>
+    <string name="shining_star_unlocked">"You completed high-quality technique sessions for %1$d day(s) or more. Shining Star unlocked!"</string>
+    <string name="shining_star_locked">"Complete high-quality technique sessions on %1$d day(s) to unlock the Shining Star badge."</string>
+    <string name="shining_star_load_error">"Unable to load technique streak for Shining Star."</string>
+    <string name="lucky_star_unlocked">"Only %1$d rescue day(s) in the past 30 days. Lucky Star unlocked!"</string>
+    <string name="lucky_star_locked">"Keep rescue days at or below %1$d in any 30-day window to unlock the Lucky Star badge."</string>
+    <string name="lucky_star_load_error">"Unable to load rescue statistics for Lucky Star."</string>
+    <string name="select_child_title">"Please select your child."</string>
 
 </resources>

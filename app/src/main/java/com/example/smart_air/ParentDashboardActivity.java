@@ -3,7 +3,6 @@ package com.example.smart_air;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -34,10 +33,11 @@ public class ParentDashboardActivity extends AppCompatActivity {
     private String parentFName;
     private String parentLName;
     private String parentUsername;
-    private TextView txtAvatar;
-    private List<String> cachedChildIds = new ArrayList<>();
-    private List<String> cachedChildNames = new ArrayList<>();
 
+    private TextView txtAvatar;
+
+    private final List<String> cachedChildIds = new ArrayList<>();
+    private final List<String> cachedChildNames = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,22 +47,28 @@ public class ParentDashboardActivity extends AppCompatActivity {
         txtAvatar = findViewById(R.id.txtUserAvatar);
 
         parentId = getIntent().getStringExtra("parentID");
-
         if (parentId == null) {
-            Toast.makeText(this, "User ID not found", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "User ID missing.", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
 
-        loadFragmentMyChildren();
-
+        loadParentInfoFromDatabase();
+        loadChildrenForSelector();
         setupBottomNavigation();
 
-        loadParentInfoFromDatabase(); // query information from Realtime Database
+        Button btnSelectChild = findViewById(R.id.btnSelectChild);
+        btnSelectChild.setOnClickListener(v -> showChildSelectorBottomSheet());
 
+        Button btnCreateChild = findViewById(R.id.btnCreateChild);
+        btnCreateChild.setOnClickListener(v -> {
+            Intent intent = new Intent(this, ChildSignUpActivity.class);
+            intent.putExtra("parentID", parentId);
+            startActivity(intent);
+        });
     }
 
-    // query information from Realtime Database
+
     private void loadParentInfoFromDatabase() {
         FirebaseDatabase.getInstance().getReference("users")
                 .child(parentId)
@@ -70,97 +76,67 @@ public class ParentDashboardActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                        if (!snapshot.exists()) {
-                            Toast.makeText(ParentDashboardActivity.this,
-                                    "User data not found",
-                                    Toast.LENGTH_SHORT).show();
-                            return;
-                        }
+                        if (!snapshot.exists()) return;
 
                         parentEmail = snapshot.child("email").getValue(String.class);
                         parentFName = snapshot.child("fName").getValue(String.class);
                         parentLName = snapshot.child("lName").getValue(String.class);
                         parentUsername = snapshot.child("username").getValue(String.class);
 
-                        if (parentEmail == null) parentEmail = "";
-                        if (parentFName == null) parentFName = "";
-                        if (parentLName == null) parentLName = "";
-                        if (parentUsername == null) parentUsername = "";
-
                         setupUserAvatar();
                     }
 
                     @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Toast.makeText(ParentDashboardActivity.this,
-                                "Database error: " + error.getMessage(),
-                                Toast.LENGTH_SHORT).show();
-                    }
+                    public void onCancelled(@NonNull DatabaseError error) { }
                 });
     }
 
-    // Set User Profile
     private void setupUserAvatar() {
-        // deal with empty name
-        if (parentFName.isEmpty() || parentLName.isEmpty()) {
-            txtAvatar.setText("U");
-        } else {
-            String initials = ("" +
-                    parentFName.charAt(0) +
-                    parentLName.charAt(0)).toUpperCase();
-            txtAvatar.setText(initials);
-        }
+        String initials = "U";
+        if (parentFName != null && parentLName != null && !parentFName.isEmpty())
+            initials = ("" + parentFName.charAt(0) + parentLName.charAt(0)).toUpperCase();
 
-        // popup: show user information
+        txtAvatar.setText(initials);
         txtAvatar.setOnClickListener(v -> showUserInfoBottomSheet());
     }
 
-
-    // popup: show user information
     private void showUserInfoBottomSheet() {
         BottomSheetDialog dialog = new BottomSheetDialog(this);
-        @SuppressLint("InflateParams") View view = getLayoutInflater().inflate(R.layout.bottomsheet_user_info, null, false);
+        @SuppressLint("InflateParams")
+        android.view.View view = getLayoutInflater().inflate(R.layout.bottomsheet_user_info, null);
 
         dialog.setContentView(view);
 
-        TextView txtFullName = view.findViewById(R.id.txtUserFullName);
-        TextView txtEmail = view.findViewById(R.id.txtUserEmail);
-        TextView txtUsername = view.findViewById(R.id.txtUsername);
-        TextView txtFName = view.findViewById(R.id.txtFirstName);
-        TextView txtLName = view.findViewById(R.id.txtLastName);
-        Button btnSignOut = view.findViewById(R.id.btnSignOut);
+        String fullNameText = getString(
+                R.string.display_full_name,
+                parentFName != null ? parentFName : "N/A",
+                parentLName != null ? parentLName : "N/A"
+        );
 
-        String fullName = (parentFName + " " + parentLName).trim();
+        ((TextView) view.findViewById(R.id.txtUserFullName))
+                .setText(fullNameText);
 
-        txtFullName.setText(fullName.isEmpty() ? "Unknown User" : fullName);
-        txtEmail.setText(getString(R.string.display_email, parentEmail));
-        txtUsername.setText(getString(R.string.display_username, parentUsername));
-        txtFName.setText(getString(R.string.display_fName, parentFName));
-        txtLName.setText(getString(R.string.display_lName, parentLName));
+        ((TextView) view.findViewById(R.id.txtUserEmail))
+                .setText(getString(R.string.display_email, parentEmail));
 
+        ((TextView) view.findViewById(R.id.txtUsername))
+                .setText(getString(R.string.display_username, parentUsername));
 
-        btnSignOut.setOnClickListener(v -> {
+        view.findViewById(R.id.btnSignOut).setOnClickListener(v -> {
             FirebaseAuth.getInstance().signOut();
-            dialog.dismiss();
-
-            Intent intent = new Intent(ParentDashboardActivity.this, LoginActivityView.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
+            startActivity(new Intent(this, LoginActivityView.class));
             finish();
         });
-
-
 
         dialog.show();
     }
 
+
     private void setupBottomNavigation() {
-
-        findViewById(R.id.tabMyChildren).setOnClickListener(v -> loadFragmentMyChildren());
-
         findViewById(R.id.tabShare).setOnClickListener(v -> {
             FrameLayout container = findViewById(R.id.containerParentDashboard);
             container.removeAllViews();
+
             TextView text = new TextView(this);
             text.setText(R.string.dummy_share_page);
             text.setTextSize(20);
@@ -169,72 +145,44 @@ public class ParentDashboardActivity extends AppCompatActivity {
     }
 
 
-    private void loadFragmentMyChildren() {
-        @SuppressLint("InflateParams") View view = getLayoutInflater().inflate(R.layout.children_profile, null, false);
-        FrameLayout container = findViewById(R.id.containerParentDashboard);
-        Button btnSelectChild = view.findViewById(R.id.btnSelectChild);
-        btnSelectChild.setOnClickListener(v -> showChildSelector());
-        container.removeAllViews();
-        container.addView(view);
-
-        setupChildrenProfiles(view);
-    }
-
-    private void showChildSelector() {
-        BottomSheetDialog dialog = new BottomSheetDialog(this);
-        @SuppressLint("InflateParams")
-        View view = getLayoutInflater().inflate(R.layout.bottomsheet_child_selector, null, false);
-        dialog.setContentView(view);
-
-        RecyclerView recycler = view.findViewById(R.id.recyclerChildSelector);
-        recycler.setLayoutManager(new LinearLayoutManager(this));
-
-        recycler.setAdapter(new ChildrenAdapter(
-                ParentDashboardActivity.this,
-                cachedChildIds,
-                cachedChildNames
-        ));
-
-        dialog.show();
-    }
-
-    private void setupChildrenProfiles(View root) {
-
-        RecyclerView recycler = root.findViewById(R.id.recyclerChildren);
-        recycler.setLayoutManager(new LinearLayoutManager(this));
-
-        List<String> childNames = new ArrayList<>();
-        List<String> childIds = new ArrayList<>();
-
-
+    private void loadChildrenForSelector() {
         FirebaseFirestore.getInstance()
                 .collection("parent-child")
                 .document(parentId)
                 .collection("child")
                 .get()
                 .addOnSuccessListener(snap -> {
+                    cachedChildIds.clear();
+                    cachedChildNames.clear();
 
                     for (DocumentSnapshot doc : snap) {
-                        String username = doc.getString("username");
-                        childNames.add(username);
-                        childIds.add(doc.getId());
+                        cachedChildIds.add(doc.getId());
+                        cachedChildNames.add(doc.getString("username"));
                     }
-
-                    cachedChildIds = childIds;
-                    cachedChildNames = childNames;
-
-                    recycler.setAdapter(new ChildrenAdapter(ParentDashboardActivity.this, childIds, childNames));
                 });
-        Button btnSelectChild = root.findViewById(R.id.btnSelectChild);
-        btnSelectChild.setOnClickListener(v -> showChildSelector());
+    }
 
-        Button btnCreateChild = root.findViewById(R.id.btnCreateChild);
+    private void showChildSelectorBottomSheet() {
+        BottomSheetDialog dialog = new BottomSheetDialog(this);
 
-        btnCreateChild.setOnClickListener(v -> {
-            Intent intent = new Intent(ParentDashboardActivity.this, ChildSignUpActivity.class);
-            intent.putExtra("parentID", parentId);
-            startActivity(intent);
-        });
+        @SuppressLint("InflateParams")
+        android.view.View sheetView = getLayoutInflater()
+                .inflate(R.layout.bottomsheet_child_selector, null);
+
+        RecyclerView recycler = sheetView.findViewById(R.id.recyclerChildSelector);
+        recycler.setLayoutManager(new LinearLayoutManager(this));
+
+        recycler.setAdapter(new ChildrenAdapter(
+                cachedChildIds,
+                cachedChildNames,
+                childId -> {
+                    dialog.dismiss();
+                    showChildOptions(childId);
+                }
+        ));
+
+        dialog.setContentView(sheetView);
+        dialog.show();
     }
 
     public void showChildOptions(String childId) {
@@ -243,9 +191,9 @@ public class ParentDashboardActivity extends AppCompatActivity {
         layout.setOrientation(LinearLayout.VERTICAL);
         layout.setPadding(40, 40, 40, 40);
 
-        TextView manage = buildOption("Manage Child Activities");
-        TextView summary = buildOption("View Child Profile Summary");
-        TextView dashboard = buildOption("Navigate To Child Dashboard");
+        TextView manage = buildOption("Manage Child Activities 〉");
+        TextView summary = buildOption("View Child Summary       〉");
+        TextView dashboard = buildOption("Go To Child Dashboard    〉");
 
         layout.addView(manage);
         layout.addView(summary);
@@ -254,36 +202,34 @@ public class ParentDashboardActivity extends AppCompatActivity {
         dialog.setContentView(layout);
 
         manage.setOnClickListener(v -> {
-            Intent i = new Intent(this, ManageChildActivity.class);
-            i.putExtra("childID", childId);
-            startActivity(i);
+            Intent it = new Intent(this, ManageChildActivity.class);
+            it.putExtra("childID", childId);
+            startActivity(it);
+            dialog.dismiss();
         });
 
         summary.setOnClickListener(v -> {
-            Intent i = new Intent(this, ChildSummaryActivity.class);
-            i.putExtra("childID", childId);
-            startActivity(i);
+            Intent it = new Intent(this, ChildSummaryActivity.class);
+            it.putExtra("childID", childId);
+            startActivity(it);
+            dialog.dismiss();
         });
 
         dashboard.setOnClickListener(v -> {
-            Intent i = new Intent(this, ChildDashboardActivity.class);
-            i.putExtra("childID", childId);
-            startActivity(i);
+            Intent it = new Intent(this, ChildDashboardActivity.class);
+            it.putExtra("childID", childId);
+            startActivity(it);
+            dialog.dismiss();
         });
 
         dialog.show();
     }
 
     private TextView buildOption(String text) {
-        TextView t = new TextView(this);
-        t.setText(text);
-        t.setTextSize(18);
-        t.setPadding(16, 32, 16, 32);
-        return t;
+        TextView tv = new TextView(this);
+        tv.setText(text);
+        tv.setTextSize(18);
+        tv.setPadding(16, 32, 16, 32);
+        return tv;
     }
-
-
-
 }
-
-

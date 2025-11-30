@@ -37,7 +37,7 @@ public class Step4Fragment extends Fragment {
                 .skipMemoryCache(true)
                 .into(gif);
 
-        CooldownHelper.startCooldown(8000, () -> cooler1 = true);
+        CooldownHelper.startCooldown(3500, () -> cooler1 = true);
 
         btnNext.setOnClickListener(view -> {
             if (!cooler1) {

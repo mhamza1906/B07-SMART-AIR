@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
+
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,7 +17,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 public class Step3NotEmptyFragment extends Fragment {
 
-    private boolean cooler1 = false;
 
     @Nullable
     @Override
@@ -37,16 +36,9 @@ public class Step3NotEmptyFragment extends Fragment {
                 .skipMemoryCache(true)
                 .into(gif);
 
-        CooldownHelper.startCooldown(8000, () -> cooler1 = true);
 
-        btnNext.setOnClickListener(view -> {
-            if (!cooler1) {
-                Toast.makeText(getContext(), "You're doing it too fast, please slow down a bit", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            ((TechniqueHelperActivity) requireActivity())
-                    .loadFragment(new Step4Fragment());
-        });
+        btnNext.setOnClickListener(view -> ((TechniqueHelperActivity) requireActivity())
+                .loadFragment(new Step4Fragment()));
 
         return v;
     }

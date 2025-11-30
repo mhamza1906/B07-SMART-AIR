@@ -1,6 +1,5 @@
 package com.example.smart_air;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,12 +18,17 @@ class ChildrenAdapter extends RecyclerView.Adapter<ChildrenAdapter.ChildViewHold
 
     private final List<String> childIds;
     private final List<String> usernames;
-    private final Context context;
 
-    ChildrenAdapter(Context context, List<String> ids, List<String> names) {
-        this.context = context;
+    interface OnChildClickListener {
+        void onChildClick(String childId);
+    }
+
+    private final OnChildClickListener listener;
+
+    ChildrenAdapter(List<String> ids, List<String> names, OnChildClickListener listener) {
         this.childIds = ids;
         this.usernames = names;
+        this.listener = listener;
     }
 
     @NonNull
@@ -42,8 +46,6 @@ class ChildrenAdapter extends RecyclerView.Adapter<ChildrenAdapter.ChildViewHold
         String childName = usernames.get(position);
 
         holder.txtChildName.setText(childName);
-
-        // 清空旧 badges
         holder.layoutBadges.removeAllViews();
 
         FirebaseFirestore.getInstance()
@@ -53,21 +55,17 @@ class ChildrenAdapter extends RecyclerView.Adapter<ChildrenAdapter.ChildViewHold
                 .addOnSuccessListener(doc -> {
                     if (!doc.exists()) return;
 
-                    Boolean budding = doc.getBoolean("allBadges.budding_star");
-                    Boolean shining = doc.getBoolean("allBadges.shining_star");
-                    Boolean lucky = doc.getBoolean("allBadges.lucky_star");
-
-                    if (Boolean.TRUE.equals(budding))
+                    if (Boolean.TRUE.equals(doc.getBoolean("allBadges.budding_star")))
                         addBadge(holder.layoutBadges, R.drawable.budding_star);
-                    if (Boolean.TRUE.equals(shining))
+
+                    if (Boolean.TRUE.equals(doc.getBoolean("allBadges.shining_star")))
                         addBadge(holder.layoutBadges, R.drawable.shining_star);
-                    if (Boolean.TRUE.equals(lucky))
+
+                    if (Boolean.TRUE.equals(doc.getBoolean("allBadges.lucky_star")))
                         addBadge(holder.layoutBadges, R.drawable.lucky_star);
                 });
 
-        holder.itemView.setOnClickListener(v ->
-                ((ParentDashboardActivity) context).showChildOptions(childId)
-        );
+        holder.itemView.setOnClickListener(v -> listener.onChildClick(childId));
     }
 
     @Override
@@ -92,8 +90,10 @@ class ChildrenAdapter extends RecyclerView.Adapter<ChildrenAdapter.ChildViewHold
         ImageView img = new ImageView(layout.getContext());
         img.setImageResource(drawableId);
 
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(48, 48);
-        params.setMarginEnd(8);
+        int size = (int) (layout.getResources().getDisplayMetrics().density * 42);
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(size, size);
+        params.setMargins(8, 4, 16, 4);
 
         img.setLayoutParams(params);
         layout.addView(img);

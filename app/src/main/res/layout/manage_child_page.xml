@@ -8,17 +8,19 @@
 
     <TextView
         android:id="@+id/txtTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="320dp"
         android:layout_height="wrap_content"
-        android:text="Title"
+        android:text="@string/manage_child_page_subtitle"
         android:textSize="24sp"
         android:textStyle="bold"
         android:layout_marginBottom="32dp" />
 
     <Button
         android:id="@+id/btnStart"
-        android:layout_width="wrap_content"
+        android:layout_width="320dp"
         android:layout_height="wrap_content"
-        android:text="@string/start_btn" />
+        android:backgroundTint="#FF6978"
+        android:text="@string/start_btn"
+        android:textColor="#263238" />
 
 </LinearLayout>

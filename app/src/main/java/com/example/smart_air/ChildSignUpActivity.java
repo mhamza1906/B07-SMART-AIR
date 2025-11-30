@@ -169,6 +169,7 @@ public class ChildSignUpActivity extends AppCompatActivity {
                     userData.put("birthday", birthdayString);
                     userData.put("accountType", "child");
                     userData.put("registerDate", registerDate);
+                    userData.put("parentID", parentID);
 
                     mDatabase.child("users").child(childID).setValue(userData)
                             .addOnCompleteListener(dbTask -> {

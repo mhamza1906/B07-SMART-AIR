@@ -37,7 +37,7 @@ public class Step3EmptyFragment extends Fragment {
                 .skipMemoryCache(true)
                 .into(gif);
 
-        CooldownHelper.startCooldown(8000, () -> cooler1 = true);
+        CooldownHelper.startCooldown(4000, () -> cooler1 = true);
 
         btnNext.setOnClickListener(view -> {
             if (!cooler1) {
