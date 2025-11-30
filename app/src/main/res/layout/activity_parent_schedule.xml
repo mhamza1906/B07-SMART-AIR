@@ -6,6 +6,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <Button
+        android:id="@+id/decrementButton"
+        android:layout_width="41dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:text="-"
+        app:layout_constraintEnd_toStartOf="@+id/controllerNumberText"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
@@ -30,7 +40,7 @@
         android:id="@+id/pickDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="52dp"
         android:text="Select Date"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -41,19 +51,51 @@
         android:id="@+id/setDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
-        android:text="Set Controller Day"
+        android:layout_marginTop="16dp"
+        android:text="Schedule Controller Usage on This Day"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pickDate" />
+        app:layout_constraintTop_toBottomOf="@+id/controllerNumberText" />
 
     <TextView
         android:id="@+id/ChosenDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
         android:text="Date"
+        app:layout_constraintBottom_toTopOf="@+id/pickDate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="How many controller usages today?"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pickDate" />
+
+    <TextView
+        android:id="@+id/controllerNumberText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="1"
+        android:textSize="34sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+    <Button
+        android:id="@+id/incrementButton"
+        android:layout_width="41dp"
+        android:layout_height="47dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:text="+"
+        app:layout_constraintStart_toEndOf="@+id/controllerNumberText"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
 </androidx.constraintlayout.widget.ConstraintLayout>
