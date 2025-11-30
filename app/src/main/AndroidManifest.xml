@@ -14,9 +14,7 @@
         android:theme="@style/Theme.Smart_air">
 
 
-        <activity
-            android:name=".InputPEFActivity"
-            android:exported="false"/>
+
 
 
         <activity
@@ -28,7 +26,7 @@
             </intent-filter>
         </activity>
 
-        <!-- ALL OTHER ACTIVITIES FROM YOUR TEAM (KEEP ALL OF THESE) -->
+        <activity android:name=".InputPEFActivity" android:exported="false"/>
         <activity android:name=".SignUpActivity" android:exported="true"/>
         <activity android:name=".ChildLoginActivityView" android:exported="true"/>
         <activity android:name=".ChildSignUpActivity" android:exported="true"/>
