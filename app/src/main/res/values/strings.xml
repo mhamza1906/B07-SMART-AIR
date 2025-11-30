@@ -88,7 +88,7 @@
     <string name="select_child_btn">"Select A Child  〉〉〉"</string>
     <string name="dummy_share_page">"Share Page TO DO"</string>
     <string name="manage_child">"Manage Child Activities"</string>
-    <string name="configure_pb">"Configure Personal Best (PB)"</string>
+    <string name="configure_pb">"Configure PEF Settings"</string>
     <string name="configure_rewards">"Configure Rewards"</string>
     <string name="create_schedule">"Create Schedule"</string>
     <string name="manage_inventory">"Manage Inventory"</string>
@@ -153,5 +153,7 @@
     <string name="lucky_star_locked">"Keep rescue days at or below %1$d in any 30-day window to unlock the Lucky Star badge."</string>
     <string name="lucky_star_load_error">"Unable to load rescue statistics for Lucky Star."</string>
     <string name="select_child_title">"Please select your child."</string>
+    <string name="perform_daily_checkin">"Perform Daily Check-In"</string>
+
 
 </resources>

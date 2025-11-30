@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class DailyCheckInActivity extends AppCompatActivity {
+public class ParentDailyCheckin extends AppCompatActivity {
 
     private RadioGroup nightWakingGroup;
     private RadioGroup coughWheezeGroup;
@@ -74,10 +74,6 @@ public class DailyCheckInActivity extends AppCompatActivity {
 
         editbtn.setOnClickListener(v -> editData());
         submitButton.setOnClickListener(v -> saveCheckInData());
-
-
-
-
     }
 
     private void editData(){
@@ -129,8 +125,6 @@ public class DailyCheckInActivity extends AppCompatActivity {
 
             }
         }
-
-
     }
 
     private void enablecheckbox(ViewGroup container, boolean enabled){
@@ -143,11 +137,7 @@ public class DailyCheckInActivity extends AppCompatActivity {
         }
     }
 
-
-
     private void saveCheckInData() {
-
-        //Validation
         if (nightWakingGroup.getCheckedRadioButtonId() == -1 ||
                 coughWheezeGroup.getCheckedRadioButtonId() == -1 ||
                 activityLimitGroup.getCheckedRadioButtonId() == -1) {
@@ -155,16 +145,13 @@ public class DailyCheckInActivity extends AppCompatActivity {
             return;
         }
 
-        //Data Collection
         Map<String, Object> data = new HashMap<>();
-        data.put("Author", "child");
+        data.put("Author", "Parent");
 
-        //Get selected symptom text
         data.put("NightWaking", getSelectedText(nightWakingGroup));
         data.put("CoughWheeze", getSelectedText(coughWheezeGroup));
         data.put("ActivityLimit", getSelectedText(activityLimitGroup));
 
-        // Get selected triggers, or an empty list if the symptom is not present
         if (nightWakingGroup.getCheckedRadioButtonId() == R.id.night_waking_no) {
             data.put("NWTrigger", new ArrayList<>());
         } else {
@@ -189,14 +176,12 @@ public class DailyCheckInActivity extends AppCompatActivity {
                 .collection("log").document(todayDate);
 
         docRef.set(data, SetOptions.merge()).addOnSuccessListener(aVoid -> {
-                    Toast.makeText(DailyCheckInActivity.this, "Check-in saved!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ParentDailyCheckin.this, "Check-in saved!", Toast.LENGTH_SHORT).show();
                     EnableAllInputs(false);
                     submitButton.setVisibility(View.GONE);
                     editbtn.setVisibility(View.VISIBLE);
                 })
-                .addOnFailureListener(e -> Toast.makeText(DailyCheckInActivity.this, "Failed to save data.", Toast.LENGTH_SHORT).show());
-
-
+                .addOnFailureListener(e -> Toast.makeText(ParentDailyCheckin.this, "Failed to save data.", Toast.LENGTH_SHORT).show());
     }
 
     private String getSelectedText(RadioGroup group) {

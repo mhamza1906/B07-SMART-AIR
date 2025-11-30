@@ -54,7 +54,7 @@ public class ManageChildActivity extends AppCompatActivity {
         });
 
 
-        loadPage(R.layout.manage_child_page, ConfigurePBActivity.class,
+        loadPage(R.layout.manage_child_page, ConfigurePEFSettingsActivity.class,
                 "Press START to configure Personal Best (PB) for this child.");
     }
 
@@ -64,8 +64,8 @@ public class ManageChildActivity extends AppCompatActivity {
 
         if (id == R.id.navPB) {
             loadPage(R.layout.manage_child_page,
-                    ConfigurePBActivity.class,
-                    "Press START to configure Personal Best (PB) for this child.");
+                    ConfigurePEFSettingsActivity.class,
+                    "Press START to configure PEF Settings for this child.");
 
         } else if (id == R.id.navSchedule) {
             loadPage(R.layout.manage_child_page,
@@ -81,7 +81,12 @@ public class ManageChildActivity extends AppCompatActivity {
             loadPage(R.layout.manage_child_page,
                     ConfigureRewardsActivity.class,
                     "Press START to configure badges condition for this child.");
+        }else if(id == R.id.navDailyCheckin){
+            loadPage(R.layout.daily_check_in,
+                    ParentDailyCheckin.class,
+                    "Press START to perform daily check-in for this child.");
         }
+
     }
 
     private void loadPage(int layoutResId, Class<?> targetActivity, String titleText) {

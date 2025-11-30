@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/check_in_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Daily Check-In"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Block 1: Night Waking -->
+        <TextView
+            android:id="@+id/night_waking_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Night Waking"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/check_in_title" />
+
+        <RadioGroup
+            android:id="@+id/night_waking_group"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/night_waking_label">
+
+            <RadioButton
+                android:id="@+id/night_waking_yes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Yes" />
+
+            <RadioButton
+                android:id="@+id/night_waking_no"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No" />
+        </RadioGroup>
+
+        <HorizontalScrollView
+            android:id="@+id/night_waking_triggers_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/night_waking_group"
+            tools:visibility="visible">
+
+            <LinearLayout
+                android:id="@+id/night_waking_triggers_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/night_waking_trigger_dust"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Dust" />
+
+                <CheckBox
+                    android:id="@+id/night_waking_trigger_pets"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pets" />
+
+                <CheckBox
+                    android:id="@+id/night_waking_trigger_smoke"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Smoke" />
+
+                <CheckBox
+                    android:id="@+id/night_waking_trigger_odors"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Strong odors/perfumes" />
+
+                <CheckBox
+                    android:id="@+id/night_waking_trigger_cold_air"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cold air" />
+
+                <CheckBox
+                    android:id="@+id/night_waking_trigger_illness"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Illness" />
+
+                <CheckBox
+                    android:id="@+id/night_waking_trigger_exercise"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Exercise" />
+            </LinearLayout>
+        </HorizontalScrollView>
+
+
+        <!-- Block 2: Cough/Wheeze -->
+        <TextView
+            android:id="@+id/cough_wheeze_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="Cough/Wheeze"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/night_waking_triggers_container" />
+
+        <RadioGroup
+            android:id="@+id/cough_wheeze_group"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cough_wheeze_label">
+
+            <RadioButton
+                android:id="@+id/cough_wheeze_none"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="None" />
+
+            <RadioButton
+                android:id="@+id/cough_wheeze_some"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Some" />
+
+            <RadioButton
+                android:id="@+id/cough_wheeze_lot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="A lot" />
+        </RadioGroup>
+
+        <HorizontalScrollView
+            android:id="@+id/cough_wheeze_triggers_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cough_wheeze_group"
+            tools:visibility="visible">
+
+            <LinearLayout
+                android:id="@+id/cough_wheeze_triggers_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/cough_wheeze_trigger_dust"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Dust" />
+
+                <CheckBox
+                    android:id="@+id/cough_wheeze_trigger_pets"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pets" />
+
+                <CheckBox
+                    android:id="@+id/cough_wheeze_trigger_smoke"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Smoke" />
+
+                <CheckBox
+                    android:id="@+id/cough_wheeze_trigger_odors"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Strong odors/perfumes" />
+
+                <CheckBox
+                    android:id="@+id/cough_wheeze_trigger_cold_air"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cold air" />
+
+                <CheckBox
+                    android:id="@+id/cough_wheeze_trigger_illness"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Illness" />
+
+                <CheckBox
+                    android:id="@+id/cough_wheeze_trigger_exercise"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Exercise" />
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <!-- Block 3: Activity Level -->
+        <TextView
+            android:id="@+id/activity_limit_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="Activity Level Limitations"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cough_wheeze_triggers_container" />
+
+        <RadioGroup
+            android:id="@+id/activity_limit_group"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/activity_limit_label">
+
+            <RadioButton
+                android:id="@+id/activity_limit_none"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="None: Played normally"
+                android:textSize="14sp" />
+
+            <RadioButton
+                android:id="@+id/activity_limit_mild"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mild: Slowed down but still played"
+                android:textSize="14sp" />
+
+            <RadioButton
+                android:id="@+id/activity_limit_significant"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Significant: Had to stop activity"
+                android:textSize="14sp" />
+
+            <RadioButton
+                android:id="@+id/activity_limit_could_not_play"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Couldn't play at all"
+                android:textSize="14sp" />
+
+        </RadioGroup>
+
+        <HorizontalScrollView
+            android:id="@+id/activity_limit_triggers_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/activity_limit_group"
+            tools:visibility="visible">
+
+            <LinearLayout
+                android:id="@+id/activity_limit_triggers_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/activity_limit_trigger_dust"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Dust" />
+
+                <CheckBox
+                    android:id="@+id/activity_limit_trigger_pets"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pets" />
+
+                <CheckBox
+                    android:id="@+id/activity_limit_trigger_smoke"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Smoke" />
+
+                <CheckBox
+                    android:id="@+id/activity_limit_trigger_odors"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Strong odors/perfumes" />
+
+                <CheckBox
+                    android:id="@+id/activity_limit_trigger_cold_air"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cold air" />
+
+                <CheckBox
+                    android:id="@+id/activity_limit_trigger_illness"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Illness" />
+
+                <CheckBox
+                    android:id="@+id/activity_limit_trigger_exercise"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Exercise" />
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <Button
+            android:id="@+id/submit_check_in_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Submit"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/activity_limit_triggers_container" />
+
+        <Button
+            android:id="@+id/editbtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Edit"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/activity_limit_triggers_container" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
