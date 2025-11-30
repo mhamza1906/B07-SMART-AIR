@@ -28,7 +28,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:fontFamily="sans-serif-medium"
             android:text="Today's Zone:"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/child_name_text" />
@@ -43,26 +42,42 @@
             app:layout_constraintStart_toEndOf="@+id/todays_zone_label"
             app:layout_constraintTop_toTopOf="@+id/todays_zone_label" />
 
-        <ImageView
+        <TextView
+            android:id="@+id/dob_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Date of Birth:"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/todays_zone_label" />
+
+        <TextView
+            android:id="@+id/dob_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textStyle="bold"
+            app:layout_constraintBaseline_toBaselineOf="@+id/dob_label"
+            app:layout_constraintStart_toEndOf="@+id/dob_label"
+            tools:text="Jan 1, 2018" />
+
+        <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/trend_graph_view"
             android:layout_width="0dp"
             android:layout_height="100dp"
             android:layout_marginTop="16dp"
-            android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/todays_zone_label"
-            tools:srcCompat="@tools:sample/backgrounds/scenic" />
+            app:layout_constraintTop_toBottomOf="@+id/dob_label" />
 
         <TextView
             android:id="@+id/last_rescue_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:fontFamily="sans-serif-medium"
             android:text="Last Rescue:"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/trend_graph_view" />
+            app:layout_constraintTop_toBottomOf="@id/trend_graph_view" />
 
         <TextView
             android:id="@+id/last_rescue_value"
@@ -79,7 +94,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:fontFamily="sans-serif-medium"
             android:text="Weekly Rescue Count:"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/last_rescue_label" />
@@ -93,17 +107,6 @@
             app:layout_constraintBaseline_toBaselineOf="@+id/weekly_rescue_label"
             app:layout_constraintStart_toEndOf="@+id/weekly_rescue_label"
             tools:text="5" />
-
-        <Button
-            android:id="@+id/view_details_button"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="View Detailed Info"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/weekly_rescue_value" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
