@@ -3,8 +3,10 @@ package com.example.smart_air;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -133,16 +135,44 @@ public class ParentDashboardActivity extends AppCompatActivity {
 
 
     private void setupBottomNavigation() {
-        findViewById(R.id.tabShare).setOnClickListener(v -> {
-            FrameLayout container = findViewById(R.id.containerParentDashboard);
+
+        LinearLayout tabMyChildren = findViewById(R.id.tabMyChildren);
+        LinearLayout tabShare = findViewById(R.id.tabShare);
+
+        Button btnSelectChild = findViewById(R.id.btnSelectChild);
+        Button btnCreateChild = findViewById(R.id.btnCreateChild);
+
+        FrameLayout container = findViewById(R.id.containerParentDashboard);
+
+
+        setTabSelected(true);
+
+        tabMyChildren.setOnClickListener(v -> {
+            setTabSelected(true);
+
+
+            btnSelectChild.setVisibility(View.VISIBLE);
+            btnCreateChild.setVisibility(View.VISIBLE);
+
+            container.removeAllViews();
+            // TODO: Finish Share
+        });
+
+        tabShare.setOnClickListener(v -> {
+            setTabSelected(false);
+
+
+            btnSelectChild.setVisibility(View.GONE);
+            btnCreateChild.setVisibility(View.GONE);
+
             container.removeAllViews();
 
-            TextView text = new TextView(this);
-            text.setText(R.string.dummy_share_page);
-            text.setTextSize(20);
-            container.addView(text);
+
+            View shareView = getLayoutInflater().inflate(R.layout.parent_dashboard_share_page, container, false);
+            container.addView(shareView);
         });
     }
+
 
 
     private void loadChildrenForSelector() {
@@ -224,6 +254,30 @@ public class ParentDashboardActivity extends AppCompatActivity {
 
         dialog.show();
     }
+
+    private void setTabSelected(boolean isMyChildren) {
+
+        TextView myChildrenLabel = findViewById(R.id.tabMyChildrenLabel);
+        ImageView myChildrenIcon = findViewById(R.id.tabMyChildrenIcon);
+
+        TextView shareLabel = findViewById(R.id.tabShareLabel);
+        ImageView shareIcon = findViewById(R.id.tabShareIcon);
+
+        if (isMyChildren) {
+            myChildrenLabel.setTextColor(getColor(R.color.tab_selected));
+            myChildrenIcon.setAlpha(1f);
+
+            shareLabel.setTextColor(getColor(R.color.tab_unselected));
+            shareIcon.setAlpha(0.4f);
+        } else {
+            shareLabel.setTextColor(getColor(R.color.tab_selected));
+            shareIcon.setAlpha(1f);
+
+            myChildrenLabel.setTextColor(getColor(R.color.tab_unselected));
+            myChildrenIcon.setAlpha(0.4f);
+        }
+    }
+
 
     private TextView buildOption(String text) {
         TextView tv = new TextView(this);
