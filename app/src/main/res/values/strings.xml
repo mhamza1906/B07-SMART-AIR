@@ -27,11 +27,11 @@
     <string name="prompt_enter_current_pef">Please enter your current PEF to see your action plan.</string>
     <string name="pb_not_set">Your PEF Personal Best is not set. Cannot determine action plan.</string>
     <string name="green_zone">Green Zone: Your asthma is well-controlled. Continue your current medication plan.</string>
-    <string name="yellow_zone">Yellow Zone: Your asthma is worsening. Use your rescue inhaler as prescribed. Be cautious.</string>
-    <string name="red_zone">Red Zone: Medical alert! Use your rescue inhaler immediately. Your symptoms are severe.</string>
+    <string name="yellow_zone">Yellow Zone: Your asthma is worsening. Take 2 to 4 puffs of your rescue inhaler immediately.</string>
+    <string name="red_zone">Red Zone: Medical alert! Take 4 to 6 puffs of your rescue inhaler immediately.</string>
 
 
-    <string name="childSignInButtonWithParentName">"SIGN IN WITH YOUR USERNAME (CHILD)"</string>
+    <string name="childSignInButtonWithParentName1">"SIGN IN WITH YOUR USERNAME (CHILD)"</string>
     <string name="DOB">"Birthday (YYYY-MM-DD)"</string>
     <string name="linkChildBtn">"LINK THIS CHILD"</string>
     <string-array name="accountType">

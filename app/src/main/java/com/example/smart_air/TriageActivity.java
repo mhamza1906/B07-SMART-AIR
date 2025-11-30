@@ -23,11 +23,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.FirebaseFirestore; // --- FIX: Import Firestore ---
+import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.Date; // --- FIX: Import Date for timestamp ---
-import java.util.HashMap; // --- FIX: Import HashMap to create data object ---
-import java.util.Map; // --- FIX: Import Map ---
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TriageActivity extends AppCompatActivity {
 
@@ -38,21 +38,22 @@ public class TriageActivity extends AppCompatActivity {
     private EditText editCurrentPEF, editMedTime;
     private RadioGroup rgRescueMed;
 
-    private DatabaseReference mUserRef; // For Realtime DB (user profile)
-    private FirebaseFirestore mFirestore; // --- FIX: Add a Firestore instance variable ---
+    // Firebase
+    private DatabaseReference mUserRef; // For Realtime DB (reading user's PEF)
+    private FirebaseFirestore mFirestore; // For Firestore (writing logs/alerts)
     private FirebaseUser currentUser;
 
     // Logic
     private CountDownTimer tenMinuteTimer;
     private boolean isEmergencyState = false;
-    private String triageIncidentId; // --- FIX: To store the unique ID for this specific incident ---
+    private String triageIncidentId; // Stores the Firestore Document ID for this incident
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_triage);
 
-        // Initialize UI
+        // Initialize UI Elements
         chkBreathingBreaks = findViewById(R.id.chkBreathingBreaks);
         chkHardToBreathe = findViewById(R.id.chkHardToBreathe);
         chkLipColorChange = findViewById(R.id.chkLipColorChange);
@@ -63,9 +64,8 @@ public class TriageActivity extends AppCompatActivity {
         rgRescueMed = findViewById(R.id.rgRescueMed);
 
         // Initialize Firebase
-        // Firebase
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        mFirestore = FirebaseFirestore.getInstance(); // --- FIX: Initialize Firestore ---
+        mFirestore = FirebaseFirestore.getInstance();
         currentUser = mAuth.getCurrentUser();
 
         if (currentUser == null) {
@@ -74,61 +74,72 @@ public class TriageActivity extends AppCompatActivity {
             return;
         }
 
+        // This reference is ONLY for reading the user's profile data (like PEF)
         mUserRef = FirebaseDatabase.getInstance().getReference("users").child(currentUser.getUid());
 
         // --- CORE FUNCTIONALITY ---
 
-        // --- FIX: Log the start of the triage session to Firestore ---
-        logTriageEventToFirestore(); // false because emergency services have not been called yet
-
-        // 1. Immediately notify parent and start the 10-minute timer
-        notifyParent("TriageModeStarted");
+        // 1. Log the start of the triage session to Firestore AND trigger parent alert
+        triggerParentAlert("TriageModeStarted");
         startTenMinuteTimer();
 
-        // ... (rest of your onCreate method is the same)
+        // Setup UI listeners
         setupRedFlagListeners();
         setupMedicationListener();
         btnEmergencyCall.setOnClickListener(v -> {
-            // Log that the user is calling emergency services
-            updateTriageLogWithEmergencyCall();
+            triggerParentAlert("EmergencyStateTriggered");
             Intent intent = new Intent(Intent.ACTION_DIAL);
             intent.setData(Uri.parse("tel:911"));
-            startActivity(intent);
+            try {
+                startActivity(intent);
+            } catch (SecurityException e) {
+                Log.e("TriageActivity", "Dialer could not be opened.", e);
+                Toast.makeText(this, "Could not open dialer.", Toast.LENGTH_SHORT).show();
+            }
         });
+
         fetchUserDataAndDetermineActionPlan();
     }
 
-    // --- FIX: NEW METHOD TO LOG THE TRIAGE EVENT ---
-    private void logTriageEventToFirestore() {
+    /**
+     * Creates a new document in the 'triage_incidents' collection in Firestore.
+     * This action will be detected by the Firebase Cloud Function to send a notification.
+     *
+     * @param eventType A string describing the event (e.g., "TriageModeStarted").
+     */
+    private void triggerParentAlert(String eventType) {
         if (currentUser == null) return;
 
-        // Create a data object to store the triage information
-        Map<String, Object> triageLog = new HashMap<>();
-        triageLog.put("userId", currentUser.getUid());
-        triageLog.put("timestamp", new Date()); // Uses the current date and time
-        triageLog.put("emergencyServicesCalled", false);
+        // Define the data for the new incident document
+        Map<String, Object> incidentData = new HashMap<>();
+        incidentData.put("childId", currentUser.getUid());
+        incidentData.put("eventType", eventType);
+        incidentData.put("timestamp", new Date());
+        incidentData.put("emergencyServicesCalled", eventType.equals("EmergencyStateTriggered"));
 
-        // A unique ID for this specific incident is generated automatically by .document()
-        triageIncidentId = mFirestore.collection("triage_incidents").document().getId();
-
-        mFirestore.collection("triage_incidents").document(triageIncidentId)
-                .set(triageLog)
-                .addOnSuccessListener(aVoid -> Log.d("TriageActivity", "Triage event logged successfully."))
-                .addOnFailureListener(e -> Log.w("TriageActivity", "Error logging triage event.", e));
-    }
-
-    // --- FIX: NEW METHOD TO UPDATE THE LOG WHEN EMERGENCY IS CALLED ---
-    private void updateTriageLogWithEmergencyCall() {
-        if (triageIncidentId != null && !triageIncidentId.isEmpty()) {
+        // If this is the first log for this session, create a new document
+        if (triageIncidentId == null) {
+            mFirestore.collection("triage_incidents").add(incidentData)
+                    .addOnSuccessListener(documentReference -> {
+                        triageIncidentId = documentReference.getId(); // Save the ID for later updates
+                        Log.d("TriageActivity", "Triage event created in Firestore with ID: " + triageIncidentId);
+                        Toast.makeText(this, "Parent has been notified.", Toast.LENGTH_SHORT).show();
+                    })
+                    .addOnFailureListener(e -> Log.e("TriageActivity", "Error creating triage event.", e));
+        } else {
+            // If the incident already exists, just update it
             mFirestore.collection("triage_incidents").document(triageIncidentId)
-                    .update("emergencyServicesCalled", true)
-                    .addOnSuccessListener(aVoid -> Log.d("TriageActivity", "Triage log updated for emergency call."))
-                    .addOnFailureListener(e -> Log.w("TriageActivity", "Error updating triage log.", e));
+                    .update(incidentData)
+                    .addOnSuccessListener(aVoid -> {
+                        Log.d("TriageActivity", "Triage event updated in Firestore for emergency.");
+                        Toast.makeText(this, "Parent has been re-notified of the emergency.", Toast.LENGTH_SHORT).show();
+                    })
+                    .addOnFailureListener(e -> Log.e("TriageActivity", "Error updating triage event.", e));
         }
     }
 
-
     private void triggerEmergencyState(String reason) {
+        if (isEmergencyState) return; // Prevent multiple triggers
         isEmergencyState = true;
 
         if (tenMinuteTimer != null) {
@@ -138,14 +149,14 @@ public class TriageActivity extends AppCompatActivity {
         btnEmergencyCall.setVisibility(View.VISIBLE);
         txtActionPlan.setVisibility(View.GONE);
 
-        // --- FIX: Update the existing Firestore log to reflect the emergency state ---
-        updateTriageLogWithEmergencyCall();
+        // This now correctly calls the method to update the Firestore log
+        triggerParentAlert("EmergencyStateTriggered");
 
-        notifyParent("EmergencyStateTriggered");
         Toast.makeText(this, "Emergency state triggered: " + reason, Toast.LENGTH_LONG).show();
     }
 
-    // ... (The rest of your TriageActivity.java methods remain the same)
+    // --- The rest of your TriageActivity.java methods remain the same. They are correct. ---
+    // ... (setupRedFlagListeners, setupMedicationListener, checkRedFlagStatus, etc.) ...
     private void setupRedFlagListeners() {
         View.OnClickListener redFlagListener = v -> checkRedFlagStatus();
         chkBreathingBreaks.setOnClickListener(redFlagListener);
@@ -239,11 +250,6 @@ public class TriageActivity extends AppCompatActivity {
                 }
                 break;
         }
-    }
-
-    private void notifyParent(String eventType) {
-        mUserRef.child("triageEvents").push().setValue(eventType + " at " + System.currentTimeMillis());
-        Toast.makeText(this, "Parent has been notified.", Toast.LENGTH_SHORT).show();
     }
 
     @Override
