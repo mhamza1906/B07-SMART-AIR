@@ -172,7 +172,7 @@ public class TakeMedicineActivityPost extends AppCompatActivity {
         }).addOnFailureListener(e -> Toast.makeText(TakeMedicineActivityPost.this, "Failed to save medicine log: " + e.getMessage(), Toast.LENGTH_LONG).show());
     }
 
-    // ... (keep all existing streak methods: updateStreaks, applyControllerStreak) ...
+
     private void updateStreaks(String childID, String medType, String date) {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();

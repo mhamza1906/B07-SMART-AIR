@@ -27,7 +27,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.SetOptions;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -42,7 +41,7 @@ public class ParentDashboardActivity extends AppCompatActivity {
 
     private static final String TAG = "ParentDashboardActivity";
 
-    // Teammate's fields
+
     private String parentId;
     private String parentEmail;
     private String parentFName;
@@ -52,7 +51,7 @@ public class ParentDashboardActivity extends AppCompatActivity {
     private final List<String> cachedChildIds = new ArrayList<>();
     private final List<String> cachedChildNames = new ArrayList<>();
 
-    // RecyclerView fields
+
     private FirebaseFirestore db;
     private RecyclerView childSummariesRecyclerView;
     private ChildSummaryAdapter adapter;
@@ -65,7 +64,7 @@ public class ParentDashboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.parent_dashboard);
 
-        // --- Teammate's onCreate setup ---
+
         txtAvatar = findViewById(R.id.txtUserAvatar);
         parentId = getIntent().getStringExtra("parentID");
         if (parentId == null) {
@@ -74,21 +73,21 @@ public class ParentDashboardActivity extends AppCompatActivity {
             return;
         }
 
-        // Find views for tab content
+
         shareContentPlaceholder = findViewById(R.id.share_content_placeholder);
         childSummariesRecyclerView = findViewById(R.id.ChildSummaries);
 
-        // --- My onCreate setup ---
+
         db = FirebaseFirestore.getInstance();
         setupRecyclerView();
         fetchChildData(parentId);
 
-        // --- Combined onCreate setup ---
+
         loadParentInfoFromDatabase();
         loadChildrenForSelector();
         setupBottomNavigation();
 
-        // --- Teammate's button listeners (unchanged) ---
+
         Button btnSelectChild = findViewById(R.id.btnSelectChild);
         btnSelectChild.setOnClickListener(v -> showChildSelectorBottomSheet());
 
@@ -98,6 +97,9 @@ public class ParentDashboardActivity extends AppCompatActivity {
             intent.putExtra("parentID", parentId);
             startActivity(intent);
         });
+
+        findViewById(R.id.tabMyChildren).performClick();
+
     }
 
     private void setupRecyclerView() {
@@ -107,6 +109,8 @@ public class ParentDashboardActivity extends AppCompatActivity {
         childSummariesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
+
+    @SuppressLint("NotifyDataSetChanged")
     private void fetchChildData(String parentId) {
         db.collection("parent-child").document(parentId).collection("child")
                 .get()
@@ -114,18 +118,18 @@ public class ParentDashboardActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         childSummaryList.clear();
                         if (task.getResult().isEmpty()) {
-                            adapter.notifyDataSetChanged(); // Ensure list is cleared on UI
+                            adapter.notifyDataSetChanged();
                             return;
                         }
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             String childId = document.getId();
-                            String fname = document.getString("fname");
-                            String lname = document.getString("lname");
+                            String fName = document.getString("fName");
+                            String lName = document.getString("lName");
                             String birthday = document.getString("birthday");
 
                             List<String> nameParts = new ArrayList<>();
-                            if (fname != null && !fname.isEmpty()) nameParts.add(fname);
-                            if (lname != null && !lname.isEmpty()) nameParts.add(lname);
+                            if (fName != null && !fName.isEmpty()) nameParts.add(fName);
+                            if (lName != null && !lName.isEmpty()) nameParts.add(lName);
                             String fullName = String.join(" ", nameParts);
 
                             fetchChildDetails(childId, fullName, birthday);
@@ -137,8 +141,9 @@ public class ParentDashboardActivity extends AppCompatActivity {
                 });
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void fetchChildDetails(String childId, String fullName, String birthday) {
-        // 1. Get rescue medication stats
+
         db.collection("medlog").document(childId).get().addOnCompleteListener(medLogTask -> {
             String lastRescueTime = "N/A";
             int weeklyRescueCount = 0;
@@ -155,7 +160,7 @@ public class ParentDashboardActivity extends AppCompatActivity {
             final String finalLastRescueTime = lastRescueTime;
             final int finalWeeklyRescueCount = weeklyRescueCount;
 
-            // 2. Get graph display preference (and create it if it doesn't exist)
+
             db.collection("PEF").document(childId).get().addOnCompleteListener(prefTask -> {
                 int durationDays = 7; // Default to 7 days
                 if (prefTask.isSuccessful() && prefTask.getResult() != null && prefTask.getResult().exists()) {
@@ -164,16 +169,15 @@ public class ParentDashboardActivity extends AppCompatActivity {
                         durationDays = duration.intValue();
                     }
                 } else {
-                    // Preference doesn't exist, create it with the default
+
                     Map<String, Object> prefUpdate = new HashMap<>();
                     prefUpdate.put("graph_day_range", 7);
                     db.collection("PEF").document(childId).set(prefUpdate, SetOptions.merge());
                 }
 
                 List<String> dateList = getLastNDays(durationDays);
-                final int finalDurationDays = durationDays;
 
-                // 3. Get the graph data for the specified date range
+
                 db.collection("PEF").document(childId).collection("log")
                         .whereIn(FieldPath.documentId(), dateList)
                         .get().addOnCompleteListener(graphDataTask -> {
@@ -187,14 +191,14 @@ public class ParentDashboardActivity extends AppCompatActivity {
                                     }
                                 }
                             }
-                            // Assemble the graph data in the correct chronological order
+
                             List<Float> graphData = new ArrayList<>();
                             for (String date : dateList) {
                                 graphData.add(dailyPercents.getOrDefault(date, 0f)); // Add 0 if no data for a day
                             }
                             Collections.reverse(graphData); // Ensure oldest to newest
 
-                            // 4. Get today's zone color
+
                             String todayDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
                             db.collection("PEF").document(childId).collection("log").document(todayDate)
                                     .get()
@@ -211,7 +215,7 @@ public class ParentDashboardActivity extends AppCompatActivity {
                                             }
                                         }
 
-                                        // 5. Finally, build the summary object
+
                                         ChildSummary summary = new ChildSummary(fullName, todayZoneColor, finalLastRescueTime, finalWeeklyRescueCount, birthday, graphData);
                                         childSummaryList.add(summary);
                                         adapter.notifyDataSetChanged();
@@ -240,15 +244,20 @@ public class ParentDashboardActivity extends AppCompatActivity {
         myChildrenTab.setOnClickListener(v -> {
             childSummariesRecyclerView.setVisibility(View.VISIBLE);
             shareContentPlaceholder.setVisibility(View.GONE);
+            findViewById(R.id.btnSelectChild).setVisibility(View.VISIBLE);
+            findViewById(R.id.btnCreateChild).setVisibility(View.VISIBLE);
         });
 
         shareTab.setOnClickListener(v -> {
             childSummariesRecyclerView.setVisibility(View.GONE);
-            shareContentPlaceholder.setVisibility(View.VISIBLE);
+            shareContentPlaceholder.setVisibility(View.GONE);
+            findViewById(R.id.btnSelectChild).setVisibility(View.GONE);
+            findViewById(R.id.btnCreateChild).setVisibility(View.GONE);
         });
+
     }
 
-    // --- All of teammate's methods below are unchanged ---
+
 
     private void loadParentInfoFromDatabase() {
         FirebaseDatabase.getInstance().getReference("users")

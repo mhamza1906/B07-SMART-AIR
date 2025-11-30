@@ -82,8 +82,8 @@ public class ManageChildActivity extends AppCompatActivity {
                     ConfigureRewardsActivity.class,
                     "Press START to configure badges condition for this child.");
         }else if(id == R.id.navDailyCheckin){
-            loadPage(R.layout.daily_check_in,
-                    ParentDailyCheckin.class,
+            loadPage(R.layout.manage_child_page,
+                    ParentDailyCheckIn.class,
                     "Press START to perform daily check-in for this child.");
         }
 

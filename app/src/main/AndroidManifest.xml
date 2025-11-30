@@ -85,6 +85,14 @@
             android:name=".ConfigureRewardsActivity"
             android:exported="true" />
 
+        <activity
+            android:name=".ParentDailyCheckIn"
+            android:exported="true" />
+
+        <activity
+            android:name=".ConfigurePEFSettingsActivity"
+            android:exported="true" />
+
 
     </application>
 </manifest>
