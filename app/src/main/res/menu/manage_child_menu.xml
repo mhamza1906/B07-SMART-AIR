@@ -21,4 +21,9 @@
         android:icon="@drawable/configure_rewards"
         android:title="@string/configure_rewards" />
 
+    <item
+        android:id="@+id/navDailyCheckin"
+        android:icon="@drawable/perform_daily_checkin"
+        android:title="@string/perform_daily_checkin" />
+
 </menu>

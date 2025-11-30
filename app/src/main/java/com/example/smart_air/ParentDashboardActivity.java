@@ -3,10 +3,9 @@ package com.example.smart_air;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,31 +22,51 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.SetOptions;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 public class ParentDashboardActivity extends AppCompatActivity {
 
+    private static final String TAG = "ParentDashboardActivity";
+
+    // Teammate's fields
     private String parentId;
     private String parentEmail;
     private String parentFName;
     private String parentLName;
     private String parentUsername;
-
     private TextView txtAvatar;
-
     private final List<String> cachedChildIds = new ArrayList<>();
     private final List<String> cachedChildNames = new ArrayList<>();
+
+    // RecyclerView fields
+    private FirebaseFirestore db;
+    private RecyclerView childSummariesRecyclerView;
+    private ChildSummaryAdapter adapter;
+    private List<ChildSummary> childSummaryList;
+    private TextView shareContentPlaceholder;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.parent_dashboard);
 
+        // --- Teammate's onCreate setup ---
         txtAvatar = findViewById(R.id.txtUserAvatar);
-
         parentId = getIntent().getStringExtra("parentID");
         if (parentId == null) {
             Toast.makeText(this, "User ID missing.", Toast.LENGTH_SHORT).show();
@@ -55,10 +74,21 @@ public class ParentDashboardActivity extends AppCompatActivity {
             return;
         }
 
+        // Find views for tab content
+        shareContentPlaceholder = findViewById(R.id.share_content_placeholder);
+        childSummariesRecyclerView = findViewById(R.id.ChildSummaries);
+
+        // --- My onCreate setup ---
+        db = FirebaseFirestore.getInstance();
+        setupRecyclerView();
+        fetchChildData(parentId);
+
+        // --- Combined onCreate setup ---
         loadParentInfoFromDatabase();
         loadChildrenForSelector();
         setupBottomNavigation();
 
+        // --- Teammate's button listeners (unchanged) ---
         Button btnSelectChild = findViewById(R.id.btnSelectChild);
         btnSelectChild.setOnClickListener(v -> showChildSelectorBottomSheet());
 
@@ -70,6 +100,155 @@ public class ParentDashboardActivity extends AppCompatActivity {
         });
     }
 
+    private void setupRecyclerView() {
+        childSummaryList = new ArrayList<>();
+        adapter = new ChildSummaryAdapter(childSummaryList);
+        childSummariesRecyclerView.setAdapter(adapter);
+        childSummariesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    private void fetchChildData(String parentId) {
+        db.collection("parent-child").document(parentId).collection("child")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        childSummaryList.clear();
+                        if (task.getResult().isEmpty()) {
+                            adapter.notifyDataSetChanged(); // Ensure list is cleared on UI
+                            return;
+                        }
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            String childId = document.getId();
+                            String fname = document.getString("fname");
+                            String lname = document.getString("lname");
+                            String birthday = document.getString("birthday");
+
+                            List<String> nameParts = new ArrayList<>();
+                            if (fname != null && !fname.isEmpty()) nameParts.add(fname);
+                            if (lname != null && !lname.isEmpty()) nameParts.add(lname);
+                            String fullName = String.join(" ", nameParts);
+
+                            fetchChildDetails(childId, fullName, birthday);
+                        }
+                    } else {
+                        Log.w(TAG, "Error getting child documents: ", task.getException());
+                        Toast.makeText(ParentDashboardActivity.this, "Failed to load child data.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void fetchChildDetails(String childId, String fullName, String birthday) {
+        // 1. Get rescue medication stats
+        db.collection("medlog").document(childId).get().addOnCompleteListener(medLogTask -> {
+            String lastRescueTime = "N/A";
+            int weeklyRescueCount = 0;
+
+            if (medLogTask.isSuccessful() && medLogTask.getResult() != null && medLogTask.getResult().exists()) {
+                DocumentSnapshot medLogDoc = medLogTask.getResult();
+                lastRescueTime = medLogDoc.getString("last_rescue_use");
+                if (lastRescueTime == null) lastRescueTime = "N/A";
+
+                Long weeklyCount = medLogDoc.getLong("rescue_use_in_last_7_days");
+                if (weeklyCount != null) weeklyRescueCount = weeklyCount.intValue();
+            }
+
+            final String finalLastRescueTime = lastRescueTime;
+            final int finalWeeklyRescueCount = weeklyRescueCount;
+
+            // 2. Get graph display preference (and create it if it doesn't exist)
+            db.collection("PEF").document(childId).get().addOnCompleteListener(prefTask -> {
+                int durationDays = 7; // Default to 7 days
+                if (prefTask.isSuccessful() && prefTask.getResult() != null && prefTask.getResult().exists()) {
+                    Long duration = prefTask.getResult().getLong("graph_day_range");
+                    if (duration != null) {
+                        durationDays = duration.intValue();
+                    }
+                } else {
+                    // Preference doesn't exist, create it with the default
+                    Map<String, Object> prefUpdate = new HashMap<>();
+                    prefUpdate.put("graph_day_range", 7);
+                    db.collection("PEF").document(childId).set(prefUpdate, SetOptions.merge());
+                }
+
+                List<String> dateList = getLastNDays(durationDays);
+                final int finalDurationDays = durationDays;
+
+                // 3. Get the graph data for the specified date range
+                db.collection("PEF").document(childId).collection("log")
+                        .whereIn(FieldPath.documentId(), dateList)
+                        .get().addOnCompleteListener(graphDataTask -> {
+
+                            Map<String, Float> dailyPercents = new HashMap<>();
+                            if (graphDataTask.isSuccessful()) {
+                                for (QueryDocumentSnapshot logDoc : graphDataTask.getResult()) {
+                                    Double percent = logDoc.getDouble("percent");
+                                    if (percent != null) {
+                                        dailyPercents.put(logDoc.getId(), percent.floatValue());
+                                    }
+                                }
+                            }
+                            // Assemble the graph data in the correct chronological order
+                            List<Float> graphData = new ArrayList<>();
+                            for (String date : dateList) {
+                                graphData.add(dailyPercents.getOrDefault(date, 0f)); // Add 0 if no data for a day
+                            }
+                            Collections.reverse(graphData); // Ensure oldest to newest
+
+                            // 4. Get today's zone color
+                            String todayDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+                            db.collection("PEF").document(childId).collection("log").document(todayDate)
+                                    .get()
+                                    .addOnCompleteListener(pefTask -> {
+                                        String todayZoneColor = "#808080"; // Default to Gray
+                                        if (pefTask.isSuccessful() && pefTask.getResult() != null && pefTask.getResult().exists()) {
+                                            String zone = pefTask.getResult().getString("zone");
+                                            if (zone != null) {
+                                                switch (zone) {
+                                                    case "Green": todayZoneColor = "#4CAF50"; break;
+                                                    case "Yellow": todayZoneColor = "#FFEB3B"; break;
+                                                    case "Red": todayZoneColor = "#F44336"; break;
+                                                }
+                                            }
+                                        }
+
+                                        // 5. Finally, build the summary object
+                                        ChildSummary summary = new ChildSummary(fullName, todayZoneColor, finalLastRescueTime, finalWeeklyRescueCount, birthday, graphData);
+                                        childSummaryList.add(summary);
+                                        adapter.notifyDataSetChanged();
+                                    });
+                        });
+            });
+        });
+    }
+
+    private List<String> getLastNDays(int n) {
+        List<String> list = new ArrayList<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        Calendar cal = Calendar.getInstance();
+        for (int i = 0; i < n; i++) {
+            list.add(sdf.format(cal.getTime()));
+            cal.add(Calendar.DATE, -1);
+        }
+        return list;
+    }
+
+
+    private void setupBottomNavigation() {
+        View myChildrenTab = findViewById(R.id.tabMyChildren);
+        View shareTab = findViewById(R.id.tabShare);
+
+        myChildrenTab.setOnClickListener(v -> {
+            childSummariesRecyclerView.setVisibility(View.VISIBLE);
+            shareContentPlaceholder.setVisibility(View.GONE);
+        });
+
+        shareTab.setOnClickListener(v -> {
+            childSummariesRecyclerView.setVisibility(View.GONE);
+            shareContentPlaceholder.setVisibility(View.VISIBLE);
+        });
+    }
+
+    // --- All of teammate's methods below are unchanged ---
 
     private void loadParentInfoFromDatabase() {
         FirebaseDatabase.getInstance().getReference("users")
@@ -77,17 +256,13 @@ public class ParentDashboardActivity extends AppCompatActivity {
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-
                         if (!snapshot.exists()) return;
-
                         parentEmail = snapshot.child("email").getValue(String.class);
                         parentFName = snapshot.child("fName").getValue(String.class);
                         parentLName = snapshot.child("lName").getValue(String.class);
                         parentUsername = snapshot.child("username").getValue(String.class);
-
                         setupUserAvatar();
                     }
-
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) { }
                 });
@@ -97,7 +272,6 @@ public class ParentDashboardActivity extends AppCompatActivity {
         String initials = "U";
         if (parentFName != null && parentLName != null && !parentFName.isEmpty())
             initials = ("" + parentFName.charAt(0) + parentLName.charAt(0)).toUpperCase();
-
         txtAvatar.setText(initials);
         txtAvatar.setOnClickListener(v -> showUserInfoBottomSheet());
     }
@@ -105,75 +279,19 @@ public class ParentDashboardActivity extends AppCompatActivity {
     private void showUserInfoBottomSheet() {
         BottomSheetDialog dialog = new BottomSheetDialog(this);
         @SuppressLint("InflateParams")
-        android.view.View view = getLayoutInflater().inflate(R.layout.bottomsheet_user_info, null);
-
+        View view = getLayoutInflater().inflate(R.layout.bottomsheet_user_info, null);
         dialog.setContentView(view);
-
-        String fullNameText = getString(
-                R.string.display_full_name,
-                parentFName != null ? parentFName : "N/A",
-                parentLName != null ? parentLName : "N/A"
-        );
-
-        ((TextView) view.findViewById(R.id.txtUserFullName))
-                .setText(fullNameText);
-
-        ((TextView) view.findViewById(R.id.txtUserEmail))
-                .setText(getString(R.string.display_email, parentEmail));
-
-        ((TextView) view.findViewById(R.id.txtUsername))
-                .setText(getString(R.string.display_username, parentUsername));
-
+        String fullNameText = getString(R.string.display_full_name, parentFName != null ? parentFName : "N/A", parentLName != null ? parentLName : "N/A");
+        ((TextView) view.findViewById(R.id.txtUserFullName)).setText(fullNameText);
+        ((TextView) view.findViewById(R.id.txtUserEmail)).setText(getString(R.string.display_email, parentEmail));
+        ((TextView) view.findViewById(R.id.txtUsername)).setText(getString(R.string.display_username, parentUsername));
         view.findViewById(R.id.btnSignOut).setOnClickListener(v -> {
             FirebaseAuth.getInstance().signOut();
             startActivity(new Intent(this, LoginActivityView.class));
             finish();
         });
-
         dialog.show();
     }
-
-
-    private void setupBottomNavigation() {
-
-        LinearLayout tabMyChildren = findViewById(R.id.tabMyChildren);
-        LinearLayout tabShare = findViewById(R.id.tabShare);
-
-        Button btnSelectChild = findViewById(R.id.btnSelectChild);
-        Button btnCreateChild = findViewById(R.id.btnCreateChild);
-
-        FrameLayout container = findViewById(R.id.containerParentDashboard);
-
-
-        setTabSelected(true);
-
-        tabMyChildren.setOnClickListener(v -> {
-            setTabSelected(true);
-
-
-            btnSelectChild.setVisibility(View.VISIBLE);
-            btnCreateChild.setVisibility(View.VISIBLE);
-
-            container.removeAllViews();
-            // TODO: Finish Share
-        });
-
-        tabShare.setOnClickListener(v -> {
-            setTabSelected(false);
-
-
-            btnSelectChild.setVisibility(View.GONE);
-            btnCreateChild.setVisibility(View.GONE);
-
-            container.removeAllViews();
-
-
-            View shareView = getLayoutInflater().inflate(R.layout.parent_dashboard_share_page, container, false);
-            container.addView(shareView);
-        });
-    }
-
-
 
     private void loadChildrenForSelector() {
         FirebaseFirestore.getInstance()
@@ -184,7 +302,6 @@ public class ParentDashboardActivity extends AppCompatActivity {
                 .addOnSuccessListener(snap -> {
                     cachedChildIds.clear();
                     cachedChildNames.clear();
-
                     for (DocumentSnapshot doc : snap) {
                         cachedChildIds.add(doc.getId());
                         cachedChildNames.add(doc.getString("username"));
@@ -194,23 +311,14 @@ public class ParentDashboardActivity extends AppCompatActivity {
 
     private void showChildSelectorBottomSheet() {
         BottomSheetDialog dialog = new BottomSheetDialog(this);
-
         @SuppressLint("InflateParams")
-        android.view.View sheetView = getLayoutInflater()
-                .inflate(R.layout.bottomsheet_child_selector, null);
-
+        View sheetView = getLayoutInflater().inflate(R.layout.bottomsheet_child_selector, null);
         RecyclerView recycler = sheetView.findViewById(R.id.recyclerChildSelector);
         recycler.setLayoutManager(new LinearLayoutManager(this));
-
-        recycler.setAdapter(new ChildrenAdapter(
-                cachedChildIds,
-                cachedChildNames,
-                childId -> {
-                    dialog.dismiss();
-                    showChildOptions(childId);
-                }
-        ));
-
+        recycler.setAdapter(new ChildrenAdapter(cachedChildIds, cachedChildNames, childId -> {
+            dialog.dismiss();
+            showChildOptions(childId);
+        }));
         dialog.setContentView(sheetView);
         dialog.show();
     }
@@ -220,64 +328,33 @@ public class ParentDashboardActivity extends AppCompatActivity {
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
         layout.setPadding(40, 40, 40, 40);
-
         TextView manage = buildOption("Manage Child Activities 〉");
         TextView summary = buildOption("View Child Summary       〉");
         TextView dashboard = buildOption("Go To Child Dashboard    〉");
-
         layout.addView(manage);
         layout.addView(summary);
         layout.addView(dashboard);
-
         dialog.setContentView(layout);
-
         manage.setOnClickListener(v -> {
             Intent it = new Intent(this, ManageChildActivity.class);
             it.putExtra("childID", childId);
             startActivity(it);
             dialog.dismiss();
         });
-
         summary.setOnClickListener(v -> {
             Intent it = new Intent(this, ChildSummaryActivity.class);
             it.putExtra("childID", childId);
             startActivity(it);
             dialog.dismiss();
         });
-
         dashboard.setOnClickListener(v -> {
             Intent it = new Intent(this, ChildDashboardActivity.class);
             it.putExtra("childID", childId);
             startActivity(it);
             dialog.dismiss();
         });
-
         dialog.show();
     }
-
-    private void setTabSelected(boolean isMyChildren) {
-
-        TextView myChildrenLabel = findViewById(R.id.tabMyChildrenLabel);
-        ImageView myChildrenIcon = findViewById(R.id.tabMyChildrenIcon);
-
-        TextView shareLabel = findViewById(R.id.tabShareLabel);
-        ImageView shareIcon = findViewById(R.id.tabShareIcon);
-
-        if (isMyChildren) {
-            myChildrenLabel.setTextColor(getColor(R.color.tab_selected));
-            myChildrenIcon.setAlpha(1f);
-
-            shareLabel.setTextColor(getColor(R.color.tab_unselected));
-            shareIcon.setAlpha(0.4f);
-        } else {
-            shareLabel.setTextColor(getColor(R.color.tab_selected));
-            shareIcon.setAlpha(1f);
-
-            myChildrenLabel.setTextColor(getColor(R.color.tab_unselected));
-            myChildrenIcon.setAlpha(0.4f);
-        }
-    }
-
 
     private TextView buildOption(String text) {
         TextView tv = new TextView(this);
