@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/imgTechniqueStepRest"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="@string/technique_step_rest_prompt"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toTopOf="@id/txtTechniquePrompt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="RedundantDescriptionCheck" />
+
+    <TextView
+        android:id="@+id/txtTechniquePrompt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/technique_step_rest_prompt"
+        android:textSize="20sp"
+        android:padding="20dp"
+        android:gravity="center"
+        android:maxLines="10"
+        android:scrollHorizontally="false"
+        android:importantForAccessibility="yes"
+        app:layout_constrainedHeight="false"
+        app:layout_constraintTop_toBottomOf="@id/imgTechniqueStepRest"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+
+    <Button
+        android:id="@+id/btnAnother"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="12dp"
+        android:paddingHorizontal="32dp"
+        android:paddingVertical="16dp"
+        android:minHeight="48dp"
+        android:minWidth="48dp"
+        android:maxLines="3"
+        android:text="@string/technique_step_rest_button_another"
+        android:contentDescription="@string/technique_step_rest_button_another"
+        android:importantForAccessibility="yes"
+        app:layout_constrainedHeight="false"
+        app:layout_constraintTop_toBottomOf="@id/txtTechniquePrompt"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+    <Button
+        android:id="@+id/btnFinish"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="24dp"
+        android:paddingHorizontal="32dp"
+        android:paddingVertical="16dp"
+        android:minHeight="48dp"
+        android:minWidth="48dp"
+        android:maxLines="3"
+        android:text="@string/technique_step_rest_button_finish"
+        android:contentDescription="@string/technique_step_rest_button_finish"
+        android:importantForAccessibility="yes"
+        app:layout_constrainedHeight="false"
+        app:layout_constraintTop_toBottomOf="@id/btnAnother"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

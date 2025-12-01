@@ -7,21 +7,94 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="register">Register</string>
-
-    <!-- Changes from your team -->
     <string name="commonSignInButton">"SIGN IN"</string>
     <string name="credentialRecovery">"Forget Password?"</string>
     <string name="jumpIntoSignUp">"DON'T HAVE AN ACCOUNT?"</string>
     <string name="childSignInButtonWithParentName">"SIGN IN WITH YOUR USERNAME (CHILD)"</string>
     <string name="DOB">"Birthday (YYYY-MM-DD)"</string>
     <string name="linkChildBtn">"LINK THIS CHILD"</string>
+    <string name="technique_step1">"Technique Step 1 Animation"</string>
+    <string name="technique_step2_if_empty">"Technique Step 2 Empty Animation"</string>
+    <string name="technique_step2_if_not_empty">"Technique Step 2 Not Empty Animation"</string>
+    <string name="technique_step3_if_empty">"Technique Step 3 Empty Animation"</string>
+    <string name="technique_step3_if_not_empty">"Technique Step 3 Not Empty Animation"</string>
+    <string name="technique_step4">"Technique Step 4 Animation"</string>
+    <string name="technique_step5">"Technique Step 5 Animation"</string>
+    <string name="technique_step6">"Technique Step 6 Animation"</string>
+    <string name="technique_step7">"Technique Step 7 Animation"</string>
+    <string name="technique_step_rest">"Technique Step Rest Animation"</string>
+    <string name="technique_step1_prompt">"Check the dose counter on the inhaler, do not use if it says zero.\n
+        Zero means the inhaler is empty and needs to be replaced."</string>
+    <string name="technique_step1_button_empty">"I got a new inhaler, let's start!"</string>
+    <string name="technique_step1_button_not_empty">"The inhaler isn't empty, let's start!"</string>
+    <string name="technique_step2_if_empty_prompt">"Prime the brand new inhaler by shaking for 10 seconds."</string>
+    <string name="technique_step_button_general">"I did it!"</string>
+    <string name="technique_step3_if_empty_prompt">"Spray 2 or 4 puffs into the air based on your medicine instructions."</string>
+    <string name="technique_step2_if_not_empty_prompt">"Prime the inhaler by shaking for 10 seconds."</string>
+    <string name="technique_step3_if_not_empty_prompt">"Take the cap off the inhaler.\n
+        Make sure the mouthpiece and valved holding chamber are clean."</string>
+    <string name="technique_step4_prompt">"Place the mouthpiece into the open end of the valved holding chamber.\n
+        Remove the valved holding chamber mouthpiece cap.\n
+        Prepare your body by sitting or standing up straight.\n"</string>
+    <string name="technique_step5_prompt">"Breathe out all the way from the holding chamber.\n
+        Put the mouthpiece into your mouth above your tongue.\n
+        Close your lips tightly around the mouthpiece"</string>
+    <string name="technique_step6_prompt">"Press down the top of the inhaler once to release the medicine.\n
+        Breathe in for 3 to 5 seconds using one deep and steady breath to pull the medicine into your lungs.\n
+        If the holding chamber whistles, you are breathing in too fast!"</string>
+    <string name="technique_step7_prompt">"Remove the chamber from your mouth.\n
+        Hold your breath for up to 10 seconds.\n
+        Then breathe out slowly through your mouth.\n"</string>
+    <string name="technique_step_rest_prompt">"If you need another puff, wait with the cat for 1 minute,
+        then proceed with the 'Another Puff' button.\n
+        Or you can proceed with 'Finish Taking Medicine'."</string>
+    <string name="technique_step_rest_button_another">"Another Puff"</string>
+    <string name="technique_step_rest_button_finish">"Finish Taking Medicine"</string>
+    <string name="technique_streak_desc">Technique Streak Flame</string>
+    <string name="controller_streak_desc">Controller Streak Flame</string>
+    <string name="empty_streak_desc">Empty Streak Icon</string>
+    <string name="technique_streak_text">"Consecutive Technique-Session Completed: %1$d"</string>
+    <string name="controller_streak_text">Consecutive Controller Days Completed: %1$d</string>
     <string-array name="accountType">
         <item>Select Account Type</item>
         <item>Parent</item>
         <item>Healthcare Provider</item>
     </string-array>
-
-    <!-- Your PEF feature strings -->
+    <string name="budding_star_desc">"Budding Star Badge"</string>
+    <string name="shining_star_desc">"Shining Star Badge"</string>
+    <string name="lucky_star_desc">"Lucky Star Badge"</string>
+    <string name="budding_star_title">"Budding Star"</string>
+    <string name="shining_star_title">"Shining Star"</string>
+    <string name="lucky_star_title">"Lucky Star"</string>
+    <string name="budding_star_condition">"You can change the condition of the Budding Star to first &apos;n&apos; perfect controller weeks."</string>
+    <string name="shining_star_condition">"You can change the condition of the Shining Star to first &apos;n&apos; high-quality technique sessions."</string>
+    <string name="lucky_star_condition">"You can change the condition of the Lucky Star to low-rescue month (≤ n rescue days / 30 days)."</string>
+    <string name="edittext_hint_number">"Enter a value (≥ 1)"</string>
+    <string name="toast_invalid_number">"Please enter a valid integer ≥ 1."</string>
+    <string name="toast_saved_successfully">"Threshold updated successfully."</string>
+    <string name="save_button_text">Save</string>
+    <string name="achievements_title">Achievements</string>
+    <string name="streaks_title">Streaks</string>
+    <string name="badges_title">Badges</string>
+    <string name="sign_out_btn">"SIGN OFF"</string>
+    <string name="display_email">Email: %1$s</string>
+    <string name="display_username">Username: %1$s</string>
+    <string name="display_full_name">Name: %1$s %2$s</string>
+    <string name="page_my_children">"MY CHILDREN"</string>
+    <string name="page_share">"SHARE"</string>
+    <string name="select_child_hint">"Select a child"</string>
+    <string name="arrow">" 〉"</string>
+    <string name="link_child_page_btn">"LINK A NEW CHILD"</string>
+    <string name="select_child_btn">"Select A Child  〉〉〉"</string>
+    <string name="dummy_share_page">"Share Page TO DO"</string>
+    <string name="manage_child">"Manage Child Activities"</string>
+    <string name="configure_pb">"Configure PEF Settings"</string>
+    <string name="configure_rewards">"Configure Rewards"</string>
+    <string name="create_schedule">"Create Schedule"</string>
+    <string name="manage_inventory">"Manage Inventory"</string>
+    <string name="start_btn">"START"</string>
+    <string name="start_clicked_message">%1$s\n\nStart clicked (To Do)</string>
+    <string name="menu">"Menu"</string>
     <string name="view_history">View History</string>
     <string name="save_pef">Save</string>
     <string name="enter_pef">Enter Pef:</string>
@@ -35,4 +108,52 @@
     <string name="invalid_pef_entry">Invalid PEF Entry</string>
     <string name="db_pef_error">Unable to read Database</string>
     <string name="shared_with_provider">Shared with provider</string>
+    <string name="medType">"Medicine Type"</string>
+    <string name="controller">"Controller"</string>
+    <string name="rescue">"Rescue"</string>
+    <string name="breath_rating">"Breath Rating"</string>
+    <string name="one_to_ten">"1–10"</string>
+    <string name="continue_btn">"CONTINUE"</string>
+    <string name="feeling">"How do you feel?"</string>
+    <string name="feeling_better">"Better"</string>
+    <string name="feeling_same">"Same"</string>
+    <string name="feeling_worse">"Worse"</string>
+    <string name="does_amount">"How many doses did you take?"</string>
+    <string name="finish_btn">"FINISH MEDICINE TAKING"</string>
+    <string name="does_amount_hint">"integer ≥ 1"</string>
+    <string name="manage_child_page_subtitle">"Title"</string>
+    <string name="badge_budding_star">"Badge: BUDDING STAR"</string>
+    <string name="badge_shining_star">"Badge: SHINING STAR"</string>
+    <string name="badge_lucky_star">"Badge: LUCKY STAR"</string>
+    <string name="budding_intro">"This badge is awarded to the child who perfectly completed the first"</string>
+    <string name="budding_after_n">"week(s) of Controllers according to your schedule."</string>
+    <string name="shining_intro">"This badge is awarded to the child who has completed"</string>
+    <string name="shining_after_n">"technique sessions for medicine taking."</string>
+    <string name="lucky_intro">"This badge is awarded to the child who has ≤"</string>
+    <string name="lucky_after_n">"rescue(s) in this month."</string>
+    <string name="default_budding">"1"</string>
+    <string name="default_shining">"10"</string>
+    <string name="default_lucky">"4"</string>
+    <string name="badge_budding_star_title">Badge: BUDDING STAR</string>
+    <string name="badge_shining_star_title">Badge: SHINING STAR</string>
+    <string name="badge_lucky_star_title">Badge: LUCKY STAR</string>
+    <string name="tech_streak_interrupted">"Your consecutive technique-helper usage days have been interrupted."</string>
+    <string name="tech_streak_unable_to_load">"Unable to load technique streak."</string>
+    <string name="tech_streak_success">"You have used the technique helper as planned for %1$d consecutive day(s). Great job!"</string>
+    <string name="controller_streak_interrupted">"Your consecutive planned controller days have been interrupted."</string>
+    <string name="controller_streak_unable_to_load">"Unable to load controller streak."</string>
+    <string name="controller_streak_success">"You have completed your planned controller days for %1$d day(s) in a row. Amazing!"</string>
+    <string name="budding_star_unlocked">"You perfectly completed your planned controller schedule for %1$d week(s). Budding Star unlocked!"</string>
+    <string name="budding_star_locked">"Complete your planned controller schedule perfectly for %1$d full week(s) to unlock the Budding Star badge."</string>
+    <string name="budding_star_load_error">"Unable to load controller history for Budding Star."</string>
+    <string name="shining_star_unlocked">"You completed high-quality technique sessions for %1$d day(s) or more. Shining Star unlocked!"</string>
+    <string name="shining_star_locked">"Complete high-quality technique sessions on %1$d day(s) to unlock the Shining Star badge."</string>
+    <string name="shining_star_load_error">"Unable to load technique streak for Shining Star."</string>
+    <string name="lucky_star_unlocked">"Only %1$d rescue day(s) in the past 30 days. Lucky Star unlocked!"</string>
+    <string name="lucky_star_locked">"Keep rescue days at or below %1$d in any 30-day window to unlock the Lucky Star badge."</string>
+    <string name="lucky_star_load_error">"Unable to load rescue statistics for Lucky Star."</string>
+    <string name="select_child_title">"Please select your child."</string>
+    <string name="perform_daily_checkIn">"Perform Daily Check-In"</string>
+
+
 </resources>
