@@ -74,7 +74,7 @@ public class ManageChildActivity extends AppCompatActivity {
 
         } else if (id == R.id.navInventory) {
             loadPage(R.layout.manage_child_page,
-                    ManageInventoryActivity.class,
+                    InventoryLogActivity.class,
                     "Press START to manage medicine inventory for this child.");
 
         } else if (id == R.id.navRewards) {
