@@ -351,7 +351,7 @@ public class ParentDashboardActivity extends AppCompatActivity {
             dialog.dismiss();
         });
         summary.setOnClickListener(v -> {
-            Intent it = new Intent(this, ChildSummaryActivity.class);
+            Intent it = new Intent(this, ViewChildSummaryActivity.class);
             it.putExtra("childID", childId);
             startActivity(it);
             dialog.dismiss();

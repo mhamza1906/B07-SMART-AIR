@@ -93,6 +93,37 @@
             android:name=".ConfigurePEFSettingsActivity"
             android:exported="true" />
 
+        <activity
+            android:name=".ViewChildSummaryActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".SummaryChartsActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ControllerAdherenceSummaryActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".PEFSummaryActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".RescueLogsSummaryActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".SymptomSummaryActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".TriageIncidentSummaryActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".TriggerSummaryActivity"
+            android:exported="true" />
 
     </application>
 </manifest>

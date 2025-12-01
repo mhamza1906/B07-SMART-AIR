@@ -26,16 +26,28 @@ import java.util.Map;
 
 public class ParentDailyCheckIn extends AppCompatActivity {
 
-    private RadioGroup nightWakingGroup;
-    private RadioGroup coughWheezeGroup;
-    private RadioGroup activityLimitGroup;
+    private RadioGroup groupNightWaking;
+    private RadioGroup groupCoughWheeze;
+    private RadioGroup groupActivityLimit;
 
-    private ViewGroup nightWakingTriggersContainer;
-    private ViewGroup coughWheezeTriggersContainer;
-    private ViewGroup activityLimitTriggersContainer;
+    private ViewGroup listNightWakingTriggers;
+    private ViewGroup listCoughWheezeTriggers;
+    private ViewGroup listActivityLimitTriggers;
 
-    private Button submitButton;
-    private Button editBtn;
+    private View containerNightWakingTriggers;
+    private View containerCoughWheezeTriggers;
+    private View containerActivityLimitTriggers;
+
+    private View txtNightWakingScrollHint;
+    private View txtCoughWheezeScrollHint;
+    private View txtActivityLimitScrollHint;
+
+    private View txtNightWakingTriggersLabel;
+    private View txtCoughWheezeTriggersLabel;
+    private View txtActivityLimitTriggersLabel;
+
+    private Button btnSubmit;
+    private Button btnEdit;
 
     private String childId;
     private FirebaseFirestore db;
@@ -55,118 +67,136 @@ public class ParentDailyCheckIn extends AppCompatActivity {
         }
 
 
-        nightWakingGroup = findViewById(R.id.night_waking_group);
-        coughWheezeGroup = findViewById(R.id.cough_wheeze_group);
-        activityLimitGroup = findViewById(R.id.activity_limit_group);
+        groupNightWaking = findViewById(R.id.group_night_waking);
+        groupCoughWheeze = findViewById(R.id.group_cough_wheeze);
+        groupActivityLimit = findViewById(R.id.group_activity_limit);
 
-        nightWakingTriggersContainer = findViewById(R.id.night_waking_triggers_list);
-        coughWheezeTriggersContainer = findViewById(R.id.cough_wheeze_triggers_list);
-        activityLimitTriggersContainer = findViewById(R.id.activity_limit_triggers_list);
+        listNightWakingTriggers = findViewById(R.id.list_night_waking_triggers);
+        listCoughWheezeTriggers = findViewById(R.id.list_cough_wheeze_triggers);
+        listActivityLimitTriggers = findViewById(R.id.list_activity_limit_triggers);
 
-        submitButton = findViewById(R.id.submit_check_in_button);
-        editBtn = findViewById(R.id.editbtn);
+        containerNightWakingTriggers = findViewById(R.id.container_night_waking_triggers);
+        containerCoughWheezeTriggers = findViewById(R.id.container_cough_wheeze_triggers);
+        containerActivityLimitTriggers = findViewById(R.id.container_activity_limit_triggers);
 
+        txtNightWakingScrollHint = findViewById(R.id.txt_night_waking_scroll_hint);
+        txtCoughWheezeScrollHint = findViewById(R.id.txt_cough_wheeze_scroll_hint);
+        txtActivityLimitScrollHint = findViewById(R.id.txt_activity_limit_scroll_hint);
+
+        txtNightWakingTriggersLabel = findViewById(R.id.txt_nw_triggers_label);
+        txtCoughWheezeTriggersLabel = findViewById(R.id.txt_cw_triggers_label);
+        txtActivityLimitTriggersLabel = findViewById(R.id.txt_al_triggers_label);
+
+        btnSubmit = findViewById(R.id.btn_submit_check_in);
+        btnEdit = findViewById(R.id.btn_edit_check_in);
 
         setupTriggerListener(
-                nightWakingGroup,
-                findViewById(R.id.night_waking_triggers_container),
-                R.id.night_waking_no
+                groupNightWaking,
+                containerNightWakingTriggers,
+                txtNightWakingScrollHint,
+                txtNightWakingTriggersLabel,
+                R.id.radio_night_waking_no
         );
 
         setupTriggerListener(
-                coughWheezeGroup,
-                findViewById(R.id.cough_wheeze_triggers_container),
-                R.id.cough_wheeze_none
+                groupCoughWheeze,
+                containerCoughWheezeTriggers,
+                txtCoughWheezeScrollHint,
+                txtCoughWheezeTriggersLabel,
+                R.id.radio_cough_wheeze_none
         );
 
         setupTriggerListener(
-                activityLimitGroup,
-                findViewById(R.id.activity_limit_triggers_container),
-                R.id.activity_limit_none
+                groupActivityLimit,
+                containerActivityLimitTriggers,
+                txtActivityLimitScrollHint,
+                txtActivityLimitTriggersLabel,
+                R.id.radio_activity_none
         );
-
 
         loadCheckInData();
 
-        editBtn.setOnClickListener(v -> editData());
-        submitButton.setOnClickListener(v -> saveCheckInData());
-    }
-
-    private void editData() {
-        enableAllInputs(true);
-        submitButton.setVisibility(View.VISIBLE);
-        editBtn.setVisibility(View.GONE);
+        btnEdit.setOnClickListener(v -> editData());
+        btnSubmit.setOnClickListener(v -> saveCheckInData());
     }
 
     private void loadCheckInData() {
         String todayDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+
         DocumentReference docRef = db.collection("DailyCheckIns")
-                .document(childId)
-                .collection("log")
-                .document(todayDate);
+                .document(childId).collection("log").document(todayDate);
 
-        docRef.get().addOnSuccessListener(documentSnapshot -> {
-            if (documentSnapshot.exists()) {
+        docRef.get().addOnSuccessListener(doc -> {
+            if (doc.exists()) {
 
-                selectRadioButtonByText(nightWakingGroup, documentSnapshot.getString("NightWaking"));
-                selectRadioButtonByText(coughWheezeGroup, documentSnapshot.getString("CoughWheeze"));
-                selectRadioButtonByText(activityLimitGroup, documentSnapshot.getString("ActivityLimit"));
+                selectRadioButtonByText(groupNightWaking, doc.getString("NightWaking"));
+                selectRadioButtonByText(groupCoughWheeze, doc.getString("CoughWheeze"));
+                selectRadioButtonByText(groupActivityLimit, doc.getString("ActivityLimit"));
 
+                selectCheckboxesByText(listNightWakingTriggers, getStringList(doc, "NWTrigger"));
+                selectCheckboxesByText(listCoughWheezeTriggers, getStringList(doc, "CWTrigger"));
+                selectCheckboxesByText(listActivityLimitTriggers, getStringList(doc, "ALTrigger"));
 
-                selectCheckboxesByText(
-                        nightWakingTriggersContainer,
-                        getStringList(documentSnapshot, "NWTrigger")
-                );
-                selectCheckboxesByText(
-                        coughWheezeTriggersContainer,
-                        getStringList(documentSnapshot, "CWTrigger")
-                );
-                selectCheckboxesByText(
-                        activityLimitTriggersContainer,
-                        getStringList(documentSnapshot, "ALTrigger")
-                );
+                btnSubmit.setVisibility(View.GONE);
+                btnEdit.setVisibility(View.VISIBLE);
 
-                submitButton.setVisibility(View.GONE);
-                editBtn.setVisibility(View.VISIBLE);
                 enableAllInputs(false);
+
+
+                showLoadedTriggers(groupNightWaking, containerNightWakingTriggers, txtNightWakingScrollHint, txtNightWakingTriggersLabel, R.id.radio_night_waking_no);
+                showLoadedTriggers(groupCoughWheeze, containerCoughWheezeTriggers, txtCoughWheezeScrollHint, txtCoughWheezeTriggersLabel, R.id.radio_cough_wheeze_none);
+                showLoadedTriggers(groupActivityLimit, containerActivityLimitTriggers, txtActivityLimitScrollHint, txtActivityLimitTriggersLabel, R.id.radio_activity_none);
             }
         }).addOnFailureListener(e ->
                 Toast.makeText(this, "Failed to load existing data.", Toast.LENGTH_SHORT).show()
         );
     }
 
-    private void enableAllInputs(boolean enabled) {
-        enableRadioGroup(nightWakingGroup, enabled);
-        enableRadioGroup(coughWheezeGroup, enabled);
-        enableRadioGroup(activityLimitGroup, enabled);
+    private void showLoadedTriggers(RadioGroup group, View container, View hint, View label, int noneOptionId) {
+        int id = group.getCheckedRadioButtonId();
+        if (id != noneOptionId && id != -1) {
+            container.setVisibility(View.VISIBLE);
+            hint.setVisibility(View.VISIBLE);
+            label.setVisibility(View.VISIBLE);
+        }
+    }
 
-        enableCheckboxGroup(nightWakingTriggersContainer, enabled);
-        enableCheckboxGroup(coughWheezeTriggersContainer, enabled);
-        enableCheckboxGroup(activityLimitTriggersContainer, enabled);
+    private void editData() {
+        enableAllInputs(true);
+        btnSubmit.setVisibility(View.VISIBLE);
+        btnEdit.setVisibility(View.GONE);
+    }
+
+    private void enableAllInputs(boolean enabled) {
+        enableRadioGroup(groupNightWaking, enabled);
+        enableRadioGroup(groupCoughWheeze, enabled);
+        enableRadioGroup(groupActivityLimit, enabled);
+
+        enableCheckboxGroup(listNightWakingTriggers, enabled);
+        enableCheckboxGroup(listCoughWheezeTriggers, enabled);
+        enableCheckboxGroup(listActivityLimitTriggers, enabled);
     }
 
     private void enableRadioGroup(RadioGroup group, boolean enabled) {
         for (int i = 0; i < group.getChildCount(); i++) {
-            View child = group.getChildAt(i);
-            if (child instanceof RadioButton) {
-                child.setEnabled(enabled);
-            }
+            group.getChildAt(i).setEnabled(enabled);
         }
     }
 
     private void enableCheckboxGroup(ViewGroup container, boolean enabled) {
         for (int i = 0; i < container.getChildCount(); i++) {
             View child = container.getChildAt(i);
-            if (child instanceof CheckBox) {
+            if (child instanceof CheckBox)
                 child.setEnabled(enabled);
-            }
         }
     }
 
     private void saveCheckInData() {
-        if (nightWakingGroup.getCheckedRadioButtonId() == -1 ||
-                coughWheezeGroup.getCheckedRadioButtonId() == -1 ||
-                activityLimitGroup.getCheckedRadioButtonId() == -1) {
+
+        if (groupNightWaking.getCheckedRadioButtonId() == -1 ||
+                groupCoughWheeze.getCheckedRadioButtonId() == -1 ||
+                groupActivityLimit.getCheckedRadioButtonId() == -1) {
+
             Toast.makeText(this, "Please fill out all required symptom fields.", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -174,40 +204,35 @@ public class ParentDailyCheckIn extends AppCompatActivity {
         Map<String, Object> data = new HashMap<>();
         data.put("Author", "Parent");
 
-        data.put("NightWaking", getSelectedText(nightWakingGroup));
-        data.put("CoughWheeze", getSelectedText(coughWheezeGroup));
-        data.put("ActivityLimit", getSelectedText(activityLimitGroup));
+        data.put("NightWaking", getSelectedText(groupNightWaking));
+        data.put("CoughWheeze", getSelectedText(groupCoughWheeze));
+        data.put("ActivityLimit", getSelectedText(groupActivityLimit));
 
-        if (nightWakingGroup.getCheckedRadioButtonId() == R.id.night_waking_no) {
+        if (groupNightWaking.getCheckedRadioButtonId() == R.id.radio_night_waking_no)
             data.put("NWTrigger", new ArrayList<>());
-        } else {
-            data.put("NWTrigger", getSelectedTriggers(nightWakingTriggersContainer));
-        }
+        else
+            data.put("NWTrigger", getSelectedTriggers(listNightWakingTriggers));
 
-        if (coughWheezeGroup.getCheckedRadioButtonId() == R.id.cough_wheeze_none) {
+        if (groupCoughWheeze.getCheckedRadioButtonId() == R.id.radio_cough_wheeze_none)
             data.put("CWTrigger", new ArrayList<>());
-        } else {
-            data.put("CWTrigger", getSelectedTriggers(coughWheezeTriggersContainer));
-        }
+        else
+            data.put("CWTrigger", getSelectedTriggers(listCoughWheezeTriggers));
 
-        if (activityLimitGroup.getCheckedRadioButtonId() == R.id.activity_limit_none) {
+        if (groupActivityLimit.getCheckedRadioButtonId() == R.id.radio_activity_none)
             data.put("ALTrigger", new ArrayList<>());
-        } else {
-            data.put("ALTrigger", getSelectedTriggers(activityLimitTriggersContainer));
-        }
+        else
+            data.put("ALTrigger", getSelectedTriggers(listActivityLimitTriggers));
 
         String todayDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         DocumentReference docRef = db.collection("DailyCheckIns")
-                .document(childId)
-                .collection("log")
-                .document(todayDate);
+                .document(childId).collection("log").document(todayDate);
 
         docRef.set(data, SetOptions.merge())
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(ParentDailyCheckIn.this, "Check-in saved!", Toast.LENGTH_SHORT).show();
                     enableAllInputs(false);
-                    submitButton.setVisibility(View.GONE);
-                    editBtn.setVisibility(View.VISIBLE);
+                    btnSubmit.setVisibility(View.GONE);
+                    btnEdit.setVisibility(View.VISIBLE);
                 })
                 .addOnFailureListener(e ->
                         Toast.makeText(ParentDailyCheckIn.this, "Failed to save data.", Toast.LENGTH_SHORT).show()
@@ -215,29 +240,38 @@ public class ParentDailyCheckIn extends AppCompatActivity {
     }
 
     private String getSelectedText(RadioGroup group) {
-        int selectedId = group.getCheckedRadioButtonId();
-        if (selectedId == -1) return "";
-        RadioButton selectedButton = findViewById(selectedId);
-        return selectedButton.getText().toString();
+        int id = group.getCheckedRadioButtonId();
+        if (id == -1) return "";
+        RadioButton rb = findViewById(id);
+        return rb.getText().toString();
     }
 
     private List<String> getSelectedTriggers(ViewGroup container) {
-        List<String> triggers = new ArrayList<>();
+        List<String> list = new ArrayList<>();
         for (int i = 0; i < container.getChildCount(); i++) {
-            View child = container.getChildAt(i);
-            if (child instanceof CheckBox && ((CheckBox) child).isChecked()) {
-                triggers.add(((CheckBox) child).getText().toString());
-            }
+            View v = container.getChildAt(i);
+            if (v instanceof CheckBox && ((CheckBox) v).isChecked())
+                list.add(((CheckBox) v).getText().toString());
         }
-        return triggers;
+        return list;
     }
 
-    private void setupTriggerListener(RadioGroup group, final View triggersContainer, final int noneOptionId) {
-        group.setOnCheckedChangeListener((radioGroup, checkedId) -> {
+    private void setupTriggerListener(
+            RadioGroup group,
+            View triggersContainer,
+            View scrollHint,
+            View triggersLabel,
+            int noneOptionId
+    ) {
+        group.setOnCheckedChangeListener((g, checkedId) -> {
             if (checkedId == noneOptionId || checkedId == -1) {
                 triggersContainer.setVisibility(View.GONE);
+                scrollHint.setVisibility(View.GONE);
+                triggersLabel.setVisibility(View.GONE);
             } else {
                 triggersContainer.setVisibility(View.VISIBLE);
+                scrollHint.setVisibility(View.VISIBLE);
+                triggersLabel.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -245,39 +279,37 @@ public class ParentDailyCheckIn extends AppCompatActivity {
     private void selectRadioButtonByText(RadioGroup group, String text) {
         if (text == null) return;
         for (int i = 0; i < group.getChildCount(); i++) {
-            View child = group.getChildAt(i);
-            if (child instanceof RadioButton) {
-                RadioButton button = (RadioButton) child;
-                if (button.getText().toString().equals(text)) {
-                    button.setChecked(true);
+            View v = group.getChildAt(i);
+            if (v instanceof RadioButton) {
+                RadioButton rb = (RadioButton) v;
+                if (rb.getText().toString().equals(text)) {
+                    rb.setChecked(true);
                     return;
                 }
             }
         }
     }
 
-    private void selectCheckboxesByText(ViewGroup container, List<String> texts) {
-        if (texts == null) return;
+    private void selectCheckboxesByText(ViewGroup container, List<String> values) {
+        if (values == null) return;
         for (int i = 0; i < container.getChildCount(); i++) {
-            View child = container.getChildAt(i);
-            if (child instanceof CheckBox) {
-                CheckBox checkBox = (CheckBox) child;
-                checkBox.setChecked(texts.contains(checkBox.getText().toString()));
+            View v = container.getChildAt(i);
+            if (v instanceof CheckBox) {
+                CheckBox cb = (CheckBox) v;
+                cb.setChecked(values.contains(cb.getText().toString()));
             }
         }
     }
 
-
     private List<String> getStringList(DocumentSnapshot doc, String key) {
         Object value = doc.get(key);
-        List<String> result = new ArrayList<>();
+        List<String> list = new ArrayList<>();
         if (value instanceof List<?>) {
             for (Object o : (List<?>) value) {
-                if (o instanceof String) {
-                    result.add((String) o);
-                }
+                if (o instanceof String)
+                    list.add((String) o);
             }
         }
-        return result;
+        return list;
     }
 }

@@ -154,6 +154,60 @@
     <string name="lucky_star_load_error">"Unable to load rescue statistics for Lucky Star."</string>
     <string name="select_child_title">"Please select your child."</string>
     <string name="perform_daily_checkIn">"Perform Daily Check-In"</string>
+    <string name="view_rescue_logs">"Rescue Logs"</string>
+    <string name="view_controller_adherence">"Controller Adherence"</string>
+    <string name="view_symptoms">"Symptoms"</string>
+    <string name="view_triggers">"Triggers"</string>
+    <string name="view_pef">"Peak-Flow (PEF)"</string>
+    <string name="view_triage_incidents">"Triage Incidents"</string>
+    <string name="view_summary_charts">"Summary Charts"</string>
+    <string name="check_in_title">"Daily Check-In"</string>
+    <string name="night_waking_label">"Night Waking"</string>
+    <string name="cough_wheeze_label">"Cough / Wheeze"</string>
+    <string name="activity_limit_label">"Activity Limitations"</string>
+    <string name="yes">"Yes"</string>
+    <string name="no">"No"</string>
+    <string name="none">"None"</string>
+    <string name="some">"Some"</string>
+    <string name="a_lot">"A lot"</string>
+    <string name="trigger_dust">"Dust"</string>
+    <string name="trigger_pets">"Pets"</string>
+    <string name="trigger_smoke">"Smoke"</string>
+    <string name="trigger_odors">"Strong odors / perfumes"</string>
+    <string name="trigger_cold_air">"Cold air"</string>
+    <string name="trigger_illness">"Illness"</string>
+    <string name="trigger_exercise">"Exercise"</string>
+    <string name="scroll_right_hint">"Scroll right -> See more triggers"</string>
+    <string name="submit">"Submit"</string>
+    <string name="edit">"Edit"</string>
+    <string name="activity_none">"None: Played normally"</string>
+    <string name="activity_mild">"Mild: Slowed down but still played"</string>
+    <string name="activity_significant">"Significant: Had to stop activity"</string>
+    <string name="activity_could_not">"Couldn't play at all"</string>
+    <string name="trigger_label">"Select Triggers"</string>
+    <string name="symptom_summary_title">"Symptom Summary"</string>
+    <string name="symptom_summary_subtitle">"See how symptoms changed over recent days."</string>
+    <string name="symptom_empty">"No symptom data available."</string>
+    <string name="symptom_loading_failed">"Failed to load symptom data."</string>
+    <string name="symptom_na">"No symptom check-ins yet."</string>
+    <string name="no_symptoms">"No valid symptom records."</string>
+    <string name="trigger_summary_title">"Trigger Summary"</string>
+    <string name="trigger_summary_subtitle">"See which triggers show up most often across check-ins."</string>
+    <string name="trigger_empty">"No trigger data available."</string>
+    <string name="trigger_loading_failed">"Failed to load trigger data."</string>
+    <string name="trigger_na">"No trigger data recorded."</string>
+    <string name="no_triggers">"No triggers selected in check-ins."</string>
+    <string name="share_with_provider">"Share this chart"</string>
+    <string name="share_chart_hint">"This chart will be shared with selected provider"</string>
+    <string name="last_rescue_use">"Last Rescue Use: -"</string>
+    <string name="rescue_7_day_title">"Rescue usage in last 7 days"</string>
+    <string name="rescue_30_day_title">"Rescue usage in last 30 days"</string>
+    <string name="last_rescue_use_format">"Last Rescue Use: %1$s"</string>
+
+
+
+
+
 
 
 </resources>

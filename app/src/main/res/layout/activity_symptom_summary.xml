@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="32dp"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/txt_symptom_summary_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/symptom_summary_title"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="4dp" />
+
+        <TextView
+            android:id="@+id/txt_symptom_summary_subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/symptom_summary_subtitle"
+            android:textSize="14sp"
+            android:layout_marginBottom="12dp" />
+
+        <ProgressBar
+            android:id="@+id/symptom_progress_bar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/txt_symptom_empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/symptom_empty"
+            android:textSize="14sp"
+            android:visibility="gone"
+            android:layout_marginTop="8dp"
+            android:layout_gravity="center_horizontal" />
+
+        <!-- Night Waking Chart -->
+        <TextView
+            android:id="@+id/txt_symptom_night_waking_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/night_waking_label"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="4dp" />
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/chart_night_waking"
+            android:layout_width="match_parent"
+            android:layout_height="200dp" />
+
+        <!-- Cough/Wheeze Chart -->
+        <TextView
+            android:id="@+id/txt_symptom_cough_wheeze_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cough_wheeze_label"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="4dp" />
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/chart_cough_wheeze"
+            android:layout_width="match_parent"
+            android:layout_height="200dp" />
+
+        <!-- Activity Limit Chart -->
+        <TextView
+            android:id="@+id/txt_symptom_activity_limit_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/activity_limit_label"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="4dp" />
+
+
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/chart_activity_limit"
+            android:layout_width="match_parent"
+            android:layout_height="200dp" />
+
+        <CheckBox
+            android:id="@+id/chk_share_chart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/share_with_provider"
+            android:checked="false" />
+
+        <TextView
+            android:id="@+id/txt_share_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/share_chart_hint"
+            android:textSize="12sp"
+            android:textColor="#666666"
+            android:layout_marginTop="4dp" />
+
+    </LinearLayout>
+</ScrollView>
