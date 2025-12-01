@@ -19,10 +19,8 @@ public class RefillActivity extends AppCompatActivity {
     private String childId;
     private FirebaseFirestore db;
 
-    // Controller EditTexts
     private EditText controllerPurchaseDateInput, controllerAmountLeftInput, controllerExpiryDateInput, controllerReplacementReminderInput;
 
-    // Rescue EditTexts
     private EditText rescuePurchaseDateInput, rescueAmountLeftInput, rescueExpiryDateInput, rescueReplacementReminderInput;
 
     private Button saveButton;
@@ -47,19 +45,16 @@ public class RefillActivity extends AppCompatActivity {
     }
 
     private void initializeViews() {
-        // Controller Inputs
         controllerPurchaseDateInput = findViewById(R.id.controller_purchase_date_input);
         controllerAmountLeftInput = findViewById(R.id.controller_amount_left_input);
         controllerExpiryDateInput = findViewById(R.id.controller_expiry_date_input);
         controllerReplacementReminderInput = findViewById(R.id.controller_replacement_reminder_input);
 
-        // Rescue Inputs
         rescuePurchaseDateInput = findViewById(R.id.rescue_purchase_date_input);
         rescueAmountLeftInput = findViewById(R.id.rescue_amount_left_input);
         rescueExpiryDateInput = findViewById(R.id.rescue_expiry_date_input);
         rescueReplacementReminderInput = findViewById(R.id.rescue_replacement_reminder_input);
 
-        // Save Button
         saveButton = findViewById(R.id.save_button);
     }
 
@@ -88,14 +83,12 @@ public class RefillActivity extends AppCompatActivity {
     }
 
     private void saveInventoryData() {
-        // Controller Data
         Map<String, Object> controllerMap = new HashMap<>();
         controllerMap.put("purchaseDate", controllerPurchaseDateInput.getText().toString());
         controllerMap.put("amountLeft", Long.parseLong(controllerAmountLeftInput.getText().toString()));
         controllerMap.put("expiry", controllerExpiryDateInput.getText().toString());
         controllerMap.put("replacementReminder", controllerReplacementReminderInput.getText().toString());
 
-        // Rescue Data
         Map<String, Object> rescueMap = new HashMap<>();
         rescueMap.put("purchaseDate", rescuePurchaseDateInput.getText().toString());
         rescueMap.put("amountLeft", Long.parseLong(rescueAmountLeftInput.getText().toString()));

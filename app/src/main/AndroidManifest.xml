@@ -132,6 +132,9 @@
         <activity
             android:name=".ExportChildHistoryActivity"
             android:exported="true" />
+        <activity
+            android:name=".RefillActivity"
+            android:exported="true" />
     </application>
 
 </manifest>
