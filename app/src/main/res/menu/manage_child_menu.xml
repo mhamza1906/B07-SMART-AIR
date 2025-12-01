@@ -23,7 +23,7 @@
 
     <item
         android:id="@+id/navDailyCheckin"
-        android:icon="@drawable/perform_daily_checkin"
-        android:title="@string/perform_daily_checkin" />
+        android:icon="@drawable/perform_daily_check_in"
+        android:title="@string/perform_daily_checkIn" />
 
 </menu>

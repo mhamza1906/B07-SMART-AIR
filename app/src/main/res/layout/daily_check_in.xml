@@ -12,6 +12,7 @@
         android:padding="16dp"
         android:visibility="visible">
 
+        <!-- 标题 -->
         <TextView
             android:id="@+id/check_in_title"
             android:layout_width="wrap_content"
@@ -20,9 +21,9 @@
             android:text="Daily Check-In"
             android:textSize="24sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <!-- Block 1: Night Waking -->
         <TextView
@@ -32,17 +33,18 @@
             android:layout_marginTop="24dp"
             android:text="Night Waking"
             android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/check_in_title"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/check_in_title" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <RadioGroup
             android:id="@+id/night_waking_group"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/night_waking_label"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/night_waking_label">
+            app:layout_constraintEnd_toEndOf="parent">
 
             <RadioButton
                 android:id="@+id/night_waking_yes"
@@ -63,9 +65,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/night_waking_group"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             tools:visibility="visible">
 
             <LinearLayout
@@ -118,7 +120,6 @@
             </LinearLayout>
         </HorizontalScrollView>
 
-
         <!-- Block 2: Cough/Wheeze -->
         <TextView
             android:id="@+id/cough_wheeze_label"
@@ -127,17 +128,18 @@
             android:layout_marginTop="32dp"
             android:text="Cough/Wheeze"
             android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/night_waking_triggers_container"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/night_waking_triggers_container" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <RadioGroup
             android:id="@+id/cough_wheeze_group"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/cough_wheeze_label"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cough_wheeze_label">
+            app:layout_constraintEnd_toEndOf="parent">
 
             <RadioButton
                 android:id="@+id/cough_wheeze_none"
@@ -164,9 +166,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cough_wheeze_group"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             tools:visibility="visible">
 
             <LinearLayout
@@ -227,17 +229,18 @@
             android:layout_marginTop="32dp"
             android:text="Activity Level Limitations"
             android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cough_wheeze_triggers_container"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cough_wheeze_triggers_container" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <RadioGroup
             android:id="@+id/activity_limit_group"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@id/activity_limit_label"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/activity_limit_label">
+            app:layout_constraintEnd_toEndOf="parent">
 
             <RadioButton
                 android:id="@+id/activity_limit_none"
@@ -266,7 +269,6 @@
                 android:layout_height="wrap_content"
                 android:text="Couldn't play at all"
                 android:textSize="14sp" />
-
         </RadioGroup>
 
         <HorizontalScrollView
@@ -275,9 +277,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/activity_limit_group"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             tools:visibility="visible">
 
             <LinearLayout
@@ -336,9 +338,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:text="Submit"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/activity_limit_triggers_container"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/activity_limit_triggers_container" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <Button
             android:id="@+id/editbtn"
@@ -347,9 +349,9 @@
             android:layout_marginTop="24dp"
             android:text="Edit"
             android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/activity_limit_triggers_container"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/activity_limit_triggers_container" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

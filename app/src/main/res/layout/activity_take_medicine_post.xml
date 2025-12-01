@@ -71,7 +71,6 @@
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:minHeight="48dp"
-        android:hint="@string/one_to_ten"
         android:importantForAutofill="no"
         android:inputType="number"
         android:layout_marginStart="16dp"

@@ -17,6 +17,7 @@
             android:layout_height="56dp"
             android:contentDescription="@string/technique_streak_desc"
             android:src="@drawable/empty_streak"
+            android:layout_marginTop="32dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 

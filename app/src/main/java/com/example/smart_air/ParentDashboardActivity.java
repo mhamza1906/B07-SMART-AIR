@@ -44,7 +44,7 @@ public class ParentDashboardActivity extends AppCompatActivity {
 
     private static final String TAG = "ParentDashboardActivity";
 
-    // Teammate's fields
+
     private String parentId;
     private String parentEmail;
     private String parentFName;
@@ -69,28 +69,28 @@ public class ParentDashboardActivity extends AppCompatActivity {
 
         // --- Teammate's onCreate setup ---
         txtAvatar = findViewById(R.id.txtUserAvatar);
-        parentId = "sampleParentID56789";
+        parentId = getIntent().getStringExtra("parentID");
         if (parentId == null) {
             Toast.makeText(this, "User ID missing.", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
 
-        // Find views for tab content
+
         shareContentPlaceholder = findViewById(R.id.share_content_placeholder);
         childSummariesRecyclerView = findViewById(R.id.ChildSummaries);
 
-        // --- My onCreate setup ---
+
         db = FirebaseFirestore.getInstance();
         setupRecyclerView();
         fetchChildData(parentId);
 
-        // --- Combined onCreate setup ---
+
         loadParentInfoFromDatabase();
         loadChildrenForSelector();
         setupBottomNavigation();
 
-        // --- Teammate's button listeners (unchanged) ---
+
         Button btnSelectChild = findViewById(R.id.btnSelectChild);
         btnSelectChild.setOnClickListener(v -> showChildSelectorBottomSheet());
 
@@ -100,6 +100,9 @@ public class ParentDashboardActivity extends AppCompatActivity {
             intent.putExtra("parentID", parentId);
             startActivity(intent);
         });
+
+        findViewById(R.id.tabMyChildren).performClick();
+
     }
 
     private void setupRecyclerView() {
@@ -109,6 +112,8 @@ public class ParentDashboardActivity extends AppCompatActivity {
         childSummariesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
+
+    @SuppressLint("NotifyDataSetChanged")
     private void fetchChildData(String parentId) {
         db.collection("parent-child").document(parentId).collection("child")
                 .get()
@@ -116,7 +121,7 @@ public class ParentDashboardActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         childSummaryList.clear();
                         if (task.getResult().isEmpty()) {
-                            adapter.notifyDataSetChanged(); // Ensure list is cleared on UI
+                            adapter.notifyDataSetChanged();
                             return;
                         }
                         for (QueryDocumentSnapshot document : task.getResult()) {
@@ -139,15 +144,16 @@ public class ParentDashboardActivity extends AppCompatActivity {
                 });
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void fetchChildDetails(String childId, String fullName, String birthday) {
-        // 1. Get rescue medication stats
+
         db.collection("medlog").document(childId).get().addOnCompleteListener(medLogTask -> {
             String lastRescueTime = "N/A";
             int weeklyRescueCount = 0;
 
             if (medLogTask.isSuccessful() && medLogTask.getResult() != null && medLogTask.getResult().exists()) {
                 DocumentSnapshot medLogDoc = medLogTask.getResult();
-                
+
                 // Format the last rescue time string for display
                 String lastUseTimestamp = medLogDoc.getString("last_rescue_use");
                 if (lastUseTimestamp != null && !lastUseTimestamp.isEmpty()) {
@@ -190,7 +196,7 @@ public class ParentDashboardActivity extends AppCompatActivity {
 
                 List<String> dateList = getLastNDays(durationDays);
 
-                // 3. Get the graph data for the specified date range
+
                 db.collection("PEF").document(childId).collection("log")
                         .whereIn(FieldPath.documentId(), dateList)
                         .get().addOnCompleteListener(graphDataTask -> {
@@ -204,14 +210,14 @@ public class ParentDashboardActivity extends AppCompatActivity {
                                     }
                                 }
                             }
-                            // Assemble the graph data in the correct chronological order
+
                             List<Float> graphData = new ArrayList<>();
                             for (String date : dateList) {
                                 graphData.add(dailyPercents.getOrDefault(date, 0f)); // Add 0 if no data for a day
                             }
                             Collections.reverse(graphData); // Ensure oldest to newest
 
-                            // 4. Get today's zone color
+
                             String todayDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
                             db.collection("PEF").document(childId).collection("log").document(todayDate)
                                     .get()
@@ -228,7 +234,7 @@ public class ParentDashboardActivity extends AppCompatActivity {
                                             }
                                         }
 
-                                        // 5. Finally, build the summary object
+
                                         ChildSummary summary = new ChildSummary(fullName, todayZoneColor, finalLastRescueTime, finalWeeklyRescueCount, birthday, graphData);
                                         childSummaryList.add(summary);
                                         adapter.notifyDataSetChanged();
@@ -302,14 +308,16 @@ public class ParentDashboardActivity extends AppCompatActivity {
             findViewById(R.id.btnSelectChild).setVisibility(View.VISIBLE);
             findViewById(R.id.btnCreateChild).setVisibility(View.VISIBLE);
 
+
         });
 
         shareTab.setOnClickListener(v -> {
             childSummariesRecyclerView.setVisibility(View.GONE);
-            shareContentPlaceholder.setVisibility(View.VISIBLE);
+            shareContentPlaceholder.setVisibility(View.GONE);
             findViewById(R.id.btnSelectChild).setVisibility(View.GONE);
             findViewById(R.id.btnCreateChild).setVisibility(View.GONE);
         });
+
     }
 
 

@@ -102,8 +102,8 @@ public class TakeMedicineActivityPost extends AppCompatActivity {
             return;
         }
 
-        if (postBreathRating < 1 || postBreathRating > 10) {
-            Toast.makeText(this, "Breath rating must be between 1 and 10", Toast.LENGTH_SHORT).show();
+        if (postBreathRating < 1) {
+            Toast.makeText(this, "Breath rating must be greater than or equal to 1", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -172,7 +172,7 @@ public class TakeMedicineActivityPost extends AppCompatActivity {
         }).addOnFailureListener(e -> Toast.makeText(TakeMedicineActivityPost.this, "Failed to save medicine log: " + e.getMessage(), Toast.LENGTH_LONG).show());
     }
 
-    // ... (keep all existing streak methods: updateStreaks, applyControllerStreak) ...
+
     private void updateStreaks(String childID, String medType, String date) {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();

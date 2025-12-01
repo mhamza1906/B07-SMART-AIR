@@ -21,15 +21,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChildSummaryAdapter extends RecyclerView.Adapter<ChildSummaryAdapter.ViewHolder> {
-    private List<ChildSummary> childSummaries;
+    private final List<ChildSummary> childSummaries;
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView child_name_text;
         public View todays_zone_view;
         public TextView dob_value;
         public LineChart trend_graph_view;
         public TextView last_rescue_value;
         public TextView weekly_rescue_value;
+
+
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -42,8 +44,8 @@ public class ChildSummaryAdapter extends RecyclerView.Adapter<ChildSummaryAdapte
         }
     }
 
-    public ChildSummaryAdapter(List<ChildSummary> summaries) {
-        this.childSummaries = summaries;
+    public ChildSummaryAdapter(List<ChildSummary> list) {
+        this.childSummaries = list;
     }
 
 
@@ -63,13 +65,13 @@ public class ChildSummaryAdapter extends RecyclerView.Adapter<ChildSummaryAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        // Get the data model based on position
+
         ChildSummary currentChild = childSummaries.get(position);
 
         holder.child_name_text.setText(currentChild.getChildName());
         holder.dob_value.setText(currentChild.getDob());
 
-        // Setting zone color
+
         try {
             holder.todays_zone_view.setBackgroundColor(Color.parseColor(currentChild.getTodayZoneColor()));
         } catch (IllegalArgumentException e) {
@@ -79,9 +81,10 @@ public class ChildSummaryAdapter extends RecyclerView.Adapter<ChildSummaryAdapte
         holder.last_rescue_value.setText(currentChild.getLastRescueTime());
         holder.weekly_rescue_value.setText(String.valueOf(currentChild.getWeeklyRescueCount()));
 
-        // --- Graph Implementation ---
+
         setupGraph(holder.trend_graph_view, currentChild.getGraphData());
     }
+
 
     private void setupGraph(LineChart chart, List<Float> graphData) {
         if (graphData == null || graphData.isEmpty()) {
@@ -123,6 +126,7 @@ public class ChildSummaryAdapter extends RecyclerView.Adapter<ChildSummaryAdapte
         chart.setData(lineData);
         chart.invalidate(); // Refresh the chart
     }
+
 
 
     @Override

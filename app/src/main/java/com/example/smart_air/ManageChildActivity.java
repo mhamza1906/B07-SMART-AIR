@@ -83,7 +83,7 @@ public class ManageChildActivity extends AppCompatActivity {
                     "Press START to configure badges condition for this child.");
         }else if(id == R.id.navDailyCheckin){
             loadPage(R.layout.manage_child_page,
-                    ParentDailyCheckin.class,
+                    ParentDailyCheckIn.class,
                     "Press START to perform daily check-in for this child.");
         }
 
