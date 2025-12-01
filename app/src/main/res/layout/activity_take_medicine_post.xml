@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TakeMedicineActivityPost">
+
+
+    <TextView
+        android:id="@+id/post_checkup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/feeling"
+        android:textSize="20sp"
+        android:layout_marginTop="48dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+
+    <RadioGroup
+        android:id="@+id/post_checkup_radio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/post_checkup"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+
+
+        <RadioButton
+            android:id="@+id/radioButton1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/feeling_better" />
+
+        <RadioButton
+            android:id="@+id/radioButton2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@string/feeling_same" />
+
+        <RadioButton
+            android:id="@+id/radioButton3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@string/feeling_worse" />
+    </RadioGroup>
+
+
+    <TextView
+        android:id="@+id/post_breath_rating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/breath_rating"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/post_checkup_radio"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="36dp" />
+
+    <EditText
+        android:id="@+id/post_breath_rating_input"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:importantForAutofill="no"
+        android:inputType="number"
+        android:layout_marginStart="16dp"
+        app:layout_constraintStart_toEndOf="@id/post_breath_rating"
+        app:layout_constraintBaseline_toBaselineOf="@id/post_breath_rating" />
+
+
+
+    <TextView
+        android:id="@+id/doses"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/does_amount"
+        android:textSize="20sp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="48dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/post_breath_rating" />
+
+    <EditText
+        android:id="@+id/dose_input"
+        android:layout_width="100dp"
+        android:minHeight="48dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/does_amount_hint"
+        android:importantForAutofill="no"
+        android:inputType="number"
+        android:layout_marginStart="16dp"
+        app:layout_constraintStart_toEndOf="@id/doses"
+        app:layout_constraintBaseline_toBaselineOf="@id/doses" />
+
+
+
+    <Button
+        android:id="@+id/finish"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/finish_btn"
+        android:layout_marginBottom="48dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
