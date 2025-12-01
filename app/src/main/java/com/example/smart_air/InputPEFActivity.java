@@ -31,7 +31,6 @@ public class InputPEFActivity extends AppCompatActivity {
     private TextView pbViewer;
     private View zoneColorView;
     private TextView percentView;
-    private TextView sharedProviderText;
 
 
     @Override
@@ -147,7 +146,7 @@ public class InputPEFActivity extends AppCompatActivity {
                 DocumentSnapshot document = task.getResult();
                 if (!document.exists()) {
                     Map<String, Object> defaultPEF = new HashMap<>();
-                    defaultPEF.put("PB", 900); // Corrected to uppercase 'PB'
+                    defaultPEF.put("PB", 900);
                     defaultPEF.put("graph_day_range", 7);
 
                     userDocRef.set(defaultPEF).addOnSuccessListener(aVoid ->
@@ -232,5 +231,3 @@ public class InputPEFActivity extends AppCompatActivity {
         });
     }
 }
-
-

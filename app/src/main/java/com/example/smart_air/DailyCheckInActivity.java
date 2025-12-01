@@ -45,7 +45,6 @@ public class DailyCheckInActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
 
-
         childId = getIntent().getStringExtra("childID");
         if (childId == null || childId.isEmpty()) {
             Toast.makeText(this, "User ID not found.", Toast.LENGTH_SHORT).show();
@@ -53,7 +52,6 @@ public class DailyCheckInActivity extends AppCompatActivity {
             return;
         }
 
-        // Initialize the view groups
         nightWakingGroup = findViewById(R.id.night_waking_group);
         coughWheezeGroup = findViewById(R.id.cough_wheeze_group);
         activityLimitGroup = findViewById(R.id.activity_limit_group);
@@ -65,7 +63,6 @@ public class DailyCheckInActivity extends AppCompatActivity {
         submitButton = findViewById(R.id.submit_check_in_button);
         editbtn = findViewById(R.id.editbtn);
 
-        // Set up the listeners to show/hide triggers
         setupTriggerListener(nightWakingGroup, findViewById(R.id.night_waking_triggers_container), R.id.night_waking_no);
         setupTriggerListener(coughWheezeGroup, findViewById(R.id.cough_wheeze_triggers_container), R.id.cough_wheeze_none);
         setupTriggerListener(activityLimitGroup, findViewById(R.id.activity_limit_triggers_container), R.id.activity_limit_none);
@@ -74,10 +71,6 @@ public class DailyCheckInActivity extends AppCompatActivity {
 
         editbtn.setOnClickListener(v -> editData());
         submitButton.setOnClickListener(v -> saveCheckInData());
-
-
-
-
     }
 
     private void editData(){
@@ -93,12 +86,10 @@ public class DailyCheckInActivity extends AppCompatActivity {
 
         docRef.get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
-                // Pre-select symptoms
                 selectRadioButtonByText(nightWakingGroup, documentSnapshot.getString("NightWaking"));
                 selectRadioButtonByText(coughWheezeGroup, documentSnapshot.getString("CoughWheeze"));
                 selectRadioButtonByText(activityLimitGroup, documentSnapshot.getString("ActivityLimit"));
 
-                // Pre-select triggers
                 selectCheckboxesByText(nightWakingTriggersContainer, (List<String>) documentSnapshot.get("NWTrigger"));
                 selectCheckboxesByText(coughWheezeTriggersContainer, (List<String>) documentSnapshot.get("CWTrigger"));
                 selectCheckboxesByText(activityLimitTriggersContainer, (List<String>) documentSnapshot.get("ALTrigger"));
@@ -129,8 +120,6 @@ public class DailyCheckInActivity extends AppCompatActivity {
 
             }
         }
-
-
     }
 
     private void enablecheckbox(ViewGroup container, boolean enabled){
@@ -143,11 +132,7 @@ public class DailyCheckInActivity extends AppCompatActivity {
         }
     }
 
-
-
     private void saveCheckInData() {
-
-        //Validation
         if (nightWakingGroup.getCheckedRadioButtonId() == -1 ||
                 coughWheezeGroup.getCheckedRadioButtonId() == -1 ||
                 activityLimitGroup.getCheckedRadioButtonId() == -1) {
@@ -155,16 +140,13 @@ public class DailyCheckInActivity extends AppCompatActivity {
             return;
         }
 
-        //Data Collection
         Map<String, Object> data = new HashMap<>();
         data.put("Author", "child");
 
-        //Get selected symptom text
         data.put("NightWaking", getSelectedText(nightWakingGroup));
         data.put("CoughWheeze", getSelectedText(coughWheezeGroup));
         data.put("ActivityLimit", getSelectedText(activityLimitGroup));
 
-        // Get selected triggers, or an empty list if the symptom is not present
         if (nightWakingGroup.getCheckedRadioButtonId() == R.id.night_waking_no) {
             data.put("NWTrigger", new ArrayList<>());
         } else {
@@ -195,8 +177,6 @@ public class DailyCheckInActivity extends AppCompatActivity {
                     editbtn.setVisibility(View.VISIBLE);
                 })
                 .addOnFailureListener(e -> Toast.makeText(DailyCheckInActivity.this, "Failed to save data.", Toast.LENGTH_SHORT).show());
-
-
     }
 
     private String getSelectedText(RadioGroup group) {

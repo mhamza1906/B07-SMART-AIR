@@ -184,7 +184,7 @@ public class ParentDashboardActivity extends AppCompatActivity {
             final String finalLastRescueTime = lastRescueTime;
             final int finalWeeklyRescueCount = weeklyRescueCount;
 
-            // 2. Get graph display preference
+            // Get graph display preference
             db.collection("PEF").document(childId).get().addOnCompleteListener(prefTask -> {
                 int durationDays = 7; // Default to 7 days
                 if (prefTask.isSuccessful() && prefTask.getResult() != null && prefTask.getResult().exists()) {
@@ -213,9 +213,9 @@ public class ParentDashboardActivity extends AppCompatActivity {
 
                             List<Float> graphData = new ArrayList<>();
                             for (String date : dateList) {
-                                graphData.add(dailyPercents.getOrDefault(date, 0f)); // Add 0 if no data for a day
+                                graphData.add(dailyPercents.getOrDefault(date, 0f)); //Add 0 if no data for a day
                             }
-                            Collections.reverse(graphData); // Ensure oldest to newest
+                            Collections.reverse(graphData); //Ensure oldest to newest
 
 
                             String todayDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
