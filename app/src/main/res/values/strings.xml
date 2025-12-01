@@ -15,7 +15,7 @@
     <string name="hardToBreathe">"Does it feel like you have to work hard to breathe in?"</string>
     <string name="lipColorChange">"Have you noticed any changes in the colour of your lips or eyebrows?"</string>
     <string name="currentPEF">"What is your current PEF? (Optional)"</string>
-    <string name="rescueMed">"Have you taken rescue medication recently?"</string>
+    <string name="rescueMed">"Have you taken rescue medication today?"</string>
     <string name="actionPlan">"Your action plan will appear here"</string>
     <string name="emergencyCallButton">"CALL EMERGENCY SERVICES"</string>
     <string name="howLongAgo">"How long ago? (e.g., 5 mins)"</string>
@@ -27,6 +27,7 @@
     <string name="green_zone">Green Zone: Your asthma is well-controlled. Continue your current medication plan.</string>
     <string name="yellow_zone">Yellow Zone: Your asthma is worsening. Take 2 to 4 puffs of your rescue inhaler immediately.</string>
     <string name="red_zone">Red Zone: Medical alert! Take 4 to 6 puffs of your rescue inhaler immediately.</string>
+    <string name="safety_disclaimer">This is guidance, not a diagnosis. If in doubt, call emergency.</string>
 
 
     <string name="childSignInButtonWithParentName1">"SIGN IN WITH YOUR USERNAME (CHILD)"</string>

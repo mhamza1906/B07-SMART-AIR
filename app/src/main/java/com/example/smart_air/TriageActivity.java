@@ -44,6 +44,7 @@ public class TriageActivity extends AppCompatActivity {
     private CountDownTimer tenMinuteTimer;
     private boolean isEmergencyState = false;
     private String currentIncidentId; // Stores the Document ID for the current rescue event
+    private String currentPefZone; // Stores the current PEF zone
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +111,29 @@ public class TriageActivity extends AppCompatActivity {
         incidentData.put("timestamp", new Date());
         incidentData.put("eventType", eventType);
         incidentData.put("emergencyServicesCalled", eventType.equals("EmergencyStateTriggered"));
+        // B) Capture if rescue medication was taken
+        int selectedMedButtonId = rgRescueMed.getCheckedRadioButtonId();
+        boolean tookRescueMed = (selectedMedButtonId == R.id.rbMedYes);
+        incidentData.put("tookRescueMed", tookRescueMed);
+        // A) Capture which red flags were checked
+        Map<String, Boolean> redFlags = new HashMap<>();
+        redFlags.put("unableToTalk", chkBreathingBreaks.isChecked());
+        redFlags.put("hardToBreathe", chkHardToBreathe.isChecked());
+        redFlags.put("lipColorChange", chkLipColorChange.isChecked());
+        incidentData.put("redFlagsPresent", redFlags);
+        // C) Capture the PEF value entered by the user (if any)
+        String pefValue = editCurrentPEF.getText().toString();
+        if (!pefValue.isEmpty()) {
+            try {
+                incidentData.put("enteredPEF", Integer.parseInt(pefValue));
+            } catch (NumberFormatException e) {
+                incidentData.put("enteredPEF", "Invalid value: " + pefValue);
+            }
+        } else {
+            incidentData.put("enteredPEF", "Not provided");
+        }
+        // D) Capture the calculated PEF zone (action plan)
+        incidentData.put("pefZone", currentPefZone);
 
         // --- FIX: Reference the new Firestore structure ---
         // Path: triage_incidents -> {userId} -> incident_log -> {new_rescue_id}
@@ -207,7 +231,11 @@ public class TriageActivity extends AppCompatActivity {
                         try {
                             int currentPEF = Integer.parseInt(editCurrentPEF.getText().toString());
                             double pefPercentage = ((double) currentPEF / personalBest) * 100;
+
+                            // --- FIX 3: Get the zone and save it to the class variable ---
                             String zone = getPEFZone(pefPercentage);
+                            currentPefZone = zone; // Save the zone
+
                             displayActionPlanForZone(childId, zone);
                         } catch (NumberFormatException e) {
                             txtActionPlan.setText(R.string.prompt_enter_current_pef);
