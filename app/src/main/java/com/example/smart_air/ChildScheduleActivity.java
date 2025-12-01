@@ -7,11 +7,18 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
 public class ChildScheduleActivity extends AppCompatActivity {
+    private FirebaseFirestore firebase;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dummy_page);
+        setContentView(R.layout.activity_child_schedule);
+
+        firebase = FirebaseFirestore.getInstance();
+
     }
 }
