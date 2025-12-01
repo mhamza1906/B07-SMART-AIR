@@ -147,7 +147,8 @@ public class InputPEFActivity extends AppCompatActivity {
                 DocumentSnapshot document = task.getResult();
                 if (!document.exists()) {
                     Map<String, Object> defaultPEF = new HashMap<>();
-                    defaultPEF.put("PB", 0); // Corrected to uppercase 'PB'
+                    defaultPEF.put("PB", 900); // Corrected to uppercase 'PB'
+                    defaultPEF.put("graph_day_range", 7);
 
                     userDocRef.set(defaultPEF).addOnSuccessListener(aVoid ->
                             Toast.makeText(InputPEFActivity.this, "PEF node created for user.", Toast.LENGTH_SHORT).show()

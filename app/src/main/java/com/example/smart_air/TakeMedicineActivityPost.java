@@ -163,9 +163,9 @@ public class TakeMedicineActivityPost extends AppCompatActivity {
             }
             updateStreaks(childID, medType, date);
             updateRescueRolling30Days(childID, date);
+            updateWeeklyRescueUsage(childID, date);
 
             if (medType.equalsIgnoreCase("rescue")) {
-                updateWeeklyRescueUsage(childID, date);
                 updateLastRescueUse(childID);
             }
 

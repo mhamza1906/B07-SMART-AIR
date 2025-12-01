@@ -14,7 +14,7 @@
 
         <!-- Initiate Activity : Login Page -->
         <activity
-            android:name=".LoginActivityView"
+            android:name=".ParentDashboardActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,7 +39,7 @@
 
 
         <activity
-            android:name=".ParentDashboardActivity"
+            android:name=".LoginActivityView"
             android:exported="true"
             android:theme="@style/Theme.Smart_air"/>
 

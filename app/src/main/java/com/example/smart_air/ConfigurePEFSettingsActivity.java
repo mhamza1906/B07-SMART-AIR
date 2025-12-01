@@ -110,16 +110,28 @@ public class ConfigurePEFSettingsActivity extends AppCompatActivity {
 
             DocumentReference pefDocRef = db.collection("PEF").document(childId);
 
-            Map<String, Object> pbUpdate = new HashMap<>();
-            pbUpdate.put("PB", pbValue);
+            // First, get the document to check if it exists
+            pefDocRef.get().addOnSuccessListener(documentSnapshot -> {
+                Map<String, Object> pbUpdate = new HashMap<>();
+                pbUpdate.put("PB", pbValue);
 
-            pefDocRef.set(pbUpdate, SetOptions.merge())
-                    .addOnSuccessListener(aVoid -> {
-                        Toast.makeText(this, "Personal Best saved successfully!", Toast.LENGTH_SHORT).show();
-                        textCurrentPbValue.setText(String.valueOf(pbValue)); // Update the UI
-                        editTextPbValue.setText(""); // Clear the input
-                    })
-                    .addOnFailureListener(e -> Toast.makeText(this, "Failed to save Personal Best.", Toast.LENGTH_SHORT).show());
+                // If the document does not exist, also set the default graph range
+                if (!documentSnapshot.exists()) {
+                    pbUpdate.put("graph_day_range", 7);
+                }
+
+                // Now, perform the write operation with the correctly prepared map
+                pefDocRef.set(pbUpdate, SetOptions.merge())
+                        .addOnSuccessListener(aVoid -> {
+                            Toast.makeText(this, "Personal Best saved successfully!", Toast.LENGTH_SHORT).show();
+                            textCurrentPbValue.setText(String.valueOf(pbValue)); // Update the UI
+                            editTextPbValue.setText(""); // Clear the input
+                        })
+                        .addOnFailureListener(e -> Toast.makeText(this, "Failed to save Personal Best.", Toast.LENGTH_SHORT).show());
+
+            }).addOnFailureListener(e -> {
+                Toast.makeText(this, "Error checking document before save.", Toast.LENGTH_SHORT).show();
+            });
 
         } catch (NumberFormatException e) {
             Toast.makeText(this, "Please enter a valid number.", Toast.LENGTH_SHORT).show();
@@ -135,11 +147,25 @@ public class ConfigurePEFSettingsActivity extends AppCompatActivity {
         }
 
         DocumentReference pefDocRef = db.collection("PEF").document(childId);
-        Map<String, Object> rangeUpdate = new HashMap<>();
-        rangeUpdate.put("graph_day_range", durationDays);
+        final int finalDurationDays = durationDays;
 
-        pefDocRef.set(rangeUpdate, SetOptions.merge())
-                .addOnSuccessListener(aVoid -> Toast.makeText(this, "Graph setting saved successfully!", Toast.LENGTH_SHORT).show())
-                .addOnFailureListener(e -> Toast.makeText(this, "Failed to save graph setting.", Toast.LENGTH_SHORT).show());
+        // First, get the document to check if it exists
+        pefDocRef.get().addOnSuccessListener(documentSnapshot -> {
+            Map<String, Object> rangeUpdate = new HashMap<>();
+            rangeUpdate.put("graph_day_range", finalDurationDays);
+
+            // If the document does not exist, also set a default PB value
+            if (!documentSnapshot.exists()) {
+                rangeUpdate.put("PB", 900);
+            }
+
+            // Now, perform the write operation
+            pefDocRef.set(rangeUpdate, SetOptions.merge())
+                    .addOnSuccessListener(aVoid -> Toast.makeText(this, "Graph setting saved successfully!", Toast.LENGTH_SHORT).show())
+                    .addOnFailureListener(e -> Toast.makeText(this, "Failed to save graph setting.", Toast.LENGTH_SHORT).show());
+
+        }).addOnFailureListener(e -> {
+            Toast.makeText(this, "Error checking document before save.", Toast.LENGTH_SHORT).show();
+        });
     }
 }
