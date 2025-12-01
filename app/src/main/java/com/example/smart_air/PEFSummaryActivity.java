@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,6 +19,7 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -51,27 +53,63 @@ public class PEFSummaryActivity extends AppCompatActivity {
         chkShare = findViewById(R.id.chk_share_pef);
 
         setupChart();
-        loadSharePreference();
+        loadShareState();
         loadPEFData();
+
+        chkShare.setOnCheckedChangeListener((btn, checked) ->
+                updateProviderShareSetting(checked)
+        );
     }
 
-    private void loadSharePreference() {
-        db.collection("summaryCharts").document(childId)
+    private void loadShareState() {
+
+        db.collection("child-provider-share")
+                .document(childId)
+                .collection("providers")
                 .get()
-                .addOnSuccessListener(doc -> {
-                    if (doc.exists()) {
-                        Boolean saved = doc.getBoolean("pefSummary");
-                        if (saved != null) chkShare.setChecked(saved);
+                .addOnSuccessListener(snap -> {
+
+                    boolean enabled = false;
+
+                    for (DocumentSnapshot doc : snap.getDocuments()) {
+                        Boolean v = doc.getBoolean("summary_visibility.pef");
+                        if (v != null && v) {
+                            enabled = true;
+                            break;
+                        }
+                    }
+
+                    chkShare.setChecked(enabled);
+                });
+    }
+
+    private void updateProviderShareSetting(boolean value) {
+
+        db.collection("child-provider-share")
+                .document(childId)
+                .collection("providers")
+                .get()
+                .addOnSuccessListener(snap -> {
+
+                    if (snap.isEmpty()) {
+                        Toast.makeText(
+                                PEFSummaryActivity.this,
+                                "This toggle will not be saved. Please link to a provider first.",
+                                Toast.LENGTH_LONG
+                        ).show();
+                        return;
+                    }
+
+                    for (DocumentSnapshot doc : snap.getDocuments()) {
+
+                        Map<String, Object> update = new HashMap<>();
+                        Map<String, Object> vis = new HashMap<>();
+                        vis.put("pef", value);
+                        update.put("summary_visibility", vis);
+
+                        doc.getReference().set(update, SetOptions.merge());
                     }
                 });
-
-        chkShare.setOnCheckedChangeListener((btn, isChecked) -> {
-            Map<String, Object> map = new HashMap<>();
-            map.put("pefSummary", isChecked);
-            db.collection("summaryCharts")
-                    .document(childId)
-                    .set(map, com.google.firebase.firestore.SetOptions.merge());
-        });
     }
 
     private void setupChart() {
@@ -86,18 +124,6 @@ public class PEFSummaryActivity extends AppCompatActivity {
         chartPEF.getXAxis().setDrawGridLines(false);
         chartPEF.getAxisLeft().setTextColor(Color.BLACK);
         chartPEF.getXAxis().setTextColor(Color.BLACK);
-    }
-
-    private List<String> getLastNDays(int n) {
-        List<String> dates = new ArrayList<>();
-        Calendar cal = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-
-        for (int i = 0; i < n; i++) {
-            dates.add(sdf.format(cal.getTime()));
-            cal.add(Calendar.DATE, -1);
-        }
-        return dates;
     }
 
     private void loadPEFData() {
@@ -167,7 +193,9 @@ public class PEFSummaryActivity extends AppCompatActivity {
     }
 
     private void loadZoneColor() {
-        String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        String today =
+                new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                        .format(new Date());
 
         db.collection("PEF")
                 .document(childId)
@@ -183,11 +211,30 @@ public class PEFSummaryActivity extends AppCompatActivity {
                     }
 
                     switch (zone.toLowerCase()) {
-                        case "green": zoneColorView.setBackgroundColor(Color.parseColor("#4CAF50")); break;
-                        case "yellow": zoneColorView.setBackgroundColor(Color.parseColor("#FFEB3B")); break;
-                        case "red": zoneColorView.setBackgroundColor(Color.parseColor("#F44336")); break;
-                        default: zoneColorView.setBackgroundColor(Color.GRAY);
+                        case "green":
+                            zoneColorView.setBackgroundColor(Color.parseColor("#4CAF50"));
+                            break;
+                        case "yellow":
+                            zoneColorView.setBackgroundColor(Color.parseColor("#FFEB3B"));
+                            break;
+                        case "red":
+                            zoneColorView.setBackgroundColor(Color.parseColor("#F44336"));
+                            break;
+                        default:
+                            zoneColorView.setBackgroundColor(Color.GRAY);
                     }
                 });
+    }
+
+    private List<String> getLastNDays(int n) {
+        List<String> dates = new ArrayList<>();
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+
+        for (int i = 0; i < n; i++) {
+            dates.add(sdf.format(cal.getTime()));
+            cal.add(Calendar.DATE, -1);
+        }
+        return dates;
     }
 }

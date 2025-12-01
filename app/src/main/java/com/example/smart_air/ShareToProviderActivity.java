@@ -67,14 +67,12 @@ public class ShareToProviderActivity extends AppCompatActivity {
 
                         Boolean available = doc.getBoolean("availability");
                         if (available != null && !available) {
-                            continue; // hide revoked or expired providers
+                            continue;
                         }
 
                         String username = doc.getString("provider_username");
-                        String code = doc.getString("code");
-                        String link = doc.getString("link");
 
-                        providerList.add(new ProviderShareItem(username, code, link));
+                        providerList.add(new ProviderShareItem(username));
                     }
                     adapter.notifyDataSetChanged();
                 });

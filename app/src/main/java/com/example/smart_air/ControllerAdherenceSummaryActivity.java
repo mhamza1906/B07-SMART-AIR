@@ -9,6 +9,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -29,8 +30,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import java.util.Map;
 
 public class ControllerAdherenceSummaryActivity extends AppCompatActivity {
 
@@ -74,7 +75,6 @@ public class ControllerAdherenceSummaryActivity extends AppCompatActivity {
         loadAdherenceData();
     }
 
-
     private void loadControllerStreak() {
         db.collection("controllerStreak").document(childId)
                 .get()
@@ -104,29 +104,63 @@ public class ControllerAdherenceSummaryActivity extends AppCompatActivity {
                 });
     }
 
-
     private void loadShareSetting() {
-        db.collection("summaryCharts")
+
+        db.collection("child-provider-share")
                 .document(childId)
+                .collection("providers")
                 .get()
-                .addOnSuccessListener(doc -> {
-                    if (doc.exists()) {
-                        Boolean val = doc.getBoolean("controllerAdherence");
-                        if (val != null) chkShare.setChecked(val);
+                .addOnSuccessListener(snap -> {
+
+                    boolean enabled = false;
+
+                    for (DocumentSnapshot doc : snap.getDocuments()) {
+                        Boolean v = doc.getBoolean("summary_visibility.controller");
+                        if (v != null && v) {
+                            enabled = true;
+                            break;
+                        }
                     }
+
+                    chkShare.setChecked(enabled);
                 });
     }
 
     private void setupShareToggle() {
-        chkShare.setOnCheckedChangeListener((v, checked) -> {
-            Map<String, Object> map = new HashMap<>();
-            map.put("controllerAdherence", checked);
-            db.collection("summaryCharts")
-                    .document(childId)
-                    .set(map, SetOptions.merge());
-        });
+        chkShare.setOnCheckedChangeListener((btn, checked) ->
+                updateProviderShareSetting(checked)
+        );
     }
 
+    private void updateProviderShareSetting(boolean value) {
+
+        db.collection("child-provider-share")
+                .document(childId)
+                .collection("providers")
+                .get()
+                .addOnSuccessListener(snap -> {
+
+                    if (snap.isEmpty()) {
+                        Toast.makeText(
+                                ControllerAdherenceSummaryActivity.this,
+                                "This toggle will not be saved. Please link to a provider first.",
+                                Toast.LENGTH_LONG
+                        ).show();
+                        return;
+                    }
+
+                    for (DocumentSnapshot doc : snap.getDocuments()) {
+
+                        Map<String, Object> update = new HashMap<>();
+                        Map<String, Object> visField = new HashMap<>();
+                        visField.put("controller", value);
+
+                        update.put("summary_visibility", visField);
+
+                        doc.getReference().set(update, SetOptions.merge());
+                    }
+                });
+    }
 
     private void loadAdherenceData() {
         progress.setVisibility(View.VISIBLE);
@@ -176,7 +210,6 @@ public class ControllerAdherenceSummaryActivity extends AppCompatActivity {
         drawChart(dates, percents);
     }
 
-
     private void setupChartUI() {
         chart.setNoDataText("No adherence data.");
         chart.getDescription().setEnabled(false);
@@ -208,7 +241,7 @@ public class ControllerAdherenceSummaryActivity extends AppCompatActivity {
 
         chart.setData(new LineData(ds));
 
-        /* Reduced x-axis labels */
+        /* reduced x-axis ticks */
         List<String> labels = new ArrayList<>(Collections.nCopies(dates.size(), ""));
         int n = dates.size();
 

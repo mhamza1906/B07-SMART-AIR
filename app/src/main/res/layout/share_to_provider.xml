@@ -4,21 +4,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginTop="32dp"
     android:padding="16dp">
 
-    <!-- Title -->
     <TextView
         android:id="@+id/txtShareTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="8dp"
         android:text="@string/share_to_provider_recycler"
         android:textSize="22sp"
         android:textStyle="bold"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Shared Providers -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerProviders"
         android:layout_width="320dp"
@@ -30,7 +30,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:paddingTop="12dp"/>
 
-    <!-- Link New Provider -->
+
     <Button
         android:id="@+id/btnLinkNewProvider"
         android:layout_width="wrap_content"

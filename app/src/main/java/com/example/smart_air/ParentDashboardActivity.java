@@ -358,7 +358,7 @@ public class ParentDashboardActivity extends AppCompatActivity {
         layout.setOrientation(LinearLayout.VERTICAL);
         layout.setPadding(40, 40, 40, 40);
 
-        TextView shareOption = buildOption("Share To Selected Provider        〉");
+        TextView shareOption = buildOption("Share To Selected Provider            〉");
         TextView exportOption = buildOption("Export Child History (PDF/CSV)    〉");
 
         layout.addView(shareOption);

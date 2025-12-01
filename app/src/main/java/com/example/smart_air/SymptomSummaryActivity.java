@@ -62,26 +62,13 @@ public class SymptomSummaryActivity extends AppCompatActivity {
         txtEmpty = findViewById(R.id.txt_symptom_empty);
         progressBar = findViewById(R.id.symptom_progress_bar);
 
-
         chkShare = findViewById(R.id.chk_share_chart);
 
-        db.collection("summaryCharts").document(childId)
-                .get()
-                .addOnSuccessListener(doc -> {
-                    if (doc.exists()) {
-                        Boolean saved = doc.getBoolean("symptomSummary");
-                        if (saved != null) chkShare.setChecked(saved);
-                    }
-                });
+        loadShareState();
 
-
-        chkShare.setOnCheckedChangeListener((btn, isChecked) -> {
-            Map<String, Object> map = new HashMap<>();
-            map.put("symptomSummary", isChecked);
-            db.collection("summaryCharts").document(childId)
-                    .set(map, SetOptions.merge());
-        });
-
+        chkShare.setOnCheckedChangeListener((btn, checked) ->
+                updateProviderShareSetting(checked)
+        );
 
         setupChart(chartNightWaking, 1f);
         setupChart(chartCoughWheeze, 2f);
@@ -90,12 +77,52 @@ public class SymptomSummaryActivity extends AppCompatActivity {
         loadSymptomData();
     }
 
+    private void loadShareState() {
+        db.collection("child-provider-share")
+                .document(childId)
+                .collection("providers")
+                .get()
+                .addOnSuccessListener(snap -> {
+
+                    boolean shareEnabled = false;
+
+                    for (DocumentSnapshot doc : snap.getDocuments()) {
+                        Boolean v = doc.getBoolean("summary_visibility.symptoms");
+                        if (v != null && v) {
+                            shareEnabled = true;
+                            break;
+                        }
+                    }
+
+                    chkShare.setChecked(shareEnabled);
+                });
+    }
+
+    private void updateProviderShareSetting(boolean value) {
+
+        db.collection("child-provider-share")
+                .document(childId)
+                .collection("providers")
+                .get()
+                .addOnSuccessListener(snap -> {
+
+                    for (DocumentSnapshot doc : snap.getDocuments()) {
+
+                        Map<String, Object> update = new HashMap<>();
+                        Map<String, Object> vis = new HashMap<>();
+                        vis.put("symptoms", value);
+                        update.put("summary_visibility", vis);
+
+                        doc.getReference().set(update, SetOptions.merge());
+                    }
+                });
+    }
+
     private void setupChart(LineChart chart, float yMax) {
 
         chart.setNoDataText("No symptom data yet.");
         chart.getDescription().setEnabled(false);
         chart.getLegend().setEnabled(false);
-
 
         XAxis xAxis = chart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
@@ -103,7 +130,6 @@ public class SymptomSummaryActivity extends AppCompatActivity {
         xAxis.setDrawGridLines(false);
         xAxis.setTextSize(14f);
         xAxis.setTextColor(Color.parseColor("#000000"));
-
 
         YAxis leftAxis = chart.getAxisLeft();
         leftAxis.setAxisMinimum(0f);
@@ -117,10 +143,8 @@ public class SymptomSummaryActivity extends AppCompatActivity {
         chart.setTouchEnabled(true);
         chart.setPinchZoom(true);
 
-        chart.setExtraOffsets(0, 32, 0, 16);  // top padding
+        chart.setExtraOffsets(0, 32, 0, 16);
     }
-
-
 
     private void loadSymptomData() {
         progressBar.setVisibility(View.VISIBLE);
@@ -148,7 +172,6 @@ public class SymptomSummaryActivity extends AppCompatActivity {
         }
 
         List<DocumentSnapshot> docs = new ArrayList<>(snapshot.getDocuments());
-
         docs.sort(Comparator.comparing(DocumentSnapshot::getId));
 
         List<String> dateLabels = new ArrayList<>();
@@ -161,13 +184,9 @@ public class SymptomSummaryActivity extends AppCompatActivity {
             String dateId = doc.getId();
             dateLabels.add(formatDateLabel(dateId));
 
-            String night = doc.getString("NightWaking");
-            String cough = doc.getString("CoughWheeze");
-            String activity = doc.getString("ActivityLimit");
-
-            float nightVal = mapNightWakingValue(night);
-            float coughVal = mapCoughWheezeValue(cough);
-            float activityVal = mapActivityLimitValue(activity);
+            float nightVal = mapNightWakingValue(doc.getString("NightWaking"));
+            float coughVal = mapCoughWheezeValue(doc.getString("CoughWheeze"));
+            float activityVal = mapActivityLimitValue(doc.getString("ActivityLimit"));
 
             nightEntries.add(new Entry(index, nightVal));
             coughEntries.add(new Entry(index, coughVal));
@@ -188,6 +207,7 @@ public class SymptomSummaryActivity extends AppCompatActivity {
 
         txtEmpty.setVisibility(View.GONE);
     }
+
 
     private void applyLineData(LineChart chart,
                                List<Entry> entries,
@@ -210,29 +230,16 @@ public class SymptomSummaryActivity extends AppCompatActivity {
         chart.invalidate();
     }
 
-    private String formatDateLabel(String raw) {
-        if (raw == null || raw.trim().isEmpty()) {
-            return "";
-        }
 
+    private String formatDateLabel(String raw) {
         try {
             SimpleDateFormat src = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
             SimpleDateFormat dst = new SimpleDateFormat("MM-dd", Locale.getDefault());
-
             Date parsed = src.parse(raw);
-            if (parsed == null) {
-                return raw;
-            }
-
-            return dst.format(parsed);
-
-        } catch (Exception e) {
-            return raw;
-        }
+            if (parsed != null) return dst.format(parsed);
+        } catch (Exception ignore) {}
+        return raw;
     }
-
-
-
 
     private float mapNightWakingValue(String s) {
         if (s == null) return 0f;

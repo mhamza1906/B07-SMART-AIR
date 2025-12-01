@@ -19,8 +19,6 @@
     <string name="actionPlan">"Your action plan will appear here"</string>
     <string name="emergencyCallButton">"CALL EMERGENCY SERVICES"</string>
     <string name="howLongAgo">"How long ago? (e.g., 5 mins)"</string>
-    <string name="yes">"Yes"</string>
-    <string name="no">"No"</string>
     <string name="triageMode">"Red Flag Symptoms"</string>
     <string name="prompt_enter_current_pef">Please enter your current PEF to see your action plan.</string>
     <string name="pb_not_set">Your PEF Personal Best is not set. Cannot determine action plan.</string>
@@ -29,7 +27,6 @@
     <string name="red_zone">Red Zone: Medical alert! Take 4 to 6 puffs of your rescue inhaler immediately.</string>
     <string name="safety_disclaimer">This is guidance, not a diagnosis. If in doubt, call emergency.</string>
     <string name="enter">Enter</string>
-
     <string name="childSignInButtonWithParentName1">"SIGN IN WITH YOUR USERNAME (CHILD)"</string>
     <string name="DOB">"Birthday (YYYY-MM-DD)"</string>
     <string name="linkChildBtn">"LINK THIS CHILD"</string>
@@ -232,7 +229,7 @@
     <string name="adherence_loading_failed">"Failed to load adherence data"</string>
     <string name="share_content_placeholder">"Share Contents Placeholder"</string>
     <string name="share_to_provider_btn">Share To Provider/Export Child History</string>
-    <string name="share_to_provider_recycler">"Share This Child To Provider"</string>
+    <string name="share_to_provider_recycler">"Share this child to provider:"</string>
     <string name="link_provider">"Link A New Provider And Share"</string>
     <string name="revoke_btn">"Revoke Sharing"</string>
     <string name="provider_username">"provider_username"</string>
@@ -250,6 +247,15 @@
     <string name="triage_share">"Triage Incidents Summary"</string>
     <string name="label_code">Code: %1$s</string>
     <string name="label_link">Link: %1$s</string>
+    <string name="triage_timeline_explanation">
+    Triage Timeline — How to Read This Chart:\n
+    • Each dot represents a triage-related event.\n
+    • The horizontal axis shows when the event happened.\n
+    • The vertical axis shows the severity (Green → Yellow → Red → Emergency).\n
+    • Larger dots indicate red-flag symptoms.\n
+    • Emergency events appear at the top in dark red.\n
+    • You can zoom or drag to explore the timeline.
+    </string>
 
 
 

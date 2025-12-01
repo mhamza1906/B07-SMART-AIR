@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -25,8 +26,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-
-
 import java.util.Map;
 
 public class TriggerSummaryActivity extends AppCompatActivity {
@@ -55,31 +54,70 @@ public class TriggerSummaryActivity extends AppCompatActivity {
         chartTriggers = findViewById(R.id.chart_triggers);
         txtEmpty = findViewById(R.id.txt_trigger_empty);
         progressBar = findViewById(R.id.trigger_progress_bar);
-
-
         chkShare = findViewById(R.id.chk_share_chart);
 
 
-        db.collection("summaryCharts").document(childId)
-                .get()
-                .addOnSuccessListener(doc -> {
-                    if (doc.exists()) {
-                        Boolean saved = doc.getBoolean("triggerSummary");
-                        if (saved != null) chkShare.setChecked(saved);
-                    }
-                });
+        loadShareState();
 
-
-        chkShare.setOnCheckedChangeListener((btn, isChecked) -> {
-            Map<String, Object> map = new HashMap<>();
-            map.put("triggerSummary", isChecked);
-            db.collection("summaryCharts").document(childId)
-                    .set(map, SetOptions.merge());
-        });
+        chkShare.setOnCheckedChangeListener((btn, checked) ->
+                updateProviderShareSetting(checked)
+        );
 
         setupChart();
         loadTriggerData();
     }
+
+    private void loadShareState() {
+        db.collection("child-provider-share")
+                .document(childId)
+                .collection("providers")
+                .get()
+                .addOnSuccessListener(snap -> {
+
+                    boolean shareEnabled = false;
+
+                    for (DocumentSnapshot doc : snap.getDocuments()) {
+                        Boolean val = doc.getBoolean("summary_visibility.triggers");
+                        if (val != null && val) {
+                            shareEnabled = true;
+                            break;
+                        }
+                    }
+
+                    chkShare.setChecked(shareEnabled);
+                });
+    }
+
+    private void updateProviderShareSetting(boolean checked) {
+
+        db.collection("child-provider-share")
+                .document(childId)
+                .collection("providers")
+                .get()
+                .addOnSuccessListener(snap -> {
+
+                    if (snap.isEmpty()) {
+                        Toast.makeText(
+                                TriggerSummaryActivity.this,
+                                "This toggle will not be saved. Please link to a provider first.",
+                                Toast.LENGTH_LONG
+                        ).show();
+                        return;
+                    }
+
+                    for (DocumentSnapshot doc : snap.getDocuments()) {
+                        Map<String, Object> update = new HashMap<>();
+                        Map<String, Object> visibility = new HashMap<>();
+
+                        visibility.put("triggers", checked);
+                        update.put("summary_visibility", visibility);
+
+                        doc.getReference().set(update, SetOptions.merge());
+                    }
+                });
+    }
+
+
 
     private void setupChart() {
 
@@ -92,8 +130,6 @@ public class TriggerSummaryActivity extends AppCompatActivity {
                         chartTriggers.getXAxis(),
                         chartTriggers));
 
-
-
         XAxis xAxis = chartTriggers.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setGranularity(1f);
@@ -101,7 +137,6 @@ public class TriggerSummaryActivity extends AppCompatActivity {
         xAxis.setTextSize(14f);
         xAxis.setYOffset(16f);
         xAxis.setTextColor(Color.parseColor("#000000"));
-
 
         YAxis leftAxis = chartTriggers.getAxisLeft();
         leftAxis.setAxisMinimum(0f);
@@ -140,7 +175,6 @@ public class TriggerSummaryActivity extends AppCompatActivity {
         }
 
         List<DocumentSnapshot> docs = new ArrayList<>(snapshot.getDocuments());
-
         docs.sort(Comparator.comparing(DocumentSnapshot::getId));
 
         Map<String, Integer> triggerCounts = new HashMap<>();
@@ -180,10 +214,10 @@ public class TriggerSummaryActivity extends AppCompatActivity {
         XAxis xAxis = chartTriggers.getXAxis();
         xAxis.setValueFormatter(new IndexAxisValueFormatter(formatTriggerLabels(triggerLabels)));
 
-
         chartTriggers.invalidate();
         txtEmpty.setVisibility(View.GONE);
     }
+
 
     private void addTriggerCounts(Map<String, Integer> map, List<String> triggers) {
         if (triggers == null) return;
@@ -212,7 +246,6 @@ public class TriggerSummaryActivity extends AppCompatActivity {
         }
         return formatted;
     }
-
 
     private List<String> getStringList(DocumentSnapshot doc, String key) {
         Object value = doc.get(key);

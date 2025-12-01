@@ -32,36 +32,16 @@ public class ProviderShareAdapter extends RecyclerView.Adapter<ProviderShareAdap
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ProviderShareAdapter.ViewHolder holder, int position) {
-
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ProviderShareItem item = providerList.get(position);
 
         holder.txtProviderName.setText(item.username);
-
-
-        if (item.code != null) {
-            holder.txtProviderCode.setVisibility(View.VISIBLE);
-            holder.txtProviderCode.setText(
-                    holder.itemView.getContext().getString(R.string.label_code, item.code)
-            );
-        } else {
-            holder.txtProviderCode.setVisibility(View.GONE);
-        }
-
-        if (item.link != null) {
-            holder.txtProviderLink.setVisibility(View.VISIBLE);
-            holder.txtProviderLink.setText(
-                    holder.itemView.getContext().getString(R.string.label_link, item.link)
-            );
-        } else {
-            holder.txtProviderLink.setVisibility(View.GONE);
-        }
-
 
         holder.btnRevoke.setOnClickListener(v ->
                 revokeListener.onRevoke(item.username)
         );
     }
+
 
     @Override
     public int getItemCount() {
@@ -70,16 +50,16 @@ public class ProviderShareAdapter extends RecyclerView.Adapter<ProviderShareAdap
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView txtProviderName, txtProviderCode, txtProviderLink;
+        TextView txtProviderName;
         Button btnRevoke;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             txtProviderName = itemView.findViewById(R.id.txtProviderName);
-            txtProviderCode = itemView.findViewById(R.id.btnGenerateCode);
-            txtProviderLink = itemView.findViewById(R.id.btnGenerateLink);
             btnRevoke = itemView.findViewById(R.id.btnRevoke);
         }
     }
+
+
 }

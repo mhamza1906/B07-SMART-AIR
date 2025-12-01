@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -52,27 +53,63 @@ public class RescueLogsSummaryActivity extends AppCompatActivity {
         setupChart(chart7);
         setupChart(chart30);
 
-        loadSharePreference();
+        loadShareState();
         loadMedlogData();
         loadRescueLogs();
+
+        chkShare.setOnCheckedChangeListener((btn, checked) ->
+                updateProviderShareSetting(checked)
+        );
     }
 
-    private void loadSharePreference() {
-        db.collection("summaryCharts").document(childId)
-                .get().addOnSuccessListener(doc -> {
-                    if (doc.exists()) {
-                        Boolean saved = doc.getBoolean("rescueSummary");
-                        if (saved != null)
-                            chkShare.setChecked(saved);
+    private void loadShareState() {
+        db.collection("child-provider-share")
+                .document(childId)
+                .collection("providers")
+                .get()
+                .addOnSuccessListener(snap -> {
+
+                    boolean enabled = false;
+
+                    if (snap.isEmpty()) {
+                        Toast.makeText(
+                                RescueLogsSummaryActivity.this,
+                                "This toggle will not be saved. Please link to a provider first.",
+                                Toast.LENGTH_LONG
+                        ).show();
+                        return;
+                    }
+
+                    for (DocumentSnapshot doc : snap.getDocuments()) {
+                        Boolean v = doc.getBoolean("summary_visibility.rescue");
+                        if (v != null && v) {
+                            enabled = true;
+                            break;
+                        }
+                    }
+
+                    chkShare.setChecked(enabled);
+                });
+    }
+
+    private void updateProviderShareSetting(boolean value) {
+
+        db.collection("child-provider-share")
+                .document(childId)
+                .collection("providers")
+                .get()
+                .addOnSuccessListener(snap -> {
+
+                    for (DocumentSnapshot doc : snap.getDocuments()) {
+
+                        Map<String, Object> update = new HashMap<>();
+                        Map<String, Object> vis = new HashMap<>();
+                        vis.put("rescue", value);
+                        update.put("summary_visibility", vis);
+
+                        doc.getReference().set(update, SetOptions.merge());
                     }
                 });
-
-        chkShare.setOnCheckedChangeListener((btn, isChecked) -> {
-            Map<String, Object> map = new HashMap<>();
-            map.put("rescueSummary", isChecked);
-            db.collection("summaryCharts").document(childId)
-                    .set(map, SetOptions.merge());
-        });
     }
 
     private void setupChart(LineChart chart) {
@@ -97,14 +134,17 @@ public class RescueLogsSummaryActivity extends AppCompatActivity {
                 .get().addOnSuccessListener(snap -> {
                     if (snap.exists()) {
                         String lastUse = snap.getString("last_rescue_use");
-                        String display = (lastUse == null ? "-" : lastUse);
-                        txtLastRescue.setText(getString(R.string.last_rescue_use_format, display));
+                        txtLastRescue.setText(
+                                getString(R.string.last_rescue_use_format,
+                                        lastUse == null ? "-" : lastUse)
+                        );
                     }
                 });
     }
 
     private void loadRescueLogs() {
-        db.collection("medlog").document(childId)
+        db.collection("medlog")
+                .document(childId)
                 .collection("log")
                 .get()
                 .addOnSuccessListener(this::onRescueLogLoaded);
@@ -129,14 +169,12 @@ public class RescueLogsSummaryActivity extends AppCompatActivity {
                 }
             }
 
-            int size = rescueMap.size();
-            dailyCount.put(doc.getId(), size);
+            dailyCount.put(doc.getId(), rescueMap.size());
         }
 
         draw7DayChart(dailyCount);
         draw30DayChart(dailyCount);
     }
-
 
     private void draw7DayChart(Map<String, Integer> map) {
         List<String> last7 = getPastDates(7);
@@ -160,7 +198,6 @@ public class RescueLogsSummaryActivity extends AppCompatActivity {
             String day = dateList.get(i);
             Integer boxed = valueMap.get(day);
             int count = (boxed == null ? 0 : boxed);
-
 
             entries.add(new Entry(i, count));
 
