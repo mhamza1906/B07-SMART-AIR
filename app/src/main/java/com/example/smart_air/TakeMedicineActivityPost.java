@@ -102,8 +102,8 @@ public class TakeMedicineActivityPost extends AppCompatActivity {
             return;
         }
 
-        if (postBreathRating < 1 || postBreathRating > 10) {
-            Toast.makeText(this, "Breath rating must be between 1 and 10", Toast.LENGTH_SHORT).show();
+        if (postBreathRating < 1) {
+            Toast.makeText(this, "Breath rating must be greater than or equal to 1", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -163,9 +163,9 @@ public class TakeMedicineActivityPost extends AppCompatActivity {
             }
             updateStreaks(childID, medType, date);
             updateRescueRolling30Days(childID, date);
+            updateWeeklyRescueUsage(childID, date);
 
             if (medType.equalsIgnoreCase("rescue")) {
-                updateWeeklyRescueUsage(childID, date);
                 updateLastRescueUse(childID);
             }
 

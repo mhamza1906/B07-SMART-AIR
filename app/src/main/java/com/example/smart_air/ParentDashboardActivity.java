@@ -21,12 +21,15 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.SetOptions;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -51,7 +54,7 @@ public class ParentDashboardActivity extends AppCompatActivity {
     private final List<String> cachedChildIds = new ArrayList<>();
     private final List<String> cachedChildNames = new ArrayList<>();
 
-
+    // RecyclerView fields
     private FirebaseFirestore db;
     private RecyclerView childSummariesRecyclerView;
     private ChildSummaryAdapter adapter;
@@ -123,13 +126,13 @@ public class ParentDashboardActivity extends AppCompatActivity {
                         }
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             String childId = document.getId();
-                            String fName = document.getString("fName");
-                            String lName = document.getString("lName");
+                            String fname = document.getString("fName");
+                            String lname = document.getString("lName");
                             String birthday = document.getString("birthday");
 
                             List<String> nameParts = new ArrayList<>();
-                            if (fName != null && !fName.isEmpty()) nameParts.add(fName);
-                            if (lName != null && !lName.isEmpty()) nameParts.add(lName);
+                            if (fname != null && !fname.isEmpty()) nameParts.add(fname);
+                            if (lname != null && !lname.isEmpty()) nameParts.add(lname);
                             String fullName = String.join(" ", nameParts);
 
                             fetchChildDetails(childId, fullName, birthday);
@@ -150,8 +153,29 @@ public class ParentDashboardActivity extends AppCompatActivity {
 
             if (medLogTask.isSuccessful() && medLogTask.getResult() != null && medLogTask.getResult().exists()) {
                 DocumentSnapshot medLogDoc = medLogTask.getResult();
-                lastRescueTime = medLogDoc.getString("last_rescue_use");
-                if (lastRescueTime == null) lastRescueTime = "N/A";
+
+                // Format the last rescue time string for display
+                String lastUseTimestamp = medLogDoc.getString("last_rescue_use");
+                if (lastUseTimestamp != null && !lastUseTimestamp.isEmpty()) {
+                    String[] parts = lastUseTimestamp.split(" ");
+                    if (parts.length >= 2) {
+                        String datePart = parts[0];
+                        String timePart = parts[1];
+                        // Remove seconds for a cleaner look
+                        if (timePart.lastIndexOf(':') > 0) {
+                            timePart = timePart.substring(0, timePart.lastIndexOf(':'));
+                        }
+                        lastRescueTime = "Date: " + datePart + "  Time: " + timePart;
+                    } else {
+                        lastRescueTime = lastUseTimestamp; // Fallback to original string
+                    }
+                } else {
+                    lastRescueTime = "N/A";
+                }
+
+                //updating weekly rescue use
+                String todayDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+                updateWeeklyRescueUsage(childId, todayDate);
 
                 Long weeklyCount = medLogDoc.getLong("rescue_use_in_last_7_days");
                 if (weeklyCount != null) weeklyRescueCount = weeklyCount.intValue();
@@ -160,7 +184,7 @@ public class ParentDashboardActivity extends AppCompatActivity {
             final String finalLastRescueTime = lastRescueTime;
             final int finalWeeklyRescueCount = weeklyRescueCount;
 
-
+            // Get graph display preference
             db.collection("PEF").document(childId).get().addOnCompleteListener(prefTask -> {
                 int durationDays = 7; // Default to 7 days
                 if (prefTask.isSuccessful() && prefTask.getResult() != null && prefTask.getResult().exists()) {
@@ -168,11 +192,6 @@ public class ParentDashboardActivity extends AppCompatActivity {
                     if (duration != null) {
                         durationDays = duration.intValue();
                     }
-                } else {
-
-                    Map<String, Object> prefUpdate = new HashMap<>();
-                    prefUpdate.put("graph_day_range", 7);
-                    db.collection("PEF").document(childId).set(prefUpdate, SetOptions.merge());
                 }
 
                 List<String> dateList = getLastNDays(durationDays);
@@ -194,9 +213,9 @@ public class ParentDashboardActivity extends AppCompatActivity {
 
                             List<Float> graphData = new ArrayList<>();
                             for (String date : dateList) {
-                                graphData.add(dailyPercents.getOrDefault(date, 0f)); // Add 0 if no data for a day
+                                graphData.add(dailyPercents.getOrDefault(date, 0f)); //Add 0 if no data for a day
                             }
-                            Collections.reverse(graphData); // Ensure oldest to newest
+                            Collections.reverse(graphData); //Ensure oldest to newest
 
 
                             String todayDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
@@ -207,10 +226,10 @@ public class ParentDashboardActivity extends AppCompatActivity {
                                         if (pefTask.isSuccessful() && pefTask.getResult() != null && pefTask.getResult().exists()) {
                                             String zone = pefTask.getResult().getString("zone");
                                             if (zone != null) {
-                                                switch (zone) {
-                                                    case "Green": todayZoneColor = "#4CAF50"; break;
-                                                    case "Yellow": todayZoneColor = "#FFEB3B"; break;
-                                                    case "Red": todayZoneColor = "#F44336"; break;
+                                                switch (zone.toLowerCase()) {
+                                                    case "green": todayZoneColor = "#4CAF50"; break;
+                                                    case "yellow": todayZoneColor = "#FFEB3B"; break;
+                                                    case "red": todayZoneColor = "#F44336"; break;
                                                 }
                                             }
                                         }
@@ -236,6 +255,48 @@ public class ParentDashboardActivity extends AppCompatActivity {
         return list;
     }
 
+    private void updateWeeklyRescueUsage(String childID, String todayDate) {
+        List<String> last7Days = getLast7Days(todayDate);
+        CollectionReference logRef = db.collection("medlog").document(childID).collection("log");
+
+        logRef.get().addOnSuccessListener(snap -> {
+            int count = 0;
+            for (DocumentSnapshot d : snap.getDocuments()) {
+                String date = d.getId();
+                if (last7Days.contains(date)) {
+                    Map<String, Object> data = d.getData();
+                    if (data != null && data.containsKey("rescue")) {
+                        count++;
+                    }
+                }
+            }
+
+            DocumentReference parentDoc = db.collection("medlog").document(childID);
+            Map<String, Object> update = new HashMap<>();
+            update.put("rescue_use_in_last_7_days", count);
+            parentDoc.set(update, SetOptions.merge());
+        });
+    }
+
+    private List<String> getLast7Days(String today) {
+        List<String> list = new ArrayList<>();
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            Date date = sdf.parse(today);
+            if (date == null) return list;
+
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+
+            for (int i = 0; i < 7; i++) {
+                String d = sdf.format(cal.getTime());
+                list.add(d);
+                cal.add(Calendar.DATE, -1);
+            }
+        } catch (Exception ignored) {}
+        return list;
+    }
+
 
     private void setupBottomNavigation() {
         View myChildrenTab = findViewById(R.id.tabMyChildren);
@@ -246,6 +307,8 @@ public class ParentDashboardActivity extends AppCompatActivity {
             shareContentPlaceholder.setVisibility(View.GONE);
             findViewById(R.id.btnSelectChild).setVisibility(View.VISIBLE);
             findViewById(R.id.btnCreateChild).setVisibility(View.VISIBLE);
+
+
         });
 
         shareTab.setOnClickListener(v -> {

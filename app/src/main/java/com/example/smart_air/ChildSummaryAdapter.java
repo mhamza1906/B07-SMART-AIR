@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -94,7 +95,7 @@ public class ChildSummaryAdapter extends RecyclerView.Adapter<ChildSummaryAdapte
 
         ArrayList<Entry> entries = new ArrayList<>();
         for (int i = 0; i < graphData.size(); i++) {
-            entries.add(new Entry(i, graphData.get(i)));
+            entries.add(new Entry(i + 1, graphData.get(i))); // Shift X-axis value by 1
         }
 
         LineDataSet dataSet = new LineDataSet(entries, "Daily PEF % Trend");
@@ -110,11 +111,15 @@ public class ChildSummaryAdapter extends RecyclerView.Adapter<ChildSummaryAdapte
         dataSet.setFillAlpha(100);
 
         // Style the chart grid
-        chart.getAxisLeft().setEnabled(false);
+        chart.getAxisLeft().setEnabled(true);
         chart.getAxisRight().setEnabled(false);
-        chart.getXAxis().setEnabled(false);
-        chart.getLegend().setEnabled(false);
-        chart.getDescription().setEnabled(false);
+        chart.getXAxis().setEnabled(true);
+        chart.getLegend().setEnabled(true);
+        
+        Description description = chart.getDescription();
+        description.setEnabled(true);
+        description.setText("PEF % Last " + graphData.size() + " Days");
+
         chart.setTouchEnabled(true);
 
         LineData lineData = new LineData(dataSet);
