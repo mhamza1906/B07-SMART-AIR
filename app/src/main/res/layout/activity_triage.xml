@@ -47,18 +47,35 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/chkHardToBreathe"/>
 
-        <EditText
-            android:id="@+id/editCurrentPEF"
+        <!-- This LinearLayout groups the EditText and the Button horizontally -->
+        <LinearLayout
+            android:id="@+id/pefEntryLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:autofillHints="currentPEF"
-            android:hint="@string/currentPEF"
-            android:inputType="number"
-            android:minHeight="48dp"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/chkLipColorChange" />
+            app:layout_constraintTop_toBottomOf="@id/chkLipColorChange">
+
+            <EditText
+                android:id="@+id/editCurrentPEF"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:autofillHints=""
+                android:hint="@string/currentPEF"
+                android:inputType="number"
+                android:minHeight="48dp" />
+
+            <Button
+                android:id="@+id/btnEnterPEF"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/enter" />
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/rescueMedTitle"
@@ -68,7 +85,7 @@
             android:text="@string/rescueMed"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/editCurrentPEF"/>
+            app:layout_constraintTop_toBottomOf="@id/pefEntryLayout"/>
 
         <RadioGroup
             android:id="@+id/rgRescueMed"
@@ -93,19 +110,6 @@
                 android:text="@string/no" />
         </RadioGroup>
 
-        <EditText
-            android:id="@+id/editMedTime"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:autofillHints="howLongAgo"
-            android:hint="@string/howLongAgo"
-            android:inputType="text"
-            android:minHeight="48dp"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/rgRescueMed" />
-
         <TextView
             android:id="@+id/txtActionPlan"
             android:layout_width="0dp"
@@ -117,7 +121,7 @@
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/editMedTime" />
+            app:layout_constraintTop_toBottomOf="@id/rgRescueMed" />
 
         <Button
             android:id="@+id/btnEmergencyCall"

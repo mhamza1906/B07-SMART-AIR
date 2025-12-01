@@ -28,7 +28,7 @@
     <string name="yellow_zone">Yellow Zone: Your asthma is worsening. Take 2 to 4 puffs of your rescue inhaler immediately.</string>
     <string name="red_zone">Red Zone: Medical alert! Take 4 to 6 puffs of your rescue inhaler immediately.</string>
     <string name="safety_disclaimer">This is guidance, not a diagnosis. If in doubt, call emergency.</string>
-
+    <string name="enter">Enter</string>
 
     <string name="childSignInButtonWithParentName1">"SIGN IN WITH YOUR USERNAME (CHILD)"</string>
     <string name="DOB">"Birthday (YYYY-MM-DD)"</string>
