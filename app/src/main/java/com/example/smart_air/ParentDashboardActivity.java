@@ -67,9 +67,9 @@ public class ParentDashboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.parent_dashboard);
 
-        // --- Teammate's onCreate setup ---
+
         txtAvatar = findViewById(R.id.txtUserAvatar);
-        parentId = getIntent().getStringExtra("parentID");
+        parentId = "nyskpCwZVRPd5Xab3kUdD0nQAzV2";
         if (parentId == null) {
             Toast.makeText(this, "User ID missing.", Toast.LENGTH_SHORT).show();
             finish();
