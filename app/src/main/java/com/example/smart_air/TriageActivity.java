@@ -14,13 +14,21 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.SetOptions;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -76,23 +84,29 @@ public class TriageActivity extends AppCompatActivity {
         setupRedFlagListeners(childId);
 
         btnEnterPEF.setOnClickListener(v -> {
-            determineActionPlanFromPEF(); // Calculate zone and display it
-            updateLogWithCurrentState(childId, "PEFEntered"); // Save the new PEF value
+            // First, calculate the PEF zone and save it to the class variable
+            calculateAndSavePefZone();
+            // Second, attempt to display the UI (this will do nothing if in an emergency)
+            determineActionPlanFromPEF();
+            // Third, update the Firestore log with the newly calculated data
+            updateLogWithCurrentState(childId, "PEFEntered");
         });
 
         rgRescueMed.setOnCheckedChangeListener((group, checkedId) -> updateLogWithCurrentState(childId, "MedicationStatusChanged"));
 
         btnEmergencyCall.setOnClickListener(v -> {
+            // When the button is pressed, update the log to confirm the call
             if (currentIncidentId != null) {
                 Map<String, Object> callConfirmation = new HashMap<>();
                 callConfirmation.put("emergencyServicesCalled", true);
-
                 mFirestore.collection("triage_incidents").document(childId)
                         .collection("incident_log").document(currentIncidentId)
                         .set(callConfirmation, SetOptions.merge())
                         .addOnSuccessListener(aVoid -> Log.d("TriageActivity", "Emergency call confirmed in log."))
                         .addOnFailureListener(e -> Log.e("TriageActivity", "Error confirming emergency call.", e));
             }
+
+            // Then, open the dialer
             Intent intent = new Intent(Intent.ACTION_DIAL);
             intent.setData(Uri.parse("tel:911"));
             try {
@@ -106,9 +120,6 @@ public class TriageActivity extends AppCompatActivity {
         fetchPersonalBestPEF(childId);
     }
 
-    /**
-     * Creates the initial incident log document when the triage session starts.
-     */
     private void createInitialIncidentLog(String childId) {
         Map<String, Object> incidentData = new HashMap<>();
         incidentData.put("timestamp", new Date());
@@ -127,28 +138,115 @@ public class TriageActivity extends AppCompatActivity {
         mFirestore.collection("triage_incidents").document(childId)
                 .collection("incident_log").add(incidentData)
                 .addOnSuccessListener(documentReference -> {
-                    currentIncidentId = documentReference.getId(); // Save the ID for later updates
+                    currentIncidentId = documentReference.getId();
                     Log.d("TriageActivity", "New incident created with ID: " + currentIncidentId);
-                    Toast.makeText(this, "Parent has been notified.", Toast.LENGTH_SHORT).show();
+
+                    String message = "Child has started a triage session.";
+                    createParentAlert(childId, "TriageModeStarted", message);
+
+                    checkFrequentRescueUse(childId);
                 })
                 .addOnFailureListener(e -> Log.e("TriageActivity", "Error creating incident.", e));
     }
 
-    /**
-     * Gathers the current state of UI elements and updates the Firestore document.
-     */
+    private void checkFrequentRescueUse(String childId) {
+        Log.d("TriageActivity", "Checking for frequent rescue use...");
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.HOUR, -3);
+        Date threeHoursAgo = cal.getTime();
+
+        Query recentIncidentsQuery = mFirestore.collection("triage_incidents")
+                .document(childId)
+                .collection("incident_log")
+                .whereGreaterThan("timestamp", threeHoursAgo);
+
+        recentIncidentsQuery.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                int incidentCount = task.getResult().size();
+                Log.d("TriageActivity", "Found " + incidentCount + " incidents in the last 3 hours.");
+
+                if (incidentCount >= 3) {
+                    String message = "Child has had " + incidentCount + " rescue incidents in the last 3 hours.";
+                    createParentAlert(childId, "FrequentRescueUse", message);
+                    Toast.makeText(this, "URGENT: Your parent has been sent an urgent alert.", Toast.LENGTH_LONG).show();
+                }
+            } else {
+                Log.w("TriageActivity", "Failed to query for recent incidents.", task.getException());
+            }
+        });
+    }
+
+    private void triggerEmergencyState(String childId, String reason) {
+        if (isEmergencyState) return;
+        isEmergencyState = true;
+
+        if (tenMinuteTimer != null) {
+            tenMinuteTimer.cancel();
+        }
+        btnEmergencyCall.setVisibility(View.VISIBLE);
+        txtActionPlan.setVisibility(View.GONE);
+
+        Map<String, Object> emergencyUpdate = new HashMap<>();
+        emergencyUpdate.put("eventType", "EmergencyStateTriggered");
+        emergencyUpdate.put("emergencyReason", reason);
+
+        if (currentIncidentId != null) {
+            mFirestore.collection("triage_incidents").document(childId)
+                    .collection("incident_log").document(currentIncidentId)
+                    .set(emergencyUpdate, SetOptions.merge())
+                    .addOnSuccessListener(aVoid -> {
+                        Log.d("TriageActivity", "Log updated for EMERGENCY state.");
+                        String message = "Child is in an emergency state due to: " + reason;
+                        createParentAlert(childId, "EmergencyStateTriggered", message);
+                    })
+                    .addOnFailureListener(e -> Log.e("TriageActivity", "Error updating log for emergency.", e));
+        }
+        Toast.makeText(this, "Emergency state triggered: " + reason, Toast.LENGTH_LONG).show();
+    }
+
+    private void createParentAlert(String childId, String alertType, String message) {
+        DatabaseReference childUserRef = FirebaseDatabase.getInstance().getReference("users").child(childId);
+
+        childUserRef.child("parentId").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    String parentId = snapshot.getValue(String.class);
+
+                    if (parentId != null && !parentId.isEmpty()) {
+                        Map<String, Object> alertData = new HashMap<>();
+                        alertData.put("childId", childId);
+                        alertData.put("parentId", parentId);
+                        alertData.put("alertType", alertType);
+                        alertData.put("message", message);
+                        alertData.put("timestamp", new Date());
+                        alertData.put("isRead", false);
+
+                        mFirestore.collection("parent_alerts").add(alertData)
+                                .addOnSuccessListener(aVoid -> Log.d("TriageActivity", "Alert of type '" + alertType + "' created for parent."))
+                                .addOnFailureListener(e -> Log.e("TriageActivity", "Failed to create parent alert.", e));
+                    } else {
+                        Log.e("TriageActivity", "Parent ID field is null or empty for child: " + childId);
+                    }
+                } else {
+                    Log.e("TriageActivity", "Could not find parentId for child: " + childId);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("TriageActivity", "Database error when finding parentId: " + error.getMessage());
+            }
+        });
+    }
+
     private void updateLogWithCurrentState(String childId, String eventReason) {
         if (currentIncidentId == null || childId == null) {
             Log.w("TriageActivity", "Cannot update log: incident ID or child ID is missing.");
             return;
         }
-
         Map<String, Object> updates = new HashMap<>();
-
-        // Capture medication status
         updates.put("tookRescueMed", rgRescueMed.getCheckedRadioButtonId() == R.id.rbMedYes);
-
-        // Capture PEF and Zone
         String pefValue = editCurrentPEF.getText().toString();
         if (!pefValue.isEmpty()) {
             try {
@@ -158,8 +256,6 @@ public class TriageActivity extends AppCompatActivity {
                 updates.put("enteredPEF", "Invalid value: " + pefValue);
             }
         }
-
-        // Capture red flag status
         Map<String, Boolean> redFlags = new HashMap<>();
         redFlags.put("unableToTalk", chkBreathingBreaks.isChecked());
         redFlags.put("hardToBreathe", chkHardToBreathe.isChecked());
@@ -171,34 +267,6 @@ public class TriageActivity extends AppCompatActivity {
                 .set(updates, SetOptions.merge())
                 .addOnSuccessListener(aVoid -> Log.d("TriageActivity", "Log updated for reason: " + eventReason))
                 .addOnFailureListener(e -> Log.e("TriageActivity", "Error updating log.", e));
-    }
-
-    private void triggerEmergencyState(String childId, String reason) {
-        if (isEmergencyState) return;
-        isEmergencyState = true;
-
-        if (tenMinuteTimer != null) {
-            tenMinuteTimer.cancel();
-        }
-
-        btnEmergencyCall.setVisibility(View.VISIBLE);
-        txtActionPlan.setVisibility(View.GONE);
-
-        // Update the log with the emergency event
-        Map<String, Object> emergencyUpdate = new HashMap<>();
-        emergencyUpdate.put("eventType", "EmergencyStateTriggered");
-        emergencyUpdate.put("emergencyReason", reason);
-        emergencyUpdate.put("lastUpdateTime", new Date());
-
-        if (currentIncidentId != null) {
-            mFirestore.collection("triage_incidents").document(childId)
-                    .collection("incident_log").document(currentIncidentId)
-                    .set(emergencyUpdate, SetOptions.merge())
-                    .addOnSuccessListener(aVoid -> Log.d("TriageActivity", "Log updated for EMERGENCY state."))
-                    .addOnFailureListener(e -> Log.e("TriageActivity", "Error updating log for emergency.", e));
-        }
-
-        Toast.makeText(this, "Emergency state triggered: " + reason, Toast.LENGTH_LONG).show();
     }
 
     private void fetchPersonalBestPEF(String childId) {
@@ -225,35 +293,33 @@ public class TriageActivity extends AppCompatActivity {
         });
     }
 
-    @SuppressLint("SetTextI18n")
-    private void determineActionPlanFromPEF() {
-        if (personalBestPEF == null) {
-            Toast.makeText(this, "Personal Best PEF not loaded yet. Please wait.", Toast.LENGTH_SHORT).show();
+    private void calculateAndSavePefZone() {
+        if (personalBestPEF == null || personalBestPEF <= 0) {
+            currentPefZone = "PB not set";
             return;
         }
-        if (personalBestPEF <= 0) {
-            txtActionPlan.setText(R.string.pb_not_set);
-            txtActionPlan.setVisibility(View.VISIBLE);
-            return;
-        }
-
         String currentPEFString = editCurrentPEF.getText().toString();
         if (currentPEFString.isEmpty()) {
-            txtActionPlan.setText(R.string.prompt_enter_current_pef);
-            txtActionPlan.setVisibility(View.VISIBLE);
             currentPefZone = "Not provided";
             return;
         }
         try {
             int currentPEF = Integer.parseInt(currentPEFString);
             double pefPercentage = ((double) currentPEF / personalBestPEF) * 100;
-            String zone = getPEFZone(pefPercentage);
-            currentPefZone = zone;
-            displayActionPlanForZone(zone);
+            currentPefZone = getPEFZone(pefPercentage);
         } catch (NumberFormatException e) {
-            txtActionPlan.setText("Please enter a valid number.");
-            txtActionPlan.setVisibility(View.VISIBLE);
             currentPefZone = "Invalid input";
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void determineActionPlanFromPEF() {
+        if (isEmergencyState) {
+            txtActionPlan.setVisibility(View.GONE);
+            return;
+        }
+        if (currentPefZone != null) {
+            displayActionPlanForZone(currentPefZone);
         }
     }
 
@@ -290,7 +356,6 @@ public class TriageActivity extends AppCompatActivity {
 
     private void checkRedFlagStatus(String childId) {
         if (chkBreathingBreaks.isChecked() || chkHardToBreathe.isChecked() || chkLipColorChange.isChecked()) {
-            // Only trigger the emergency state, logging is now handled by the listener
             triggerEmergencyState(childId, "Red flag symptom checked.");
         }
     }
@@ -305,7 +370,8 @@ public class TriageActivity extends AppCompatActivity {
                     triggerEmergencyState(childId, "Condition not improving after 10 minutes.");
                 }
             }
-        }.start();
+        };
+        tenMinuteTimer.start();
     }
 
     @Override
