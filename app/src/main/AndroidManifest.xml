@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.smart_air">
 
     <application
@@ -13,10 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Smart_air">
 
-
-
-
-
+        <!-- Initiate Activity : Login Page -->
         <activity
             android:name=".LoginActivityView"
             android:exported="true">
@@ -26,25 +22,69 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".InputPEFActivity" android:exported="false"/>
-        <activity android:name=".SignUpActivity" android:exported="true"/>
-        <activity android:name=".ChildLoginActivityView" android:exported="true"/>
-        <activity android:name=".ChildSignUpActivity" android:exported="true"/>
-        <activity android:name=".ParentDashboardActivity" android:exported="false"/>
-        <activity android:name=".LinkChildActivity" android:exported="false"/>
+
+        <!-- Sign Up Activity if user does not have an account -->
+        <activity
+            android:name=".SignUpActivity"
+            android:exported="true"/>
+
+        <!-- Child Login Activity if (Child) user wants to login with user name -->
+        <activity
+            android:name=".ChildLoginActivityView"
+            android:exported="true"/>
+
+        <activity
+            android:name=".ChildSignUpActivity"
+            android:exported="true"/>
+
+
+        <activity
+            android:name=".ParentDashboardActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Smart_air"/>
+
+
         <activity android:name=".ParentAlertActivity" android:exported="false"/>
+
         <activity android:name=".ParentSignOutActivity" android:exported="false"/>
+
         <activity android:name=".AddParentActivity" android:exported="false"/>
+
         <activity android:name=".ProviderDashboardActivity" android:exported="false"/>
+
         <activity android:name=".ProviderSignOutActivity" android:exported="false"/>
+
         <activity android:name=".ProviderNotifActivity" android:exported="false"/>
-        <activity android:name=".ChildDashboardActivity" android:exported="false"/>
+
+        <activity android:name=".ChildDashboardActivity" android:exported="true"/>
+
         <activity android:name=".ChildScheduleActivity" android:exported="false"/>
+
         <activity android:name=".ChildSignOutActivity" android:exported="false"/>
+
         <activity android:name=".DailyCheckInActivity" android:exported="false"/>
+
+        <activity android:name=".InputPEFActivity" android:exported="false"/>
+
         <activity android:name=".StreakActivity" android:exported="false"/>
-        <activity android:name=".TakeMedicineActivity" android:exported="false"/>
+
+        <activity android:name=".TakeMedicineActivity" android:exported="true"/>
+
         <activity android:name=".TriageActivity" android:exported="false"/>
+
+        <activity android:name=".TechniqueHelperActivity" android:exported="true"/>
+
+        <activity android:name=".AchievementActivity" android:exported="true"/>
+
+        <activity android:name=".ManageChildActivity" android:exported="true"/>
+
+        <activity
+            android:name=".TakeMedicineActivityPost"
+            android:exported="true" />
+        <activity
+            android:name=".ConfigureRewardsActivity"
+            android:exported="true" />
+
 
     </application>
 </manifest>

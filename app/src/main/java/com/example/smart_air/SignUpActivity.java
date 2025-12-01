@@ -123,6 +123,11 @@ public class SignUpActivity extends AppCompatActivity {
                 });
     }
 
+    private String getTodayDate() {
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.US);
+        return sdf.format(new java.util.Date());
+    }
+
     private void switchToTutorialSession(String userId) {
         mDatabase.child("users").child(userId).get().addOnCompleteListener(task -> {
             if (task.isSuccessful() && task.getResult().exists() && task.getResult() != null) {
@@ -158,10 +163,17 @@ public class SignUpActivity extends AppCompatActivity {
                         FirebaseUser firebaseUser = mAuth.getCurrentUser();
                         if (firebaseUser != null) {
                             String userId = firebaseUser.getUid();
-                            User newUser = new User(fName, lName, email, username, accountType);
+                            String registerDate = getTodayDate();
+                            java.util.Map<String, Object> userData = new java.util.HashMap<>();
+                            userData.put("fName", fName);
+                            userData.put("lName", lName);
+                            userData.put("email", email);
+                            userData.put("username", username);
+                            userData.put("accountType", accountType);
+                            userData.put("registerDate", registerDate);
 
                             // LAMBDA in use here
-                            mDatabase.child("users").child(userId).setValue(newUser)
+                            mDatabase.child("users").child(userId).setValue(userData)
                                     .addOnCompleteListener(databaseTask -> {
                                         if (databaseTask.isSuccessful()) {
                                             Toast.makeText(SignUpActivity.this, "Registration successful!", Toast.LENGTH_SHORT).show();
