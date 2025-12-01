@@ -86,8 +86,13 @@ public class MedlogActivity extends AppCompatActivity {
                         if (medLogEntries.isEmpty()) {
                             Toast.makeText(MedlogActivity.this, "Medication log is empty.", Toast.LENGTH_SHORT).show();
                         }
+                        // Sort entries by date (descending), then time (descending)
+                        medLogEntries.sort((e1, e2) -> {
+                            int dateCompare = e2.getDate().compareTo(e1.getDate()); // Most recent date first
+                            if (dateCompare != 0) return dateCompare;
+                            return e2.getTime().compareTo(e1.getTime()); // Most recent time first
+                        });
                         populateTable(medLogEntries);
-                    } else {
                         Toast.makeText(MedlogActivity.this, "Error getting documents: " + task.getException(), Toast.LENGTH_SHORT).show();
                     }
                 });
