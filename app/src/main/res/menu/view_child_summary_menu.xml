@@ -32,8 +32,8 @@
         android:title="@string/view_triage_incidents" />
 
     <item
-        android:id="@+id/navSummaryCharts"
-        android:icon="@drawable/summary_charts"
-        android:title="@string/view_summary_charts" />
+        android:id="@+id/navHistoryBrowser"
+        android:icon="@drawable/history_browser"
+        android:title="@string/view_history_browser" />
 
 </menu>

@@ -50,18 +50,10 @@
             android:id="@+id/chk_share_chart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:maxWidth="320dp"
             android:layout_marginTop="16dp"
-            android:text="@string/share_with_provider"
-            android:checked="false" />
-
-        <TextView
-            android:id="@+id/txt_share_hint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:text="@string/share_chart_hint"
-            android:textSize="12sp"
-            android:textColor="#666666"
-            android:layout_marginTop="4dp" />
+            android:checked="false" />
 
 
         <com.github.mikephil.charting.charts.BarChart

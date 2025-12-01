@@ -3,7 +3,6 @@ package com.example.smart_air;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -301,9 +300,9 @@ public class TakeMedicineActivityPost extends AppCompatActivity {
 
             if (!lastCompleted && !todayCompleted) {
                 newCount = 0;
-            } else if (!lastCompleted && todayCompleted) {
+            } else if (!lastCompleted && todayCompleted) { // Ignore warning
                 newCount = 1;
-            } else if (lastCompleted && !todayCompleted) {
+            } else if (lastCompleted && !todayCompleted) { // Ignore warning
                 newCount = old;
             } else {
                 newCount = old + 1;

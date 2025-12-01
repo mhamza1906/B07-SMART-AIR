@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:padding="24dp"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/txtShareTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/share_decision"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp"/>
+
+    <CheckBox
+        android:id="@+id/chkSymptoms"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:text="@string/symptom_share"/>
+
+    <CheckBox
+        android:id="@+id/chkTriggers"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:text="@string/trigger_share"/>
+
+    <CheckBox
+        android:id="@+id/chkRescue"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:text="@string/rescue_share"/>
+
+    <CheckBox
+        android:id="@+id/chkController"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:text="@string/adherence_share"/>
+
+    <CheckBox
+        android:id="@+id/chkPEF"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:text="@string/pef_share"/>
+
+    <CheckBox
+        android:id="@+id/chkTriage"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:text="@string/triage_share"/>
+
+    <Button
+        android:id="@+id/btnConfirmCharts"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/share_with_provider"/>
+</LinearLayout>

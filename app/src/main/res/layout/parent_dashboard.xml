@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Top spacer -->
+    <!-- Top Spacer -->
     <View
         android:id="@+id/topSpacer"
         android:layout_width="match_parent"
@@ -27,7 +27,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/topSpacer" />
 
-    <!-- Select Child Button -->
+    <!-- Select Child -->
     <Button
         android:id="@+id/btnSelectChild"
         android:layout_width="280dp"
@@ -40,7 +40,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Link a New Child -->
+    <!-- Create Child -->
     <Button
         android:id="@+id/btnCreateChild"
         android:layout_width="280dp"
@@ -53,7 +53,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-
+    <!-- Main Content Container -->
     <FrameLayout
         android:id="@+id/containerParentDashboard"
         android:layout_width="0dp"
@@ -64,21 +64,39 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Your RecyclerView for the children list -->
+        <!-- My Children Recycler -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/ChildSummaries"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="visible" />
 
-        <!-- Your teammate's placeholder for the share content -->
+        <!-- Share Placeholder -->
         <TextView
             android:id="@+id/share_content_placeholder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Share Content Placeholder"
+            android:text="@string/share_content_placeholder"
             android:textSize="20sp"
             android:layout_gravity="center"
+            android:visibility="gone" />
+
+        <!-- Share Page Main Button -->
+        <Button
+            android:id="@+id/btnShareToProvider"
+            android:layout_width="320dp"
+            android:layout_height="wrap_content"
+            android:text="@string/share_to_provider_btn"
+            android:textColor="@color/dark_words"
+            android:backgroundTint="#82FF73"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+        <!-- Share Child Selector (same as Select Child) -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/shareChildSelectorRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:visibility="gone" />
 
     </FrameLayout>
@@ -97,7 +115,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-
+        <!-- My Children -->
         <LinearLayout
             android:id="@+id/tabMyChildren"
             android:layout_width="0dp"
@@ -112,7 +130,7 @@
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:src="@drawable/my_children"
-                android:importantForAccessibility="no" />
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:id="@+id/tabMyChildrenLabel"
@@ -123,8 +141,7 @@
                 android:layout_height="wrap_content" />
         </LinearLayout>
 
-
-
+        <!-- Share -->
         <LinearLayout
             android:id="@+id/tabShare"
             android:layout_width="0dp"
@@ -139,7 +156,7 @@
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:src="@drawable/share"
-                android:importantForAccessibility="no" />
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:id="@+id/tabShareLabel"
@@ -149,7 +166,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
-
 
     </LinearLayout>
 

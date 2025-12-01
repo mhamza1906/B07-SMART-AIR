@@ -29,7 +29,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.SetOptions;
 
-import java.text.ParseException;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -60,6 +60,9 @@ public class ParentDashboardActivity extends AppCompatActivity {
     private ChildSummaryAdapter adapter;
     private List<ChildSummary> childSummaryList;
     private TextView shareContentPlaceholder;
+    private Button btnShareToProvider;
+    private RecyclerView shareChildSelectorRecycler;
+
 
 
     @Override
@@ -80,6 +83,9 @@ public class ParentDashboardActivity extends AppCompatActivity {
         shareContentPlaceholder = findViewById(R.id.share_content_placeholder);
         childSummariesRecyclerView = findViewById(R.id.ChildSummaries);
 
+        btnShareToProvider = findViewById(R.id.btnShareToProvider);
+        shareChildSelectorRecycler = findViewById(R.id.shareChildSelectorRecycler);
+
 
         db = FirebaseFirestore.getInstance();
         setupRecyclerView();
@@ -93,6 +99,8 @@ public class ParentDashboardActivity extends AppCompatActivity {
 
         Button btnSelectChild = findViewById(R.id.btnSelectChild);
         btnSelectChild.setOnClickListener(v -> showChildSelectorBottomSheet());
+        btnShareToProvider.setOnClickListener(v -> showShareChildSelector());
+
 
         Button btnCreateChild = findViewById(R.id.btnCreateChild);
         btnCreateChild.setOnClickListener(v -> {
@@ -126,13 +134,13 @@ public class ParentDashboardActivity extends AppCompatActivity {
                         }
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             String childId = document.getId();
-                            String fname = document.getString("fName");
-                            String lname = document.getString("lName");
+                            String fName = document.getString("fName");
+                            String lName = document.getString("lName");
                             String birthday = document.getString("birthday");
 
                             List<String> nameParts = new ArrayList<>();
-                            if (fname != null && !fname.isEmpty()) nameParts.add(fname);
-                            if (lname != null && !lname.isEmpty()) nameParts.add(lname);
+                            if (fName != null && !fName.isEmpty()) nameParts.add(fName);
+                            if (lName != null && !lName.isEmpty()) nameParts.add(lName);
                             String fullName = String.join(" ", nameParts);
 
                             fetchChildDetails(childId, fullName, birthday);
@@ -299,27 +307,81 @@ public class ParentDashboardActivity extends AppCompatActivity {
 
 
     private void setupBottomNavigation() {
-        View myChildrenTab = findViewById(R.id.tabMyChildren);
-        View shareTab = findViewById(R.id.tabShare);
 
-        myChildrenTab.setOnClickListener(v -> {
+        View tabMyChildren = findViewById(R.id.tabMyChildren);
+        View tabShare = findViewById(R.id.tabShare);
+
+        tabMyChildren.setOnClickListener(v -> {
+            // My Children Page
             childSummariesRecyclerView.setVisibility(View.VISIBLE);
-            shareContentPlaceholder.setVisibility(View.GONE);
             findViewById(R.id.btnSelectChild).setVisibility(View.VISIBLE);
             findViewById(R.id.btnCreateChild).setVisibility(View.VISIBLE);
 
-
+            shareContentPlaceholder.setVisibility(View.GONE);
+            btnShareToProvider.setVisibility(View.GONE);
+            shareChildSelectorRecycler.setVisibility(View.GONE);
         });
 
-        shareTab.setOnClickListener(v -> {
+        tabShare.setOnClickListener(v -> {
+            // Share Page
             childSummariesRecyclerView.setVisibility(View.GONE);
-            shareContentPlaceholder.setVisibility(View.GONE);
             findViewById(R.id.btnSelectChild).setVisibility(View.GONE);
             findViewById(R.id.btnCreateChild).setVisibility(View.GONE);
-        });
 
+            shareContentPlaceholder.setVisibility(View.GONE);
+            btnShareToProvider.setVisibility(View.VISIBLE);
+            shareChildSelectorRecycler.setVisibility(View.GONE);
+        });
     }
 
+    private void showShareChildSelector() {
+
+
+        btnShareToProvider.setVisibility(View.GONE);
+
+
+        shareChildSelectorRecycler.setVisibility(View.VISIBLE);
+
+        shareChildSelectorRecycler.setLayoutManager(new LinearLayoutManager(this));
+
+
+        shareChildSelectorRecycler.setAdapter(
+                new ChildrenAdapter(cachedChildIds, cachedChildNames, this::showShareOptionsBottomSheet)
+        );
+    }
+
+    private void showShareOptionsBottomSheet(String childId) {
+
+        BottomSheetDialog dialog = new BottomSheetDialog(this);
+
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setPadding(40, 40, 40, 40);
+
+        TextView shareOption = buildOption("Share To Selected Provider        〉");
+        TextView exportOption = buildOption("Export Child History (PDF/CSV)    〉");
+
+        layout.addView(shareOption);
+        layout.addView(exportOption);
+
+        dialog.setContentView(layout);
+
+        shareOption.setOnClickListener(v -> {
+            Intent it = new Intent(this, ShareToProviderActivity.class);
+            it.putExtra("childID", childId);
+            startActivity(it);
+            dialog.dismiss();
+        });
+
+        exportOption.setOnClickListener(v -> {
+            Intent it = new Intent(this, ExportChildHistoryActivity.class);
+            it.putExtra("childID", childId);
+            startActivity(it);
+            dialog.dismiss();
+        });
+
+        dialog.show();
+    }
 
 
     private void loadParentInfoFromDatabase() {
@@ -400,9 +462,9 @@ public class ParentDashboardActivity extends AppCompatActivity {
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
         layout.setPadding(40, 40, 40, 40);
-        TextView manage = buildOption("Manage Child Activities 〉");
-        TextView summary = buildOption("View Child Summary       〉");
-        TextView dashboard = buildOption("Go To Child Dashboard    〉");
+        TextView manage = buildOption("Manage Child Activities          〉");
+        TextView summary = buildOption("View Child Summary               〉");
+        TextView dashboard = buildOption("Go To Child Dashboard           〉");
         layout.addView(manage);
         layout.addView(summary);
         layout.addView(dashboard);

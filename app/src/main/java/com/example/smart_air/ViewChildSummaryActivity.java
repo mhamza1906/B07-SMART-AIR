@@ -62,25 +62,31 @@ public class ViewChildSummaryActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.navRescueLogs) {
-            loadPage("Press START to view rescue medication logs", RescueLogsSummaryActivity.class);
+            loadPage("Press START to view rescue medication logs, " +
+                    "and decide whether to share this summary with your healthcare provider", RescueLogsSummaryActivity.class);
 
         } else if (id == R.id.navController) {
-            loadPage("Press START to view controller adherence summary", ControllerAdherenceSummaryActivity.class);
+            loadPage("Press START to view controller adherence summary," +
+                    "and decide whether to share this summary with your healthcare provider", ControllerAdherenceSummaryActivity.class);
 
         } else if (id == R.id.navSymptoms) {
-            loadPage("Press START to view symptom reports", SymptomSummaryActivity.class);
+            loadPage("Press START to view symptom reports, " +
+                    "and decide whether to share this summary with your healthcare provider", SymptomSummaryActivity.class);
 
         } else if (id == R.id.navTriggers) {
-            loadPage("Press START to view recorded triggers", TriggerSummaryActivity.class);
+            loadPage("Press START to view recorded triggers, " +
+                    "and decide whether to share this summary with your healthcare provider", TriggerSummaryActivity.class);
 
         } else if (id == R.id.navPEF) {
-            loadPage("Press START to view peak-flow history", PEFSummaryActivity.class);
+            loadPage("Press START to view peak-flow history, " +
+                    "and decide whether to share this summary with your healthcare provider", PEFSummaryActivity.class);
 
         } else if (id == R.id.navTriage) {
-            loadPage("Press START to view triage incidents", TriageIncidentSummaryActivity.class);
+            loadPage("Press START to view triage incidents, " +
+                    "and decide whether to share this summary with your healthcare provider", TriageIncidentSummaryActivity.class);
 
-        } else if (id == R.id.navSummaryCharts) {
-            loadPage("Press START to view summary charts", SummaryChartsActivity.class);
+        } else if (id == R.id.navHistoryBrowser){
+            loadPage("Press START to use History Browser", HistoryBrowserActivity.class);
         }
     }
 

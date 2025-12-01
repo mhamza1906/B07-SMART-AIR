@@ -141,8 +141,10 @@
     <string name="tech_streak_unable_to_load">"Unable to load technique streak."</string>
     <string name="tech_streak_success">"You have used the technique helper as planned for %1$d consecutive day(s). Great job!"</string>
     <string name="controller_streak_interrupted">"Your consecutive planned controller days have been interrupted."</string>
+    <string name="controller_streak_interrupted_parent">"This child's consecutive planned controller days have been interrupted."</string>
     <string name="controller_streak_unable_to_load">"Unable to load controller streak."</string>
     <string name="controller_streak_success">"You have completed your planned controller days for %1$d day(s) in a row. Amazing!"</string>
+    <string name="controller_streak_success_parent">"This child has completed your planned controller days for %1$d day(s) in a row. Amazing!"</string>
     <string name="budding_star_unlocked">"You perfectly completed your planned controller schedule for %1$d week(s). Budding Star unlocked!"</string>
     <string name="budding_star_locked">"Complete your planned controller schedule perfectly for %1$d full week(s) to unlock the Budding Star badge."</string>
     <string name="budding_star_load_error">"Unable to load controller history for Budding Star."</string>
@@ -160,7 +162,7 @@
     <string name="view_triggers">"Triggers"</string>
     <string name="view_pef">"Peak-Flow (PEF)"</string>
     <string name="view_triage_incidents">"Triage Incidents"</string>
-    <string name="view_summary_charts">"Summary Charts"</string>
+    <string name="view_history_browser">"History Browser"</string>
     <string name="check_in_title">"Daily Check-In"</string>
     <string name="night_waking_label">"Night Waking"</string>
     <string name="cough_wheeze_label">"Cough / Wheeze"</string>
@@ -197,15 +199,37 @@
     <string name="trigger_loading_failed">"Failed to load trigger data."</string>
     <string name="trigger_na">"No trigger data recorded."</string>
     <string name="no_triggers">"No triggers selected in check-ins."</string>
-    <string name="share_with_provider">"Share this chart"</string>
+    <string name="share_with_provider">"Share These Summaries"</string>
     <string name="share_chart_hint">"This chart will be shared with selected provider"</string>
     <string name="last_rescue_use">"Last Rescue Use: -"</string>
     <string name="rescue_7_day_title">"Rescue usage in last 7 days"</string>
     <string name="rescue_30_day_title">"Rescue usage in last 30 days"</string>
     <string name="last_rescue_use_format">"Last Rescue Use: %1$s"</string>
-
-
-
+    <string name="today_zone">"Today's Zone"</string>
+    <string name="chart_default_range">"Showing past %1$d days"</string>
+    <string name="controller_adherence_title">"Controller Adherence Summary"</string>
+    <string name="no_adherence_data">"No adherence data available"</string>
+    <string name="adherence_loading_failed">"Failed to load adherence data"</string>
+    <string name="share_content_placeholder">"Share Contents Placeholder"</string>
+    <string name="share_to_provider_btn">Share To Provider/Export Child History</string>
+    <string name="share_to_provider_recycler">"Share This Child To Provider"</string>
+    <string name="link_provider">"Link A New Provider And Share"</string>
+    <string name="revoke_btn">"Revoke Sharing"</string>
+    <string name="provider_username">"provider_username"</string>
+    <string name="enter_provider_username">"Enter Provider Username"</string>
+    <string name="next_btn">"NEXT"</string>
+    <string name="invite_title">"Choose Invite Type"</string>
+    <string name="generate_code">"Generate Code    〉"</string>
+    <string name="generate_link">"Generate Link    〉"</string>
+    <string name="share_decision">"Choose What To Share"</string>
+    <string name="symptom_share">"Symptoms Summary"</string>
+    <string name="trigger_share">"Triggers Summary"</string>
+    <string name="rescue_share">"Rescues Summary"</string>
+    <string name="adherence_share">"Controller Adherence Summary"</string>
+    <string name="pef_share">"PEF &amp; Zone Summary"</string>
+    <string name="triage_share">"Triage Incidents Summary"</string>
+    <string name="label_code">Code: %1$s</string>
+    <string name="label_link">Link: %1$s</string>
 
 
 
