@@ -92,8 +92,8 @@ public class TakeMedicineActivity extends AppCompatActivity {
             return;
         }
 
-        if (preBreathRating < 1 || preBreathRating > 10) {
-            Toast.makeText(this, "Breath rating must be between 1 and 10", Toast.LENGTH_SHORT).show();
+        if (preBreathRating < 1) {
+            Toast.makeText(this, "Breath rating must be greater than or equal to 1", Toast.LENGTH_SHORT).show();
             return;
         }
 
