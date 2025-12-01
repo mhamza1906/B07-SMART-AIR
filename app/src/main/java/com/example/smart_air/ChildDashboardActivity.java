@@ -72,6 +72,16 @@ public class ChildDashboardActivity extends AppCompatActivity {
             }
         });
 
+        Button medlogButton = (Button)findViewById(R.id.medicinelogbutton);
+        medlogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent medlog = new Intent(ChildDashboardActivity.this, MedlogActivity.class);
+                medlog.putExtra("childID",childId);
+                startActivity(medlog);
+            }
+        });
+
         Button checkInButton = (Button)findViewById(R.id.checkinbutton);
         checkInButton.setOnClickListener(new View.OnClickListener() {
             @Override

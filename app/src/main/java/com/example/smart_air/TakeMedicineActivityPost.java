@@ -142,7 +142,7 @@ public class TakeMedicineActivityPost extends AppCompatActivity {
                 if (dailyLog.containsKey(medType.toLowerCase())) {
                     Map<?, ?> medData = (Map<?, ?>) dailyLog.get(medType.toLowerCase());
                     if (medData != null) {
-                        doseId = medData.size() + 1;
+                        doseId = medData.size();
                     }
                 }
             }
