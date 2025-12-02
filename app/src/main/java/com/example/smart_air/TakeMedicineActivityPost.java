@@ -163,12 +163,43 @@ public class TakeMedicineActivityPost extends AppCompatActivity {
             updateStreaks(childID, medType, date);
             updateRescueRolling30Days(childID, date);
             updateWeeklyRescueUsage(childID, date);
+            updateInventoryLog(childID, medType, doseNum);
 
             if (medType.equalsIgnoreCase("rescue")) {
                 updateLastRescueUse(childID);
             }
 
         }).addOnFailureListener(e -> Toast.makeText(TakeMedicineActivityPost.this, "Failed to save medicine log: " + e.getMessage(), Toast.LENGTH_LONG).show());
+    }
+    
+
+    private void updateInventoryLog(String childID, String medType, int doseNum) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference inventoryRef = db.collection("inventory").document(childID);
+
+        inventoryRef.get().addOnSuccessListener(snapshot -> {
+            if (snapshot.exists() && snapshot.getData() != null) {
+                Map<String, Object> data = snapshot.getData();
+
+                Object medDataObject = data.get(medType.toLowerCase());
+                if (medDataObject instanceof Map) {
+                    Map<String, Object> medData = (Map<String, Object>) medDataObject;
+
+                    Object amountObj = medData.get("amountLeft");
+                    if (amountObj instanceof Number) {
+                        long amountLeft = ((Number) amountObj).longValue();
+
+
+                        medData.put("amountLeft", amountLeft - doseNum);
+
+                        data.put(medType.toLowerCase(), medData);
+                        inventoryRef.set(data, SetOptions.merge());
+                    }
+                }
+            }
+        }).addOnFailureListener(e -> {
+            Toast.makeText(TakeMedicineActivityPost.this, "Failed to update inventory.", Toast.LENGTH_SHORT).show();
+        });
     }
 
 

@@ -2,6 +2,7 @@ package com.example.smart_air;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -10,9 +11,11 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.SetOptions;
 
 import java.text.SimpleDateFormat;
@@ -23,6 +26,8 @@ import java.util.Map;
 
 public class InputPEFActivity extends AppCompatActivity {
 
+    private static final String TAG = "InputPEFActivity";
+
     private String userID;
     private FirebaseFirestore db;
     private EditText pefInput;
@@ -31,7 +36,6 @@ public class InputPEFActivity extends AppCompatActivity {
     private TextView pbViewer;
     private View zoneColorView;
     private TextView percentView;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,15 +51,12 @@ public class InputPEFActivity extends AppCompatActivity {
         zoneColorView = findViewById(R.id.zonecolor);
         percentView = findViewById(R.id.zone_percentage);
 
-
         userID = getIntent().getStringExtra("childID");
-
 
         if (userID != null && !userID.isEmpty()) {
             loadOrCreatePEFNode(userID);
             displayPB(userID);
             listenForTodayZone(userID);
-
         } else {
             Toast.makeText(this, "User ID not found. Cannot load data.", Toast.LENGTH_LONG).show();
             finish();
@@ -86,57 +87,81 @@ public class InputPEFActivity extends AppCompatActivity {
         }
 
         DocumentReference userDocRef = db.collection("PEF").document(userID);
-        String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-        DocumentReference todayLogRef = userDocRef.collection("log").document(today);
-
 
         userDocRef.get().addOnSuccessListener(userDoc -> {
-            long pb = 0;
+            long pb = 900;
             if (userDoc.exists() && userDoc.contains("PB")) {
                 pb = userDoc.getLong("PB");
             }
 
+            final long finalPB = pb;
+            final int newPercent = (int) Math.round(((double) enteredValue / finalPB) * 100);
+            final String newZone;
 
-            final long finalPB;
-            if (pb > 0) {
-                finalPB = pb;
-            } else {
-                finalPB = 900;
+            if (newPercent >= 80)
+                newZone = "green";
+            else if (newPercent >= 50)
+                newZone = "yellow";
+            else newZone = "red";
+
+            updateDailyLog(userDocRef, enteredValue, newPercent, newZone, finalPB);
+            updateZoneHistory(userDocRef, newPercent, newZone);
+
+        }).addOnFailureListener(e -> Toast.makeText(InputPEFActivity.this, "Could not verify PB.", Toast.LENGTH_SHORT).show());
+    }
+
+    private void updateDailyLog(DocumentReference userDocRef, int value, int percent, String zone, long pb) {
+        String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        DocumentReference todayLogRef = userDocRef.collection("log").document(today);
+
+        todayLogRef.get().addOnSuccessListener(logDoc -> {
+            long currentPercent = 0;
+            if (logDoc.exists() && logDoc.contains("percent")) {
+                Number num = (Number) logDoc.get("percent");
+                if (num != null) {
+                    currentPercent = num.longValue();
+                }
             }
 
+            if (!logDoc.exists() || percent > currentPercent) {
+                Map<String, Object> updateData = new HashMap<>();
+                updateData.put("value", value);
+                updateData.put("percent", percent);
+                updateData.put("zone", zone);
+                updateData.put("stored_PB", pb);
 
-            todayLogRef.get().addOnSuccessListener(logDoc -> {
-                long currentDailyHigh = 0;
-                if (logDoc.exists() && logDoc.contains("value")) {
-                    currentDailyHigh = logDoc.getLong("value");
-                }
+                todayLogRef.set(updateData, SetOptions.merge()).addOnSuccessListener(aVoid -> {
+                    Toast.makeText(InputPEFActivity.this, "New daily high PEF saved!", Toast.LENGTH_SHORT).show();
+                    pefInput.setText("");
+                }).addOnFailureListener(e -> Toast.makeText(InputPEFActivity.this, "Failed to save new daily high.", Toast.LENGTH_SHORT).show());
+            } else {
+                Toast.makeText(InputPEFActivity.this, "PEF value noted. Not a new daily high.", Toast.LENGTH_SHORT).show();
+                pefInput.setText("");
+            }
+        }).addOnFailureListener(e -> {
+            Toast.makeText(InputPEFActivity.this, "Could not read daily log before save.", Toast.LENGTH_SHORT).show();
+        });
+    }
 
-                if (enteredValue > currentDailyHigh) {
-                    int percent = (int) Math.round(((double) enteredValue / finalPB) * 100);
-                    String zone;
-                    if (percent >= 80) zone = "green";
-                    else if (percent >= 50) zone = "yellow";
-                    else zone = "red";
+    private void updateZoneHistory(DocumentReference userDocRef, final int newPercent, final String newZone) {
+        CollectionReference historyRef = userDocRef.collection("zone_history");
 
-                    Map<String, Object> updateData = new HashMap<>();
-                    updateData.put("value", enteredValue);
-                    updateData.put("percent", percent);
-                    updateData.put("zone", zone);
-                    if (!logDoc.exists()) {
-                        updateData.put("stored_PB", finalPB);
+        historyRef.orderBy("timestamp", Query.Direction.DESCENDING).limit(1).get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    String lastKnownZone = null;
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        lastKnownZone = queryDocumentSnapshots.getDocuments().get(0).getString("zone");
                     }
 
-                    todayLogRef.set(updateData, SetOptions.merge()).addOnSuccessListener(aVoid -> {
-                        Toast.makeText(InputPEFActivity.this, "PEF value saved!", Toast.LENGTH_SHORT).show();
-                        pefInput.setText("");
-                    }).addOnFailureListener(e -> Toast.makeText(InputPEFActivity.this, "Failed to save PEF.", Toast.LENGTH_SHORT).show());
-                } else {
-                    pefInput.setText("");
-                }
-
-
-            }).addOnFailureListener(e -> Toast.makeText(InputPEFActivity.this, "Could not read daily log.", Toast.LENGTH_SHORT).show());
-        }).addOnFailureListener(e -> Toast.makeText(InputPEFActivity.this, "Could not verify PB.", Toast.LENGTH_SHORT).show());
+                    if (lastKnownZone == null || !lastKnownZone.equalsIgnoreCase(newZone)) {
+                        Map<String, Object> historyData = new HashMap<>();
+                        historyData.put("timestamp", new Date());
+                        historyData.put("zone", newZone);
+                        historyData.put("percent", newPercent);
+                        historyRef.add(historyData);
+                    }
+                })
+                .addOnFailureListener(e -> Log.w(TAG, "Failed to check zone history.", e));
     }
 
     private void loadOrCreatePEFNode(String userID) {
@@ -144,7 +169,7 @@ public class InputPEFActivity extends AppCompatActivity {
         userDocRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
-                if (!document.exists()) {
+                if (document != null && !document.exists()) {
                     Map<String, Object> defaultPEF = new HashMap<>();
                     defaultPEF.put("PB", 900);
                     defaultPEF.put("graph_day_range", 7);

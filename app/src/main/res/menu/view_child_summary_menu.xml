@@ -36,4 +36,5 @@
         android:icon="@drawable/history_browser"
         android:title="@string/view_history_browser" />
 
+
 </menu>

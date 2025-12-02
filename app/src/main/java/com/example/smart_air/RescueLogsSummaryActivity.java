@@ -2,6 +2,7 @@ package com.example.smart_air;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,6 +61,11 @@ public class RescueLogsSummaryActivity extends AppCompatActivity {
         chkShare.setOnCheckedChangeListener((btn, checked) ->
                 updateProviderShareSetting(checked)
         );
+
+        boolean providerMode = getIntent().getBooleanExtra("providerMode", false);
+        if (providerMode) {
+            chkShare.setVisibility(View.GONE);
+        }
     }
 
     private void loadShareState() {

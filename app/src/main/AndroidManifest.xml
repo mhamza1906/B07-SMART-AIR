@@ -18,7 +18,7 @@
             android:name=".MedlogActivity"
             android:exported="false" /> <!-- Initiate Activity : Login Page -->
         <activity
-            android:name=".LoginActivityView"
+            android:name=".HistoryBrowserActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -58,7 +58,7 @@
             android:name=".ProviderNotifActivity"
             android:exported="false" />
         <activity
-            android:name=".ChildDashboardActivity"
+            android:name=".LoginActivityView"
             android:exported="true" />
         <activity
             android:name=".ChildScheduleActivity"
@@ -124,7 +124,7 @@
             android:name=".TriggerSummaryActivity"
             android:exported="true" />
         <activity
-            android:name=".HistoryBrowserActivity"
+            android:name=".ChildDashboardActivity"
             android:exported="true" />
         <activity
             android:name=".ShareToProviderActivity"
@@ -135,6 +135,7 @@
         <activity
             android:name=".RefillActivity"
             android:exported="true" />
+
     </application>
 
 </manifest>

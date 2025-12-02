@@ -10,7 +10,8 @@
     <string name="commonSignInButton">"SIGN IN"</string>
     <string name="credentialRecovery">"Forget Password?"</string>
     <string name="jumpIntoSignUp">"DON'T HAVE AN ACCOUNT?"</string>
-    <string name="childSignInButtonWithParentName">"SIGN IN WITH YOUR PARENT ACCOUNT"</string>
+    <string name="login_btn">"LOGIN"</string>
+    <string name="childSignInButtonWithParentName">"SIGN IN WITH YOUR USERNAME (CHILD)"</string>
     <string name="breathingBreaks">"Are you able to talk without taking breaks to breathe?"</string>
     <string name="hardToBreathe">"Does it feel like you have to work hard to breathe in?"</string>
     <string name="lipColorChange">"Have you noticed any changes in the colour of your lips or eyebrows?"</string>
@@ -27,7 +28,6 @@
     <string name="red_zone">Red Zone: Medical alert! Take 4 to 6 puffs of your rescue inhaler immediately.</string>
     <string name="safety_disclaimer">This is guidance, not a diagnosis. If in doubt, call emergency.</string>
     <string name="enter">Enter</string>
-    <string name="childSignInButtonWithParentName1">"SIGN IN WITH YOUR USERNAME (CHILD)"</string>
     <string name="DOB">"Birthday (YYYY-MM-DD)"</string>
     <string name="linkChildBtn">"LINK THIS CHILD"</string>
     <string name="technique_step1">"Technique Step 1 Animation"</string>
@@ -77,6 +77,12 @@
         <item>Parent</item>
         <item>Healthcare Provider</item>
     </string-array>
+    <string name="recent_alerts">"Recent Alerts</string>
+    <string name="no_alerts">"No new alerts."</string>
+    <string name="alert_message">"Alert Message"</string>
+    <string name="alert_timestamp">"Timestamp"</string>
+    <string name="no_timestamp">"No timestamp"</string>
+    <string name="fail_load_alerts">"Failed to load alerts."</string>
     <string name="budding_star_desc">"Budding Star Badge"</string>
     <string name="shining_star_desc">"Shining Star Badge"</string>
     <string name="lucky_star_desc">"Lucky Star Badge"</string>
@@ -102,7 +108,7 @@
     <string name="select_child_hint">"Select a child"</string>
     <string name="arrow">" 〉"</string>
     <string name="link_child_page_btn">"LINK A NEW CHILD"</string>
-    <string name="select_child_btn">"Select A Child  〉〉〉"</string>
+    <string name="select_child_btn">"SELECT A CHILD    〉〉〉"</string>
     <string name="dummy_share_page">"Share Page TO DO"</string>
     <string name="manage_child">"Manage Child Activities"</string>
     <string name="configure_pb">"Configure PEF Settings"</string>
@@ -181,9 +187,9 @@
     <string name="view_triage_incidents">"Triage Incidents"</string>
     <string name="view_history_browser">"History Browser"</string>
     <string name="check_in_title">"Daily Check-In"</string>
-    <string name="night_waking_label">"Night Waking"</string>
-    <string name="cough_wheeze_label">"Cough / Wheeze"</string>
-    <string name="activity_limit_label">"Activity Limitations"</string>
+    <string name="night_waking_label">"Night Waking: 0 = No, 1 = Yes"</string>
+    <string name="cough_wheeze_label">"Cough / Wheeze: 0 = No, 1 = Yes"</string>
+    <string name="activity_limit_label">"Activity Limitations: 0 = No, 1 = Yes"</string>
     <string name="yes">"Yes"</string>
     <string name="no">"No"</string>
     <string name="none">"None"</string>
@@ -192,7 +198,7 @@
     <string name="trigger_dust">"Dust"</string>
     <string name="trigger_pets">"Pets"</string>
     <string name="trigger_smoke">"Smoke"</string>
-    <string name="trigger_odors">"Strong odors / perfumes"</string>
+    <string name="trigger_odors">"Strong odor"</string>
     <string name="trigger_cold_air">"Cold air"</string>
     <string name="trigger_illness">"Illness"</string>
     <string name="trigger_exercise">"Exercise"</string>
@@ -251,11 +257,24 @@
     Triage Timeline — How to Read This Chart:\n
     • Each dot represents a triage-related event.\n
     • The horizontal axis shows when the event happened.\n
-    • The vertical axis shows the severity (Green → Yellow → Red → Emergency).\n
-    • Larger dots indicate red-flag symptoms.\n
+    • The vertical axis shows the PEF Zone (if applicable) or Emergency\n (N/A → Green → Yellow → Red → Emergency).\n
+    • Larger dots indicate red-flag symptoms.\n where black dots mean PEF = N/A
     • Emergency events appear at the top in dark red.\n
     • You can zoom or drag to explore the timeline.
     </string>
+    <string name="parent_alerts_btn">"VIEW ALERTS HISTORY"</string>
+    <string name="notification">"Codes/Links"</string>
+    <string name="code_link">"Codes / Links"</string>
+    <string name="check_code">"CHECK CODE"</string>
+    <string name="invite_type">"Code: "</string>
+    <string name="link">"Link: "</string>
+    <string name="random_code">"ABC1234D"</string>
+    <string name="enter_code">"Enter code to invoke the child summary:"</string>
+    <string name="edited_code">"Enter the code here"</string>
+    <string name="confirm_btn">"CONFIRM"</string>
+    <string name="na">"N/A"</string>
+    <string name="not_applicable">%1$s (N/A)</string>
+
 
 
 </resources>

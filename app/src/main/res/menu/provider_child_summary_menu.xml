@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navRescueLogs"
+        android:icon="@drawable/rescue_log"
+        android:title="@string/view_rescue_logs" />
+
+    <item
+        android:id="@+id/navController"
+        android:icon="@drawable/controller_adherence"
+        android:title="@string/view_controller_adherence" />
+
+    <item
+        android:id="@+id/navSymptoms"
+        android:icon="@drawable/symptom"
+        android:title="@string/view_symptoms" />
+
+    <item
+        android:id="@+id/navTriggers"
+        android:icon="@drawable/trigger"
+        android:title="@string/view_triggers" />
+
+    <item
+        android:id="@+id/navPEF"
+        android:icon="@drawable/peak_flow"
+        android:title="@string/view_pef" />
+
+    <item
+        android:id="@+id/navTriage"
+        android:icon="@drawable/triage_incidents"
+        android:title="@string/view_triage_incidents" />
+
+</menu>

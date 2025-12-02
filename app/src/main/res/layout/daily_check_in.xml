@@ -15,7 +15,7 @@
             android:id="@+id/txt_daily_check_in_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="24dp"
             android:text="@string/check_in_title"
             android:textSize="24sp"
             android:textStyle="bold"
@@ -23,7 +23,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-
+        <!-- Night Waking -->
         <TextView
             android:id="@+id/txt_night_waking_label"
             android:layout_width="0dp"
@@ -36,7 +36,7 @@
             app:layout_constraintEnd_toEndOf="parent" />
 
         <RadioGroup
-            android:id="@+id/group_night_waking"
+            android:id="@+id/night_waking_group"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -45,83 +45,32 @@
             app:layout_constraintEnd_toEndOf="parent">
 
             <RadioButton
-                android:id="@+id/radio_night_waking_yes"
+                android:id="@+id/night_waking_yes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/yes" />
 
             <RadioButton
-                android:id="@+id/radio_night_waking_no"
+                android:id="@+id/night_waking_no"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/no" />
         </RadioGroup>
 
-
-        <TextView
-            android:id="@+id/txt_night_waking_scroll_hint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="@string/scroll_right_hint"
-            android:textSize="12sp"
-            android:textColor="#000000"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/group_night_waking"
-            app:layout_constraintStart_toStartOf="parent" />
-
-
-        <TextView
-            android:id="@+id/txt_nw_triggers_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/trigger_label"
-            android:textStyle="bold"
-            android:visibility="gone"
-            android:labelFor="@id/list_night_waking_triggers"
-            app:layout_constraintTop_toBottomOf="@id/txt_night_waking_scroll_hint"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <HorizontalScrollView
-            android:id="@+id/container_night_waking_triggers"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/txt_nw_triggers_label"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
-
-            <LinearLayout
-                android:id="@+id/list_night_waking_triggers"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <CheckBox android:id="@+id/chk_nw_dust" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/trigger_dust"/>
-                <CheckBox android:id="@+id/chk_nw_pets" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/trigger_pets"/>
-                <CheckBox android:id="@+id/chk_nw_smoke" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/trigger_smoke"/>
-                <CheckBox android:id="@+id/chk_nw_odors" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/trigger_odors"/>
-                <CheckBox android:id="@+id/chk_nw_cold_air" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/trigger_cold_air"/>
-                <CheckBox android:id="@+id/chk_nw_illness" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/trigger_illness"/>
-                <CheckBox android:id="@+id/chk_nw_exercise" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/trigger_exercise"/>
-            </LinearLayout>
-        </HorizontalScrollView>
-
-
+        <!-- Cough/Wheeze -->
         <TextView
             android:id="@+id/txt_cough_wheeze_label"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="24dp"
             android:text="@string/cough_wheeze_label"
             android:textSize="18sp"
-            app:layout_constraintTop_toBottomOf="@id/container_night_waking_triggers"
+            app:layout_constraintTop_toBottomOf="@id/night_waking_group"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
         <RadioGroup
-            android:id="@+id/group_cough_wheeze"
+            android:id="@+id/cough_wheeze_group"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -129,156 +78,105 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
-            <RadioButton android:id="@+id/radio_cough_wheeze_none" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/none"/>
-            <RadioButton android:id="@+id/radio_cough_wheeze_some" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/some"/>
-            <RadioButton android:id="@+id/radio_cough_wheeze_lot" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/a_lot"/>
-        </RadioGroup>
-
-        <TextView
-            android:id="@+id/txt_cough_wheeze_scroll_hint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="@string/scroll_right_hint"
-            android:textSize="12sp"
-            android:textColor="#000000"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/group_cough_wheeze"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <TextView
-            android:id="@+id/txt_cw_triggers_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/trigger_label"
-            android:textStyle="bold"
-            android:visibility="gone"
-            android:labelFor="@id/list_cough_wheeze_triggers"
-            app:layout_constraintTop_toBottomOf="@id/txt_cough_wheeze_scroll_hint"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <HorizontalScrollView
-            android:id="@+id/container_cough_wheeze_triggers"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/txt_cw_triggers_label"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
-
-            <LinearLayout
-                android:id="@+id/list_cough_wheeze_triggers"
+            <RadioButton
+                android:id="@+id/cough_wheeze_yes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:text="@string/yes" />
 
-                <CheckBox android:id="@+id/chk_cw_dust" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/trigger_dust"/>
-                <CheckBox android:id="@+id/chk_cw_pets" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/trigger_pets"/>
-                <CheckBox android:id="@+id/chk_cw_smoke" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/trigger_smoke"/>
-                <CheckBox android:id="@+id/chk_cw_odors" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/trigger_odors"/>
-                <CheckBox android:id="@+id/chk_cw_cold_air" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/trigger_cold_air"/>
-                <CheckBox android:id="@+id/chk_cw_illness" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/trigger_illness"/>
-                <CheckBox android:id="@+id/chk_cw_exercise" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/trigger_exercise"/>
-            </LinearLayout>
-        </HorizontalScrollView>
+            <RadioButton
+                android:id="@+id/cough_wheeze_no"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no" />
+        </RadioGroup>
 
-
+        <!-- Activity Limit -->
         <TextView
             android:id="@+id/txt_activity_limit_label"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="24dp"
             android:text="@string/activity_limit_label"
             android:textSize="18sp"
-            app:layout_constraintTop_toBottomOf="@id/container_cough_wheeze_triggers"
+            app:layout_constraintTop_toBottomOf="@id/cough_wheeze_group"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
         <RadioGroup
-            android:id="@+id/group_activity_limit"
+            android:id="@+id/activity_limit_group"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@id/txt_activity_limit_label"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
-            <RadioButton android:id="@+id/radio_activity_none" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/activity_none" android:textSize="14sp"/>
-            <RadioButton android:id="@+id/radio_activity_mild" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/activity_mild" android:textSize="14sp"/>
-            <RadioButton android:id="@+id/radio_activity_significant" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/activity_significant" android:textSize="14sp"/>
-            <RadioButton android:id="@+id/radio_activity_could_not" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/activity_could_not" android:textSize="14sp"/>
+            <RadioButton
+                android:id="@+id/activity_limit_yes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/yes" />
+
+            <RadioButton
+                android:id="@+id/activity_limit_no"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no" />
         </RadioGroup>
 
+        <!-- Global Triggers Section -->
         <TextView
-            android:id="@+id/txt_activity_limit_scroll_hint"
-            android:layout_width="wrap_content"
+            android:id="@+id/txt_global_triggers_label"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="@string/scroll_right_hint"
-            android:textSize="12sp"
-            android:textColor="#000000"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/group_activity_limit"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:layout_marginTop="32dp"
+            android:text="What were your triggers for today?"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/activity_limit_group" />
 
-        <TextView
-            android:id="@+id/txt_al_triggers_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/trigger_label"
-            android:textStyle="bold"
-            android:visibility="gone"
-            android:labelFor="@id/list_activity_limit_triggers"
-            app:layout_constraintTop_toBottomOf="@id/txt_activity_limit_scroll_hint"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <HorizontalScrollView
-            android:id="@+id/container_activity_limit_triggers"
+        <androidx.gridlayout.widget.GridLayout
+            android:id="@+id/grid_global_triggers"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/txt_al_triggers_label"
+            app:columnCount="2"
+            app:useDefaultMargins="true"
+            app:layout_constraintTop_toBottomOf="@id/txt_global_triggers_label"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
-            <LinearLayout
-                android:id="@+id/list_activity_limit_triggers"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+            <CheckBox android:id="@+id/check_trigger_dust" android:text="@string/trigger_dust" />
+            <CheckBox android:id="@+id/check_trigger_pets" android:text="@string/trigger_pets" />
+            <CheckBox android:id="@+id/check_trigger_smoke" android:text="@string/trigger_smoke" />
+            <CheckBox android:id="@+id/check_trigger_odors" android:text="@string/trigger_odors" />
+            <CheckBox android:id="@+id/check_trigger_cold_air" android:text="@string/trigger_cold_air" />
+            <CheckBox android:id="@+id/check_trigger_illness" android:text="@string/trigger_illness" />
+            <CheckBox android:id="@+id/check_trigger_exercise" android:text="@string/trigger_exercise" />
 
-                <CheckBox android:id="@+id/chk_al_dust" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/trigger_dust"/>
-                <CheckBox android:id="@+id/chk_al_pets" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/trigger_pets"/>
-                <CheckBox android:id="@+id/chk_al_smoke" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/trigger_smoke"/>
-                <CheckBox android:id="@+id/chk_al_odors" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/trigger_odors"/>
-                <CheckBox android:id="@+id/chk_al_cold_air" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/trigger_cold_air"/>
-                <CheckBox android:id="@+id/chk_al_illness" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/trigger_illness"/>
-                <CheckBox android:id="@+id/chk_al_exercise" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/trigger_exercise"/>
-            </LinearLayout>
-        </HorizontalScrollView>
+        </androidx.gridlayout.widget.GridLayout>
 
-
+        <!-- Buttons -->
         <Button
-            android:id="@+id/btn_submit_check_in"
+            android:id="@+id/submit_check_in_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:text="@string/submit"
-            app:layout_constraintTop_toBottomOf="@id/container_activity_limit_triggers"
+            app:layout_constraintTop_toBottomOf="@id/grid_global_triggers"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-
         <Button
-            android:id="@+id/btn_edit_check_in"
+            android:id="@+id/editbtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:text="@string/edit"
             android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/container_activity_limit_triggers"
+            app:layout_constraintTop_toBottomOf="@id/grid_global_triggers"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 

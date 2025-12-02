@@ -3,6 +3,7 @@ package com.example.smart_air;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.Toast;
 
@@ -17,6 +18,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.ScatterData;
 import com.github.mikephil.charting.data.ScatterDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.interfaces.datasets.IScatterDataSet;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
@@ -29,6 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 public class TriageIncidentSummaryActivity extends AppCompatActivity {
 
@@ -57,6 +60,11 @@ public class TriageIncidentSummaryActivity extends AppCompatActivity {
         chkShareTriage.setOnCheckedChangeListener((buttonView, checked) ->
                 updateProviderShareSetting(checked)
         );
+
+        boolean providerMode = getIntent().getBooleanExtra("providerMode", false);
+        if (providerMode) {
+            chkShareTriage.setVisibility(View.GONE);
+        }
     }
 
     private void loadTriageShareSetting(CheckBox chk) {
@@ -142,8 +150,7 @@ public class TriageIncidentSummaryActivity extends AppCompatActivity {
                     List<DocumentSnapshot> docs = new ArrayList<>(snap.getDocuments());
                     docs.sort(Comparator.comparing(d -> d.getDate("timestamp")));
 
-                    List<Entry> entries = new ArrayList<>();
-                    List<Integer> colors = new ArrayList<>();
+                    List<IScatterDataSet> dataSets = new ArrayList<>();
 
                     for (DocumentSnapshot doc : docs) {
 
@@ -151,7 +158,6 @@ public class TriageIncidentSummaryActivity extends AppCompatActivity {
                         if (ts == null) continue;
 
                         long x = ts.getTime();
-
                         String zone = doc.getString("pefZone");
                         Boolean emergency = doc.getBoolean("emergencyServicesCalled");
 
@@ -163,28 +169,35 @@ public class TriageIncidentSummaryActivity extends AppCompatActivity {
                                         getBool(doc, "redFlagsPresent.lipColorChange");
 
                         Entry e = new Entry(x, y);
-                        e.setData(redFlag ? "large" : "normal");
-                        entries.add(e);
 
-                        if (emergency != null && emergency) {
-                            colors.add(Color.parseColor("#8E0000")); // dark emergency red
+                        ScatterDataSet ds = new ScatterDataSet(
+                                java.util.Collections.singletonList(e),
+                                ""
+                        );
+
+                        ds.setDrawValues(false);
+                        ds.setScatterShape(ScatterChart.ScatterShape.CIRCLE);
+
+                        ds.setScatterShapeSize(redFlag ? 65f : 45f);
+
+                        if (Boolean.TRUE.equals(emergency)) {
+                            ds.setColor(Color.parseColor("#8E0000"));
                         } else {
-                            colors.add(getColorForZone(zone));
+                            ds.setColor(getColorForZone(zone));
                         }
+
+                        dataSets.add(ds);
                     }
 
-                    ScatterDataSet dataSet = createTriageDataSet(entries);
-
-                    dataSet.setColors(colors);
-
-                    ScatterData data = new ScatterData(dataSet);
+                    ScatterData data = new ScatterData(dataSets);
                     chart.setData(data);
                     chart.invalidate();
                 });
     }
 
+
     private int getColorForZone(String zone) {
-        if (zone == null) return Color.BLACK;
+        if (Objects.equals(zone, "Not yet calculated")) return Color.BLACK;
 
         switch (zone) {
             case "Green":
@@ -205,7 +218,7 @@ public class TriageIncidentSummaryActivity extends AppCompatActivity {
         ds.setDrawValues(false);
         ds.setScatterShape(ScatterChart.ScatterShape.CIRCLE);
 
-        ds.setScatterShapeSize(30f);
+        ds.setScatterShapeSize(45f);
 
 
         ds.setValueFormatter(new ValueFormatter() {

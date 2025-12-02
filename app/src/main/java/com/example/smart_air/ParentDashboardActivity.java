@@ -26,6 +26,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.SetOptions;
 
@@ -89,7 +90,6 @@ public class ParentDashboardActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
         setupRecyclerView();
-        fetchChildData(parentId);
 
 
         loadParentInfoFromDatabase();
@@ -109,9 +109,54 @@ public class ParentDashboardActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        Button btnViewAlertsHistory = findViewById(R.id.btnParentAlert);
+        btnViewAlertsHistory.setOnClickListener(v -> {
+            Intent intent = new Intent(this, ParentAlertsActivity.class);
+            startActivity(intent);
+        });
+
         findViewById(R.id.tabMyChildren).performClick();
 
+
+        checkForMissedAlerts(parentId);
+
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fetchChildData(parentId);
+        loadChildrenForSelector();
+    }
+
+
+    private void checkForMissedAlerts(String parentId) {
+        db.collection("parent_alerts")
+                .whereEqualTo("parentID", parentId)
+                .whereEqualTo("isRead", false) // Look for alerts we haven't seen yet
+                .orderBy("timestamp", Query.Direction.DESCENDING) // Get the most recent one first
+                .get() // Use .get() for a one-time fetch
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        // We found one or more missed alerts.
+                        // We can just show a generic toast for the most recent one.
+                        String mostRecentMessage = queryDocumentSnapshots.getDocuments().get(0).getString("message");
+
+                        Toast.makeText(this, "New Alert: " + mostRecentMessage, Toast.LENGTH_LONG).show();
+
+                        // IMPORTANT: Now, mark these alerts as "read" so the toast doesn't show every single time the app opens.
+                        for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                            doc.getReference().update("isRead", true);
+                        }
+                    } else {
+                        Log.d(TAG, "No new unread alerts found for parent.");
+                    }
+                })
+                .addOnFailureListener(e -> Log.e(TAG, "Error checking for missed alerts", e));
+    }
+    // --------------------------------------------------------------------
+
+
 
     private void setupRecyclerView() {
         childSummaryList = new ArrayList<>();
@@ -119,6 +164,7 @@ public class ParentDashboardActivity extends AppCompatActivity {
         childSummariesRecyclerView.setAdapter(adapter);
         childSummariesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
+
 
 
     @SuppressLint("NotifyDataSetChanged")
@@ -162,14 +208,14 @@ public class ParentDashboardActivity extends AppCompatActivity {
             if (medLogTask.isSuccessful() && medLogTask.getResult() != null && medLogTask.getResult().exists()) {
                 DocumentSnapshot medLogDoc = medLogTask.getResult();
 
-                // Format the last rescue time string for display
+
                 String lastUseTimestamp = medLogDoc.getString("last_rescue_use");
                 if (lastUseTimestamp != null && !lastUseTimestamp.isEmpty()) {
                     String[] parts = lastUseTimestamp.split(" ");
                     if (parts.length >= 2) {
                         String datePart = parts[0];
                         String timePart = parts[1];
-                        // Remove seconds for a cleaner look
+
                         if (timePart.lastIndexOf(':') > 0) {
                             timePart = timePart.substring(0, timePart.lastIndexOf(':'));
                         }
@@ -316,6 +362,7 @@ public class ParentDashboardActivity extends AppCompatActivity {
             childSummariesRecyclerView.setVisibility(View.VISIBLE);
             findViewById(R.id.btnSelectChild).setVisibility(View.VISIBLE);
             findViewById(R.id.btnCreateChild).setVisibility(View.VISIBLE);
+            findViewById(R.id.btnParentAlert).setVisibility(View.VISIBLE);
 
             shareContentPlaceholder.setVisibility(View.GONE);
             btnShareToProvider.setVisibility(View.GONE);
@@ -327,6 +374,7 @@ public class ParentDashboardActivity extends AppCompatActivity {
             childSummariesRecyclerView.setVisibility(View.GONE);
             findViewById(R.id.btnSelectChild).setVisibility(View.GONE);
             findViewById(R.id.btnCreateChild).setVisibility(View.GONE);
+            findViewById(R.id.btnParentAlert).setVisibility(View.GONE);
 
             shareContentPlaceholder.setVisibility(View.GONE);
             btnShareToProvider.setVisibility(View.VISIBLE);
