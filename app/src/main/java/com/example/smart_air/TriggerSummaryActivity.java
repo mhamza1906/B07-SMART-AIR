@@ -184,9 +184,7 @@ public class TriggerSummaryActivity extends AppCompatActivity {
         Map<String, Integer> triggerCounts = new HashMap<>();
 
         for (DocumentSnapshot doc : docs) {
-            addTriggerCounts(triggerCounts, getStringList(doc, "NWTrigger"));
-            addTriggerCounts(triggerCounts, getStringList(doc, "CWTrigger"));
-            addTriggerCounts(triggerCounts, getStringList(doc, "ALTrigger"));
+            addTriggerCounts(triggerCounts, getStringList(doc, "Triggers"));
         }
 
         if (triggerCounts.isEmpty()) {

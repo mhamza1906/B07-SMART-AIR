@@ -97,9 +97,6 @@
             android:name=".TriggerSummaryActivity"
             android:exported="true" />
         <activity
-            android:name=".HistoryBrowserActivity"
-            android:exported="true" />
-        <activity
             android:name=".ShareToProviderActivity"
             android:exported="true" />
         <activity
@@ -125,6 +122,10 @@
         <activity
             android:name=".ParentScheduleActivity"
             android:exported="true" />
+        <activity
+            android:name=".HistoryBrowserActivity"
+            android:exported="true">
+
     </application>
 
 </manifest>
