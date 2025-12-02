@@ -172,7 +172,7 @@ public class ControllerAdherenceSummaryActivity extends AppCompatActivity {
         progress.setVisibility(View.VISIBLE);
 
         CollectionReference col =
-                db.collection("planned-schedule").document(childId).collection("schedules");
+                db.collection("planned-schedule").document(childId).collection("Schedules");
 
         col.get().addOnSuccessListener(this::onAdherenceLoaded)
                 .addOnFailureListener(e -> {

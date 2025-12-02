@@ -12,7 +12,6 @@
         android:padding="16dp"
         tools:context=".TriageActivity">
 
-        <!-- FIX 1: Constrain the first checkbox to the top of the parent layout -->
         <CheckBox
             android:id="@+id/chkBreathingBreaks"
             android:layout_width="0dp"
@@ -24,7 +23,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- FIX 2: Use 'text' instead of 'hint' for CheckBoxes, Buttons, etc. -->
         <CheckBox
             android:id="@+id/chkHardToBreathe"
             android:layout_width="0dp"
@@ -47,7 +45,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/chkHardToBreathe"/>
 
-        <!-- This LinearLayout groups the EditText and the Button horizontally -->
         <LinearLayout
             android:id="@+id/pefEntryLayout"
             android:layout_width="0dp"
@@ -72,6 +69,8 @@
                 android:id="@+id/btnEnterPEF"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:backgroundTint="#82FF73"
+                android:textColor="#263238"
                 android:layout_marginStart="8dp"
                 android:text="@string/enter" />
 

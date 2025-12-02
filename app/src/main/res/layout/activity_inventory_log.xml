@@ -19,7 +19,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Left Column (Controller) -->
+
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -88,7 +88,6 @@
                 tools:text="2024-12-01" />
         </LinearLayout>
 
-        <!-- Right Column (Rescue) -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"

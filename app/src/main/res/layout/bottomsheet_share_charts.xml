@@ -53,6 +53,8 @@
     <Button
         android:id="@+id/btnConfirmCharts"
         android:layout_width="320dp"
+        android:backgroundTint="#82FF73"
+        android:textColor="#263238"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="@string/share_with_provider"/>
