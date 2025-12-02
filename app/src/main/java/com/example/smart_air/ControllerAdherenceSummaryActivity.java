@@ -53,6 +53,7 @@ public class ControllerAdherenceSummaryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_controller_adherence_summary);
 
         childId = getIntent().getStringExtra("childID");
+
         if (childId == null) { finish(); return; }
 
         db = FirebaseFirestore.getInstance();
@@ -61,6 +62,11 @@ public class ControllerAdherenceSummaryActivity extends AppCompatActivity {
         progress = findViewById(R.id.progress_adherence);
         txtEmpty = findViewById(R.id.txt_empty_adherence);
         chkShare = findViewById(R.id.chk_share_adherence);
+
+        boolean providerMode = getIntent().getBooleanExtra("providerMode", false);
+        if (providerMode) {
+            chkShare.setVisibility(View.GONE);
+        }
 
         imgStreak = findViewById(R.id.imgControllerStreak);
         txtStreak = findViewById(R.id.txtControllerStreak);

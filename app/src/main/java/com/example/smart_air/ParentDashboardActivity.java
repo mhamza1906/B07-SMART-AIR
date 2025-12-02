@@ -118,16 +118,22 @@ public class ParentDashboardActivity extends AppCompatActivity {
 
         findViewById(R.id.tabMyChildren).performClick();
 
-        // --- NEW CODE: Check for missed alerts when the dashboard starts ---
+
         checkForMissedAlerts(parentId);
-        // --------------------------------------------------------------------
 
     }
 
-    // --- NEW METHOD: Checks for unread alerts when the activity starts ---
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fetchChildData(parentId);
+        loadChildrenForSelector();
+    }
+
+
     private void checkForMissedAlerts(String parentId) {
         db.collection("parent_alerts")
-                .whereEqualTo("parentId", parentId)
+                .whereEqualTo("parentID", parentId)
                 .whereEqualTo("isRead", false) // Look for alerts we haven't seen yet
                 .orderBy("timestamp", Query.Direction.DESCENDING) // Get the most recent one first
                 .get() // Use .get() for a one-time fetch
@@ -469,23 +475,18 @@ public class ParentDashboardActivity extends AppCompatActivity {
     }
 
     private void loadChildrenForSelector() {
-        FirebaseDatabase.getInstance().getReference("parent-child-lookup")
-                .child(parentId)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.exists()) {
-                            for(DataSnapshot child: snapshot.getChildren()) {
-                                String childId = child.getKey();
-                                String childName = child.child("fName").getValue(String.class);
-                                cachedChildIds.add(childId);
-                                cachedChildNames.add(childName);
-                            }
-                        }
+        FirebaseFirestore.getInstance()
+                .collection("parent-child")
+                .document(parentId)
+                .collection("child")
+                .get()
+                .addOnSuccessListener(snap -> {
+                    cachedChildIds.clear();
+                    cachedChildNames.clear();
+                    for (DocumentSnapshot doc : snap) {
+                        cachedChildIds.add(doc.getId());
+                        cachedChildNames.add(doc.getString("username"));
                     }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {}
                 });
     }
 

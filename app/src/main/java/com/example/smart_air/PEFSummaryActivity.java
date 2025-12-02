@@ -51,6 +51,10 @@ public class PEFSummaryActivity extends AppCompatActivity {
         chartPEF = findViewById(R.id.chart_pef);
         txtRangeLabel = findViewById(R.id.txt_range_label);
         chkShare = findViewById(R.id.chk_share_pef);
+        boolean providerMode = getIntent().getBooleanExtra("providerMode", false);
+        if (providerMode) {
+            chkShare.setVisibility(View.GONE);
+        }
 
         setupChart();
         loadShareState();

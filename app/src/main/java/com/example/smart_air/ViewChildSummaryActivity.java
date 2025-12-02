@@ -53,7 +53,8 @@ public class ViewChildSummaryActivity extends AppCompatActivity {
 
 
         loadPage(
-                "View this child's rescue medication usage",
+                "Press START to view this child's rescue medication usag, " +
+                        "and decide whether to share this summary with your healthcare provider",
                 RescueLogsSummaryActivity.class
         );
     }

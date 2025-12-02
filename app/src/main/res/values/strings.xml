@@ -257,12 +257,22 @@
     Triage Timeline — How to Read This Chart:\n
     • Each dot represents a triage-related event.\n
     • The horizontal axis shows when the event happened.\n
-    • The vertical axis shows the PEF Zone (N/A → Green → Yellow → Red → Emergency).\n
-    • Larger dots indicate red-flag symptoms.\n
-    • Emergency events appear at the top in strong red.\n
+    • The vertical axis shows the PEF Zone (if applicable) or Emergency\n (N/A → Green → Yellow → Red → Emergency).\n
+    • Larger dots indicate red-flag symptoms.\n where black dots mean PEF = N/A
+    • Emergency events appear at the top in dark red.\n
     • You can zoom or drag to explore the timeline.
     </string>
     <string name="parent_alerts_btn">"VIEW ALERTS HISTORY"</string>
-
+    <string name="notification">"Codes/Links"</string>
+    <string name="code_link">"Codes / Links"</string>
+    <string name="check_code">"CHECK CODE"</string>
+    <string name="invite_type">"Code: "</string>
+    <string name="link">"Link: "</string>
+    <string name="random_code">"ABC1234D"</string>
+    <string name="enter_code">"Enter code to invoke the child summary:"</string>
+    <string name="edited_code">"Enter the code here"</string>
+    <string name="confirm_btn">"CONFIRM"</string>
+    <string name="na">"N/A"</string>
+    <string name="not_applicable">%1$s (N/A)</string>
 
 </resources>

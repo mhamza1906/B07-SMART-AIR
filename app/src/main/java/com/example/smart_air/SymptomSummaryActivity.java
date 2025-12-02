@@ -64,6 +64,11 @@ public class SymptomSummaryActivity extends AppCompatActivity {
 
         chkShare = findViewById(R.id.chk_share_chart);
 
+        boolean providerMode = getIntent().getBooleanExtra("providerMode", false);
+        if (providerMode) {
+            chkShare.setVisibility(View.GONE);
+        }
+
         loadShareState();
 
         chkShare.setOnCheckedChangeListener((btn, checked) ->
