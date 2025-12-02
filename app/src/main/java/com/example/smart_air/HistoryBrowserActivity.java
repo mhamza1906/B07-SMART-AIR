@@ -165,19 +165,18 @@ public class HistoryBrowserActivity extends AppCompatActivity {
         }
 
         try {
-            // Create file
+
             String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Calendar.getInstance().getTime());
             String fileName = "Check-in-History-" + timeStamp + ".pdf";
             File downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
             File file = new File(downloadsDir, fileName);
 
-            // Setup iText
+
             PdfWriter writer = new PdfWriter(file);
             PdfDocument pdf = new PdfDocument(writer);
             Document document = new Document(pdf);
-
-            // Add content
             document.add(new Paragraph("Daily Check-in History").setBold().setFontSize(18));
+
 
             Table table = new Table(4);
             table.addHeaderCell("Date");
@@ -323,19 +322,41 @@ public class HistoryBrowserActivity extends AppCompatActivity {
             checkinHistoryList.clear();
             for (QueryDocumentSnapshot doc : snapshots) {
                 if (applyFilters && (isDateFilterSet || hasSymptomOrTriggerFilter)) {
-                    boolean symptomsMatch = selectedSymptoms.isEmpty() || checkSymptomsMatch(doc, selectedSymptoms);
-                    boolean triggersMatch = selectedTriggers.isEmpty() || checkTriggersMatch(doc, selectedTriggers);
+                    boolean symptomsMatch = true;
+                    boolean triggersMatch = true;
+
+                    if (!selectedSymptoms.isEmpty()) {
+                        symptomsMatch = checkSymptomsMatch(doc, selectedSymptoms);
+                    }
+
+                    if (!selectedTriggers.isEmpty()) {
+                        triggersMatch = checkTriggersMatch(doc, selectedTriggers);
+                    }
                     if (!symptomsMatch || !triggersMatch) {
                         continue; // Skip this document if it doesn't match filters
                     }
                 }
 
                 List<String> symptoms = new ArrayList<>();
-                if ("Yes".equals(doc.getString("NightWaking"))) symptoms.add("Night Waking");
-                if ("Yes".equals(doc.getString("CoughWheeze"))) symptoms.add("Cough/Wheeze");
-                if ("Yes".equals(doc.getString("ActivityLimit"))) symptoms.add("Activity Limit");
+                if ("Yes".equals(doc.getString("NightWaking")))
+                    symptoms.add("Night Waking");
+                if ("Yes".equals(doc.getString("CoughWheeze")))
+                    symptoms.add("Cough/Wheeze");
+                if ("Yes".equals(doc.getString("ActivityLimit")))
+                    symptoms.add("Limited Activity");
 
-                checkinHistoryList.add(new DailyCheckinHistoryItem(doc.getId(), doc.getString("Author"), symptoms, getStringList(doc, "Triggers")));
+                if (symptoms.isEmpty()){
+                    symptoms.add("None");
+                }
+
+                List<String> triggers = getStringList(doc, "Triggers");
+                if (triggers.isEmpty()) {
+                    triggers.add("None");
+                }
+
+
+
+                checkinHistoryList.add(new DailyCheckinHistoryItem(doc.getId(), doc.getString("Author"), symptoms, triggers));
             }
             if(checkinHistoryList.isEmpty()){
                 Toast.makeText(this, "No entries match the selected filters.", Toast.LENGTH_SHORT).show();

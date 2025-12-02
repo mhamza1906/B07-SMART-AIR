@@ -39,7 +39,7 @@ public class DailyCheckinHistoryAdapter extends RecyclerView.Adapter<DailyChecki
             holder.symptoms.setText(symptomsText);
             holder.symptoms.setVisibility(View.VISIBLE);
         } else {
-            holder.symptoms.setVisibility(View.GONE);
+            holder.symptoms.setText("Symptoms: None");
         }
 
         // Handle Triggers
@@ -48,7 +48,7 @@ public class DailyCheckinHistoryAdapter extends RecyclerView.Adapter<DailyChecki
             holder.triggers.setText(triggersText);
             holder.triggers.setVisibility(View.VISIBLE);
         } else {
-            holder.triggers.setVisibility(View.GONE);
+            holder.triggers.setText("Triggers: None");
         }
     }
 
