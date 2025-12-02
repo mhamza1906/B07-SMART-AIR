@@ -274,7 +274,40 @@
     <string name="confirm_btn">"CONFIRM"</string>
     <string name="na">"N/A"</string>
     <string name="not_applicable">%1$s (N/A)</string>
+    <string name="schedule_title">Controller Schedule</string>
+    <string name="selected_date_default">Date</string>
+    <string name="select_date_btn">Select Date</string>
+    <string name="how_many_controllers">How many controller usages today?</string>
+    <string name="schedule_for_day">Schedule Controller Usage on This Day</string>
+    <string name="number_one">1</string>
+    <string name="increase">"+"</string>
+    <string name="decrease">"-"</string>
+    <string name="dob">"Date of birth: %1$s"</string>
+    <string name="child_menu">"What would you like to do?"</string>
+    <string name="dashboard_daily_activities">Daily Activities</string>
+    <string name="dashboard_emergency_triage">EMERGENCY TRIAGE MODE</string>
+    <string name="dashboard_zone_label">"Today's Zone"</string>
+    <string name="dashboard_zone_placeholder">--%</string>
+    <string name="dashboard_zone_label_in_java">"Today's Zone: %1$s"</string>
+    <string name="dashboard_zone_no_zone">No Zone</string>
+    <string name="dashboard_zone_no_data">No Zone Yet</string>
+    <string name="dashboard_zone_percent"> %1$d%%</string>
+    <string name="dashboard_zone_percent_null">--%</string>
+    <string name="menu_take_medicine">Take Medicine</string>
+    <string name="menu_medicine_log">Medicine Log</string>
+    <string name="menu_daily_checkin">Daily Check-In</string>
+    <string name="menu_enter_pef">Enter PEF</string>
+    <string name="menu_schedule">Planned Schedule</string>
+    <string name="menu_achievements">My Achievements</string>
+    <string name="schedule">Schedule</string>
+    <string name="inventory_controller_title">Controller</string>
+    <string name="inventory_rescue_title">Rescue</string>
+    <string name="inventory_purchase_date">Purchase Date:</string>
+    <string name="inventory_amount_left">Amount Left:</string>
+    <string name="inventory_expiry_date">Expiry Date:</string>
+    <string name="inventory_replacement_reminder">Replacement Reminder:</string>
+    <string name="inventory_refill_button">Refill</string>
 
-
+]
 
 </resources>

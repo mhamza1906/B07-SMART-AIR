@@ -5,6 +5,7 @@
     android:orientation="vertical"
     android:padding="16dp"
     android:gravity="top"
+    android:layout_marginTop="32dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -16,7 +17,7 @@
         android:textStyle="bold"
         android:layout_marginBottom="24dp" />
 
-    <!-- Personal Best Configuration -->
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -63,6 +64,7 @@
                 android:id="@+id/edit_text_pb_value"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:minHeight="48dp"
                 android:hint="Enter New PEF Value"
                 android:inputType="number"
                 android:layout_marginBottom="16dp" />
@@ -71,7 +73,9 @@
                 android:id="@+id/btn_save_pb"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Save Personal Best" />
+                android:backgroundTint="#82FF73"
+                android:text="Save Personal Best"
+                android:textColor="#616161" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -120,7 +124,9 @@
                 android:id="@+id/btn_save_graph_setting"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Save Graph Setting" />
+                android:backgroundTint="#82FF73"
+                android:text="Save Graph Setting"
+                android:textColor="#616161" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

@@ -29,7 +29,7 @@ public class ChildSignUpActivity extends AppCompatActivity {
     private String parentID;
 
     private EditText birthdayEditText;
-    private String birthdayString = ""; // yyyy-MM-dd
+    private String birthdayString = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

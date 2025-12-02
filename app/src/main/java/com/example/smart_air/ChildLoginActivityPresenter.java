@@ -28,7 +28,7 @@ public class ChildLoginActivityPresenter {
         if (task.isSuccessful()) {
             FirebaseUser app_user = model.getFirebaseAuth().getCurrentUser();
             if (app_user != null) {
-                view.toastMessage("Login successful!");
+                view.toastMessage("Welcome to SMART-AIR!");
                 model.getUserFromRTDB(app_user.getUid());
             }
         } else {

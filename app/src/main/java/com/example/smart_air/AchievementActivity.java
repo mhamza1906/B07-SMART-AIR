@@ -26,7 +26,6 @@ public class AchievementActivity extends AppCompatActivity {
     private String childID;
     private FirebaseFirestore db;
 
-    // Streak views
     private ImageView imgTechniqueStreak;
     private TextView txtTechniqueStreak;
     private ImageView imgControllerStreak;

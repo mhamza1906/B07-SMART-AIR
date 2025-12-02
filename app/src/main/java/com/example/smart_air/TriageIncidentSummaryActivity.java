@@ -211,22 +211,6 @@ public class TriageIncidentSummaryActivity extends AppCompatActivity {
     }
 
 
-    private ScatterDataSet createTriageDataSet(List<Entry> entries) {
-
-        ScatterDataSet ds = new ScatterDataSet(entries, "Triage Events");
-
-        ds.setDrawValues(false);
-        ds.setScatterShape(ScatterChart.ScatterShape.CIRCLE);
-
-        ds.setScatterShapeSize(45f);
-
-
-        ds.setValueFormatter(new ValueFormatter() {
-        });
-
-        return ds;
-    }
-
     private boolean getBool(DocumentSnapshot doc, String path) {
         Boolean b = doc.getBoolean(path);
         return b != null && b;
