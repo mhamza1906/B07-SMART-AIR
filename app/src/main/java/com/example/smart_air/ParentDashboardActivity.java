@@ -92,6 +92,7 @@ public class ParentDashboardActivity extends AppCompatActivity {
         setupRecyclerView();
 
 
+
         loadParentInfoFromDatabase();
         loadChildrenForSelector();
         setupBottomNavigation();
@@ -153,8 +154,6 @@ public class ParentDashboardActivity extends AppCompatActivity {
                 .addOnFailureListener(e -> Log.e(TAG, "Error checking for missed alerts", e));
     }
 
-
-
     private void setupRecyclerView() {
         childSummaryList = new ArrayList<>();
         adapter = new ChildSummaryAdapter(childSummaryList);
@@ -205,14 +204,14 @@ public class ParentDashboardActivity extends AppCompatActivity {
             if (medLogTask.isSuccessful() && medLogTask.getResult() != null && medLogTask.getResult().exists()) {
                 DocumentSnapshot medLogDoc = medLogTask.getResult();
 
-
+                // Format the last rescue time string for display
                 String lastUseTimestamp = medLogDoc.getString("last_rescue_use");
                 if (lastUseTimestamp != null && !lastUseTimestamp.isEmpty()) {
                     String[] parts = lastUseTimestamp.split(" ");
                     if (parts.length >= 2) {
                         String datePart = parts[0];
                         String timePart = parts[1];
-
+                        // Remove seconds for a cleaner look
                         if (timePart.lastIndexOf(':') > 0) {
                             timePart = timePart.substring(0, timePart.lastIndexOf(':'));
                         }

@@ -10,12 +10,17 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -161,42 +166,66 @@ public class HistoryBrowserActivity extends AppCompatActivity {
             return;
         }
 
-        try {
+        FirebaseDatabase.getInstance().getReference("users").child(childId)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        String fName = snapshot.child("fName").getValue(String.class);
+                        String lName = snapshot.child("lName").getValue(String.class);
+                        List<String> nameParts = new ArrayList<>();
+                        if (fName != null && !fName.isEmpty()) {
+                            nameParts.add(fName);
+                        }
+                        if (lName != null && !lName.isEmpty()) {
+                            nameParts.add(lName);
+                        }
+                        String childName = String.join(" ", nameParts);
+                        try {
 
-            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Calendar.getInstance().getTime());
-            String fileName = "Check-in-History-" + timeStamp + ".pdf";
-            File downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-            File file = new File(downloadsDir, fileName);
+                            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Calendar.getInstance().getTime());
+                            String fileName = "Check-in-History-" + childName.trim().replace(" ", "_") + "-" + timeStamp + ".pdf";
+                            File downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                            File file = new File(downloadsDir, fileName);
 
 
-            PdfWriter writer = new PdfWriter(file);
-            PdfDocument pdf = new PdfDocument(writer);
-            Document document = new Document(pdf);
-            document.add(new Paragraph("Daily Check-in History").setBold().setFontSize(18));
+                            PdfWriter writer = new PdfWriter(file);
+                            PdfDocument pdf = new PdfDocument(writer);
+                            Document document = new Document(pdf);
 
 
-            Table table = new Table(4);
-            table.addHeaderCell("Date");
-            table.addHeaderCell("Author");
-            table.addHeaderCell("Symptoms");
-            table.addHeaderCell("Triggers");
+                            document.add(new Paragraph("Daily Check-in History").setBold().setFontSize(18));
+                            document.add(new Paragraph("Child: " + childName.trim()).setFontSize(12).setMarginBottom(20));
 
-            for (DailyCheckinHistoryItem item : checkinHistoryList) {
-                table.addCell(item.getDate());
-                table.addCell(item.getAuthor());
-                table.addCell(String.join(", ", item.getSymptoms()));
-                table.addCell(String.join(", ", item.getTriggers()));
-            }
+                            Table table = new Table(4);
+                            table.addHeaderCell("Date");
+                            table.addHeaderCell("Author");
+                            table.addHeaderCell("Symptoms");
+                            table.addHeaderCell("Triggers");
 
-            document.add(table);
-            document.close();
+                            for (DailyCheckinHistoryItem item : checkinHistoryList) {
+                                table.addCell(item.getDate());
+                                table.addCell(item.getAuthor());
+                                table.addCell(String.join(", ", item.getSymptoms()));
+                                table.addCell(String.join(", ", item.getTriggers()));
+                            }
 
-            Toast.makeText(this, "PDF saved to Downloads folder: " + fileName, Toast.LENGTH_LONG).show();
+                            document.add(table);
+                            document.close();
 
-        } catch (FileNotFoundException e) {
-            Log.e(TAG, "Error creating PDF", e);
-            Toast.makeText(this, "Failed to create PDF. Check permissions and storage.", Toast.LENGTH_LONG).show();
-        }
+                            Toast.makeText(HistoryBrowserActivity.this, "PDF saved to Downloads folder: " + fileName, Toast.LENGTH_LONG).show();
+
+                        } catch (FileNotFoundException e) {
+                            Log.e(TAG, "Error creating PDF", e);
+                            Toast.makeText(HistoryBrowserActivity.this, "Failed to create PDF. Check permissions and storage.", Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.e(TAG, "Failed to read user name for PDF.", error.toException());
+                        Toast.makeText(HistoryBrowserActivity.this, "Could not fetch child's name for PDF.", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private void clearFilters() {
@@ -204,6 +233,7 @@ public class HistoryBrowserActivity extends AppCompatActivity {
         ((CheckBox) findViewById(R.id.check_symptom_night_waking)).setChecked(false);
         ((CheckBox) findViewById(R.id.check_symptom_cough_wheeze)).setChecked(false);
         ((CheckBox) findViewById(R.id.check_symptom_activity_limit)).setChecked(false);
+
 
         ((CheckBox) findViewById(R.id.check_trigger_dust)).setChecked(false);
         ((CheckBox) findViewById(R.id.check_trigger_pets)).setChecked(false);
@@ -213,7 +243,7 @@ public class HistoryBrowserActivity extends AppCompatActivity {
         ((CheckBox) findViewById(R.id.check_trigger_illness)).setChecked(false);
         ((CheckBox) findViewById(R.id.check_trigger_exercise)).setChecked(false);
 
-        // Clear dates
+
         startDate = null;
         endDate = null;
         btnStartDate.setText("Start Date");
@@ -304,6 +334,7 @@ public class HistoryBrowserActivity extends AppCompatActivity {
             }
         }
         else {
+
             query = query.orderBy(FieldPath.documentId(), Query.Direction.DESCENDING).limit(50);
         }
 
@@ -414,7 +445,7 @@ public class HistoryBrowserActivity extends AppCompatActivity {
 
     private boolean checkTriggersMatch(DocumentSnapshot doc, List<String> selected) {
         List<String> docTriggers = getStringList(doc, "Triggers");
-        return new HashSet<>(docTriggers).containsAll(selected);
+        return docTriggers.containsAll(selected);
     }
 
     private List<String> getStringList(DocumentSnapshot doc, String key) {
