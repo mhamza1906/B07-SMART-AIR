@@ -1,51 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp"
-    android:visibility="visible"
-    tools:context=".ChildLoginActivityView">
+    android:layout_height="match_parent">
 
-    <!-- Child User Name Input -->
-    <EditText
-        android:id="@+id/childUserNameEditText"
-        android:layout_width="320dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        android:autofillHints="username"
-        android:hint="@string/userName"
-        android:inputType="textPersonName"
-        android:minHeight="49dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Password Input -->
-    <EditText
-        android:id="@+id/childUserPasswordEditText"
-        android:layout_width="320dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:autofillHints="password"
-        android:hint="@string/password"
-        android:inputType="textPassword"
-        android:minHeight="48dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/childUserNameEditText" />
+    <ImageView
+        android:id="@+id/bgImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/smart_air_cover"
+        android:scaleType="centerCrop"
+        android:contentDescription="@null" />
 
-    <!-- Login Button -->
-    <Button
-        android:id="@+id/childLogin_btn"
-        android:layout_width="320dp"
-        android:layout_height="wrap_content"
-        android:minHeight="48dp"
-        android:layout_marginTop="24dp"
-        android:text="@string/commonSignInButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/childUserPasswordEditText" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        tools:context=".ChildLoginActivityView">
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.38" />
+
+        <EditText
+            android:id="@+id/childUserNameEditText"
+            android:layout_width="320dp"
+            android:layout_height="wrap_content"
+            android:autofillHints="username"
+            android:hint="@string/userName"
+            android:inputType="textPersonName"
+            android:minHeight="49dp"
+            android:layout_marginTop="16dp"
+            android:textColorHint="#000000"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/guideline_top" />
+
+        <!-- Password Input -->
+        <EditText
+            android:id="@+id/childUserPasswordEditText"
+            android:layout_width="320dp"
+            android:layout_height="wrap_content"
+            android:autofillHints="password"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:minHeight="48dp"
+            android:textColorHint="#000000"
+            android:layout_marginTop="24dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/childUserNameEditText" />
+
+        <!-- Login Button -->
+        <Button
+            android:id="@+id/childLogin_btn"
+            android:layout_width="320dp"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:layout_marginTop="200dp"
+            android:text="@string/commonSignInButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/childUserPasswordEditText" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

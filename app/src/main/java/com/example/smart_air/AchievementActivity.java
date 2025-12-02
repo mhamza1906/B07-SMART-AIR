@@ -326,7 +326,7 @@ public class AchievementActivity extends AppCompatActivity {
                     if (v != null) rescueIn30 = v;
                 }
 
-                boolean unlocked = (rescueIn30 <= maxRescueDays && rescueIn30 > 0);
+                boolean unlocked = (rescueIn30 <= maxRescueDays && rescueIn30 >= 0);
 
                 updateBadgeCompletion("lucky_star", unlocked);
 

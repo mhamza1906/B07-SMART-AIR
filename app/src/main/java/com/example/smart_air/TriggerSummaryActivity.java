@@ -55,6 +55,10 @@ public class TriggerSummaryActivity extends AppCompatActivity {
         txtEmpty = findViewById(R.id.txt_trigger_empty);
         progressBar = findViewById(R.id.trigger_progress_bar);
         chkShare = findViewById(R.id.chk_share_chart);
+        boolean providerMode = getIntent().getBooleanExtra("providerMode", false);
+        if (providerMode) {
+            chkShare.setVisibility(View.GONE);
+        }
 
 
         loadShareState();

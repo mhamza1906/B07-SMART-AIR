@@ -64,15 +64,20 @@ public class SymptomSummaryActivity extends AppCompatActivity {
 
         chkShare = findViewById(R.id.chk_share_chart);
 
+        boolean providerMode = getIntent().getBooleanExtra("providerMode", false);
+        if (providerMode) {
+            chkShare.setVisibility(View.GONE);
+        }
+
         loadShareState();
 
         chkShare.setOnCheckedChangeListener((btn, checked) ->
                 updateProviderShareSetting(checked)
         );
 
-        setupChart(chartNightWaking, 1f);
-        setupChart(chartCoughWheeze, 2f);
-        setupChart(chartActivityLimit, 3f);
+        setupChart(chartNightWaking);
+        setupChart(chartCoughWheeze);
+        setupChart(chartActivityLimit);
 
         loadSymptomData();
     }
@@ -118,7 +123,7 @@ public class SymptomSummaryActivity extends AppCompatActivity {
                 });
     }
 
-    private void setupChart(LineChart chart, float yMax) {
+    private void setupChart(LineChart chart) {
 
         chart.setNoDataText("No symptom data yet.");
         chart.getDescription().setEnabled(false);
@@ -133,7 +138,7 @@ public class SymptomSummaryActivity extends AppCompatActivity {
 
         YAxis leftAxis = chart.getAxisLeft();
         leftAxis.setAxisMinimum(0f);
-        leftAxis.setAxisMaximum(yMax);
+        leftAxis.setAxisMaximum((float) 1.0);
         leftAxis.setGranularity(1f);
         leftAxis.setTextSize(14f);
         leftAxis.setTextColor(Color.parseColor("#000000"));
@@ -249,18 +254,13 @@ public class SymptomSummaryActivity extends AppCompatActivity {
 
     private float mapCoughWheezeValue(String s) {
         if (s == null) return 0f;
-        if (s.equals(getString(R.string.none))) return 0f;
-        if (s.equals(getString(R.string.some))) return 1f;
-        if (s.equals(getString(R.string.a_lot))) return 2f;
+        if (s.equals(getString(R.string.yes))) return 1f;
         return 0f;
     }
 
     private float mapActivityLimitValue(String s) {
         if (s == null) return 0f;
-        if (s.equals(getString(R.string.activity_none))) return 0f;
-        if (s.equals(getString(R.string.activity_mild))) return 1f;
-        if (s.equals(getString(R.string.activity_significant))) return 2f;
-        if (s.equals(getString(R.string.activity_could_not))) return 3f;
+        if (s.equals(getString(R.string.yes))) return 1f;
         return 0f;
     }
 }

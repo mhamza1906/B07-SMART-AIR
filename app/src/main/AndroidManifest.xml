@@ -4,31 +4,23 @@
 
     <application
         android:allowBackup="true"
-        android:dataExtractionRules="@xml/data_extraction_rules"
-        android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/Theme.Smart_air">
-        <activity
-            android:name=".InventoryLogActivity"
-            android:exported="false" />
-        <activity
-            android:name=".MedlogActivity"
-            android:exported="false" /> <!-- Initiate Activity : Login Page -->
+        android:theme="@style/Theme.SmartAir">
+
         <activity
             android:name=".LoginActivityView"
+            android:theme="@style/Theme.SmartAir.Login"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- Sign Up Activity if user does not have an account -->
+        </activity>
+
         <activity
             android:name=".SignUpActivity"
-            android:exported="true" /> <!-- Child Login Activity if (Child) user wants to login with user name -->
+            android:exported="true" />
         <activity
             android:name=".ChildLoginActivityView"
             android:exported="true" />
@@ -37,11 +29,7 @@
             android:exported="true" />
         <activity
             android:name=".ParentDashboardActivity"
-            android:exported="true"
-            android:theme="@style/Theme.Smart_air" />
-        <activity
-            android:name=".ParentAlertActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".ParentSignOutActivity"
             android:exported="false" />
@@ -53,9 +41,6 @@
             android:exported="false" />
         <activity
             android:name=".ProviderSignOutActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ProviderNotifActivity"
             android:exported="false" />
         <activity
             android:name=".ChildDashboardActivity"
@@ -93,6 +78,9 @@
         <activity
             android:name=".TakeMedicineActivityPost"
             android:exported="true" />
+        <activity
+            android:name=".MedlogActivity"
+            android:exported="false" />
         <activity
             android:name=".ConfigureRewardsActivity"
             android:exported="true" />
@@ -132,6 +120,19 @@
         <activity
             android:name=".ExportChildHistoryActivity"
             android:exported="true" />
+        <activity
+            android:name=".ParentAlertsActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ProviderNotificationActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ProviderViewChildSummaryActivity"
+            android:exported="true" />
+        <activity
+            android:name=".InventoryLogActivity"
+            android:exported="true" />
+
         <activity
             android:name=".RefillActivity"
             android:exported="true" />

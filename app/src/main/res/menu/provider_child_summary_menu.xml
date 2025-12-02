@@ -31,10 +31,4 @@
         android:icon="@drawable/triage_incidents"
         android:title="@string/view_triage_incidents" />
 
-    <item
-        android:id="@+id/navHistoryBrowser"
-        android:icon="@drawable/history_browser"
-        android:title="@string/view_history_browser" />
-
-
 </menu>
