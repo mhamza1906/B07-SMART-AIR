@@ -29,11 +29,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="@string/night_waking_label"
+            android:text="@string/dailycheckin_NW"
             android:textSize="18sp"
-            app:layout_constraintTop_toBottomOf="@id/txt_daily_check_in_title"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/txt_daily_check_in_title" />
 
         <RadioGroup
             android:id="@+id/night_waking_group"
@@ -63,11 +63,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="@string/cough_wheeze_label"
+            android:text="@string/dailycheckin_CW"
             android:textSize="18sp"
-            app:layout_constraintTop_toBottomOf="@id/night_waking_group"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/night_waking_group" />
 
         <RadioGroup
             android:id="@+id/cough_wheeze_group"
@@ -97,11 +97,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="@string/activity_limit_label"
+            android:text="@string/dailycheckin_AL"
             android:textSize="18sp"
-            app:layout_constraintTop_toBottomOf="@id/cough_wheeze_group"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/cough_wheeze_group" />
 
         <RadioGroup
             android:id="@+id/activity_limit_group"
