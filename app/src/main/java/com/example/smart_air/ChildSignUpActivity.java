@@ -167,7 +167,7 @@ public class ChildSignUpActivity extends AppCompatActivity {
                     userData.put("lName", lName);
                     userData.put("username", username);
                     userData.put("birthday", birthdayString);
-                    userData.put("accountType", "child");
+                    userData.put("accountType", "Child");
                     userData.put("registerDate", registerDate);
                     userData.put("parentID", parentID);
 

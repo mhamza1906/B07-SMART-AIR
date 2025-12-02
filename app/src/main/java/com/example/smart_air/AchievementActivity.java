@@ -311,45 +311,48 @@ public class AchievementActivity extends AppCompatActivity {
     }
 
 
-
-
     private void setupLuckyStarBadge(long maxRescueDays) {
 
-        DocumentReference medlogParent =
-                db.collection("medlog").document(childID);
+        updateRescueCountersIfExpired(() -> {
 
-        medlogParent.get().addOnSuccessListener(snap -> {
-            long rescueIn30 = 0;
-            if (snap.exists()) {
-                Long v = snap.getLong("rescue_in_30_days");
-                if (v != null) rescueIn30 = v;
-            }
+            DocumentReference medlogParent =
+                    db.collection("medlog").document(childID);
 
-            boolean unlocked = (rescueIn30 <= maxRescueDays && rescueIn30 > 0);
+            medlogParent.get().addOnSuccessListener(snap -> {
 
+                long rescueIn30 = 0;
+                if (snap.exists()) {
+                    Long v = snap.getLong("rescue_in_30_days");
+                    if (v != null) rescueIn30 = v;
+                }
 
-            updateBadgeCompletion("lucky_star", unlocked);
+                boolean unlocked = (rescueIn30 <= maxRescueDays && rescueIn30 > 0);
 
-            if (unlocked) {
-                imgLuckyStar.setImageResource(R.drawable.lucky_star);
-                imgLuckyStar.startAnimation(luckyAnim);
-                txtLuckyStarDesc.setText(
-                        getString(R.string.lucky_star_unlocked, rescueIn30)
-                );
-            } else {
+                updateBadgeCompletion("lucky_star", unlocked);
+
+                if (unlocked) {
+                    imgLuckyStar.setImageResource(R.drawable.lucky_star);
+                    imgLuckyStar.startAnimation(luckyAnim);
+                    txtLuckyStarDesc.setText(
+                            getString(R.string.lucky_star_unlocked, rescueIn30)
+                    );
+                } else {
+                    imgLuckyStar.clearAnimation();
+                    imgLuckyStar.setImageResource(R.drawable.lucky_star_empty);
+                    txtLuckyStarDesc.setText(
+                            getString(R.string.lucky_star_locked, maxRescueDays)
+                    );
+                }
+
+            }).addOnFailureListener(e -> {
                 imgLuckyStar.clearAnimation();
                 imgLuckyStar.setImageResource(R.drawable.lucky_star_empty);
-                txtLuckyStarDesc.setText(
-                        getString(R.string.lucky_star_locked, maxRescueDays)
-                );
-            }
+                txtLuckyStarDesc.setText(getString(R.string.lucky_star_load_error));
+            });
 
-        }).addOnFailureListener(e -> {
-            imgLuckyStar.clearAnimation();
-            imgLuckyStar.setImageResource(R.drawable.lucky_star_empty);
-            txtLuckyStarDesc.setText(getString(R.string.lucky_star_load_error));
         });
     }
+
 
     private void updateBadgeCompletion(String badgeKey, boolean unlocked) {
 
@@ -362,9 +365,94 @@ public class AchievementActivity extends AppCompatActivity {
         badgeMap.put(badgeKey, unlocked);
         data.put("allBadges", badgeMap);
 
-        // merge to combine with existing badges
+
         badgeDoc.set(data, SetOptions.merge());
     }
+
+    private void updateRescueCountersIfExpired(Runnable onDone) {
+        DocumentReference medLogRef =
+                db.collection("medlog").document(childID);
+
+        medLogRef.get().addOnSuccessListener(snap -> {
+
+            if (!snap.exists()) {
+
+                Map<String, Object> init = new HashMap<>();
+                init.put("last_update_day", getToday());
+                init.put("rescue_use_in_last_7_days", 0);
+                init.put("rescue_in_30_days", 0);
+                medLogRef.set(init, SetOptions.merge()).addOnSuccessListener(r -> onDone.run());
+                return;
+            }
+
+            String lastUpdate = snap.getString("last_update_day");
+            if (lastUpdate == null) lastUpdate = getToday();
+
+            long rescue7 = 0;
+            long rescue30 = 0;
+
+            Long v7 = snap.getLong("rescue_use_in_last_7_days");
+            Long v30 = snap.getLong("rescue_in_30_days");
+
+            if (v7 != null) rescue7 = v7;
+            if (v30 != null) rescue30 = v30;
+
+            int daysDiff = getDaysBetween(lastUpdate, getToday());
+
+            boolean updated = false;
+
+            if (daysDiff > 7) {
+                rescue7 = 0;
+                updated = true;
+            }
+            if (daysDiff > 30) {
+                rescue30 = 0;
+            }
+
+            if (updated) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("last_update_day", getToday());
+                map.put("rescue_use_in_last_7_days", rescue7);
+                map.put("rescue_in_30_days", rescue30);
+
+                medLogRef.set(map, SetOptions.merge())
+                        .addOnSuccessListener(r -> onDone.run())
+                        .addOnFailureListener(e -> onDone.run());
+            } else {
+
+                onDone.run();
+            }
+
+        }).addOnFailureListener(e -> onDone.run());
+    }
+
+    private String getToday() {
+        java.text.SimpleDateFormat sdf =
+                new java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault());
+        return sdf.format(new java.util.Date());
+    }
+
+    private int getDaysBetween(String d1, String d2) {
+        try {
+            java.text.SimpleDateFormat sdf =
+                    new java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault());
+
+            java.util.Date date1 = sdf.parse(d1);
+            java.util.Date date2 = sdf.parse(d2);
+
+            if (date1 == null || date2 == null) return 0;
+
+            long diffMillis = date2.getTime() - date1.getTime();
+            long diffDays = diffMillis / (1000 * 60 * 60 * 24);
+
+            return (int) diffDays;
+
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
+
 
 
 }
