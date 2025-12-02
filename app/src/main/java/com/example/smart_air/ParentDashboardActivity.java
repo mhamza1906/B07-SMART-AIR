@@ -127,7 +127,7 @@ public class ParentDashboardActivity extends AppCompatActivity {
     // --- NEW METHOD: Checks for unread alerts when the activity starts ---
     private void checkForMissedAlerts(String parentId) {
         db.collection("parent_alerts")
-                .whereEqualTo("parentId", parentId)
+                .whereEqualTo("parentID", parentId)
                 .whereEqualTo("isRead", false) // Look for alerts we haven't seen yet
                 .orderBy("timestamp", Query.Direction.DESCENDING) // Get the most recent one first
                 .get() // Use .get() for a one-time fetch
