@@ -83,7 +83,7 @@ public class LoginActivityPresenter {
         if (task.isSuccessful()) {
             FirebaseUser app_user = model.getSuccessfulLoginUser();
             if (app_user != null) {
-                view.toastMessage("Login successful!");
+                view.toastMessage("Welcome to SMART-AIR!");
                 model.getUserFromRTDB(app_user.getUid());
             }
         } else {

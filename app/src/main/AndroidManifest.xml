@@ -31,16 +31,7 @@
             android:name=".ParentDashboardActivity"
             android:exported="true" />
         <activity
-            android:name=".ParentSignOutActivity"
-            android:exported="false" />
-        <activity
-            android:name=".AddParentActivity"
-            android:exported="false" />
-        <activity
             android:name=".ProviderDashboardActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ProviderSignOutActivity"
             android:exported="false" />
         <activity
             android:name=".ChildDashboardActivity"
@@ -49,19 +40,10 @@
             android:name=".ChildScheduleActivity"
             android:exported="false" />
         <activity
-            android:name=".ParentScheduleActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ChildSignOutActivity"
-            android:exported="false" />
-        <activity
             android:name=".DailyCheckInActivity"
             android:exported="false" />
         <activity
             android:name=".InputPEFActivity"
-            android:exported="false" />
-        <activity
-            android:name=".StreakActivity"
             android:exported="false" />
         <activity
             android:name=".TakeMedicineActivity"
@@ -138,6 +120,10 @@
 
         <activity
             android:name=".RefillActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ParentScheduleActivity"
             android:exported="true" />
     </application>
 

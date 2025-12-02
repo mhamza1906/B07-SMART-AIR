@@ -66,7 +66,7 @@ public class LoginActivityPresenterTest {
 
         presenter.onSignInComplete(mockAuthTask);
 
-        verify(mockView).toastMessage("Login successful!");
+        verify(mockView).toastMessage("Welcome to SMART-AIR!");
         verify(mockModel).getUserFromRTDB("user123");
     }
 
@@ -238,7 +238,7 @@ public class LoginActivityPresenterTest {
         presenter.onSignInComplete(task);
         // the following view.toastMessage("Login successful!")，should not be called
         // even login is successful
-        verify(mockView, never()).toastMessage("Login successful!");
+        verify(mockView, never()).toastMessage("Welcome to SMART-AIR!");
     }
 
     // 13. Fail to switch user Dashboard: the behaviour of getting user's information failed

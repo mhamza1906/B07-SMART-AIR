@@ -134,18 +134,16 @@ public class ParentDashboardActivity extends AppCompatActivity {
     private void checkForMissedAlerts(String parentId) {
         db.collection("parent_alerts")
                 .whereEqualTo("parentID", parentId)
-                .whereEqualTo("isRead", false) // Look for alerts we haven't seen yet
-                .orderBy("timestamp", Query.Direction.DESCENDING) // Get the most recent one first
-                .get() // Use .get() for a one-time fetch
+                .whereEqualTo("isRead", false)
+                .orderBy("timestamp", Query.Direction.DESCENDING)
+                .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     if (!queryDocumentSnapshots.isEmpty()) {
-                        // We found one or more missed alerts.
-                        // We can just show a generic toast for the most recent one.
+
                         String mostRecentMessage = queryDocumentSnapshots.getDocuments().get(0).getString("message");
 
                         Toast.makeText(this, "New Alert: " + mostRecentMessage, Toast.LENGTH_LONG).show();
 
-                        // IMPORTANT: Now, mark these alerts as "read" so the toast doesn't show every single time the app opens.
                         for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                             doc.getReference().update("isRead", true);
                         }
@@ -155,7 +153,6 @@ public class ParentDashboardActivity extends AppCompatActivity {
                 })
                 .addOnFailureListener(e -> Log.e(TAG, "Error checking for missed alerts", e));
     }
-    // --------------------------------------------------------------------
 
     private void setupRecyclerView() {
         childSummaryList = new ArrayList<>();
