@@ -1,23 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".InventoryLogActivity"
-    android:padding="16dp">
+    android:layout_marginTop="32dp"
+    android:padding="16dp"
+    tools:context=".InventoryLogActivity">
 
     <LinearLayout
         android:id="@+id/table_container"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:baselineAligned="false"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:baselineAligned="false">
+        app:layout_constraintEnd_toEndOf="parent">
 
-
+        <!-- Left Column (Controller) -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -30,14 +32,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:text="Controller"
+                android:text="@string/inventory_controller_title"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Purchase Date:"
+                android:text="@string/inventory_purchase_date"
                 android:textStyle="bold" />
 
             <TextView
@@ -50,7 +52,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Amount Left:"
+                android:text="@string/inventory_amount_left"
                 android:textStyle="bold" />
 
             <TextView
@@ -63,7 +65,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Expiry Date:"
+                android:text="@string/inventory_expiry_date"
                 android:textStyle="bold" />
 
             <TextView
@@ -76,7 +78,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Replacement Reminder:"
+                android:text="@string/inventory_replacement_reminder"
                 android:textStyle="bold" />
 
             <TextView
@@ -86,7 +88,7 @@
                 tools:text="2024-12-01" />
         </LinearLayout>
 
-
+        <!-- Right Column (Rescue) -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -99,14 +101,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:text="Rescue"
+                android:text="@string/inventory_rescue_title"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Purchase Date:"
+                android:text="@string/inventory_purchase_date"
                 android:textStyle="bold" />
 
             <TextView
@@ -119,7 +121,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Amount Left:"
+                android:text="@string/inventory_amount_left"
                 android:textStyle="bold" />
 
             <TextView
@@ -132,7 +134,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Expiry Date:"
+                android:text="@string/inventory_expiry_date"
                 android:textStyle="bold" />
 
             <TextView
@@ -145,7 +147,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Replacement Reminder:"
+                android:text="@string/inventory_replacement_reminder"
                 android:textStyle="bold" />
 
             <TextView
@@ -160,10 +162,12 @@
         android:id="@+id/refill_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Refill"
+        android:layout_marginBottom="32dp"
+        android:backgroundTint="#82FF73"
+        android:text="@string/inventory_refill_button"
+        android:textColor="#616161"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="32dp"/>
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

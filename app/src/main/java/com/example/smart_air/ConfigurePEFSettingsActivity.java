@@ -25,12 +25,10 @@ public class ConfigurePEFSettingsActivity extends AppCompatActivity {
 
     private TextView textCurrentPbValue;
     private EditText editTextPbValue;
-    private Button btnSavePb;
 
     private RadioGroup radioGroupGraphRange;
     private RadioButton radio7Days;
     private RadioButton radio30Days;
-    private Button btnSaveGraphSetting;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,12 +46,12 @@ public class ConfigurePEFSettingsActivity extends AppCompatActivity {
 
         textCurrentPbValue = findViewById(R.id.text_current_pb_value);
         editTextPbValue = findViewById(R.id.edit_text_pb_value);
-        btnSavePb = findViewById(R.id.btn_save_pb);
+        Button btnSavePb = findViewById(R.id.btn_save_pb);
 
         radioGroupGraphRange = findViewById(R.id.radio_group_graph_range);
         radio7Days = findViewById(R.id.radio_7_days);
         radio30Days = findViewById(R.id.radio_30_days);
-        btnSaveGraphSetting = findViewById(R.id.btn_save_graph_setting);
+        Button btnSaveGraphSetting = findViewById(R.id.btn_save_graph_setting);
 
         loadCurrentSettings();
 
@@ -82,9 +80,7 @@ public class ConfigurePEFSettingsActivity extends AppCompatActivity {
                     radio7Days.setChecked(true);
                 }
             }
-        }).addOnFailureListener(e -> {
-            Toast.makeText(this, "Failed to load settings.", Toast.LENGTH_SHORT).show();
-        });
+        }).addOnFailureListener(e -> Toast.makeText(this, "Failed to load settings.", Toast.LENGTH_SHORT).show());
     }
 
     private void savePersonalBest() {
@@ -120,9 +116,7 @@ public class ConfigurePEFSettingsActivity extends AppCompatActivity {
                         })
                         .addOnFailureListener(e -> Toast.makeText(this, "Failed to save Personal Best.", Toast.LENGTH_SHORT).show());
 
-            }).addOnFailureListener(e -> {
-                Toast.makeText(this, "Error checking document before save.", Toast.LENGTH_SHORT).show();
-            });
+            }).addOnFailureListener(e -> Toast.makeText(this, "Error checking document before save.", Toast.LENGTH_SHORT).show());
 
         } catch (NumberFormatException e) {
             Toast.makeText(this, "Please enter a valid number.", Toast.LENGTH_SHORT).show();
@@ -152,8 +146,6 @@ public class ConfigurePEFSettingsActivity extends AppCompatActivity {
                     .addOnSuccessListener(aVoid -> Toast.makeText(this, "Graph setting saved successfully!", Toast.LENGTH_SHORT).show())
                     .addOnFailureListener(e -> Toast.makeText(this, "Failed to save graph setting.", Toast.LENGTH_SHORT).show());
 
-        }).addOnFailureListener(e -> {
-            Toast.makeText(this, "Error checking document before save.", Toast.LENGTH_SHORT).show();
-        });
+        }).addOnFailureListener(e -> Toast.makeText(this, "Error checking document before save.", Toast.LENGTH_SHORT).show());
     }
 }

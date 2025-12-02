@@ -3,12 +3,12 @@ package com.example.smart_air;
 import java.util.List;
 
 public class ChildSummary {
-    private String childname;
-    private String todays_zone;
-    private String last_rescue;
-    private int weekly_rescue;
-    private String dob;
-    private List<Float> graphData;
+    private final String childname;
+    private final String todays_zone;
+    private final String last_rescue;
+    private final int weekly_rescue;
+    private final String dob;
+    private final List<Float> graphData;
 
     public ChildSummary(String childName, String todayZoneColor, String lastRescueTime, int weeklyRescueCount, String dob, List<Float> graphData) {
         this.childname = childName;

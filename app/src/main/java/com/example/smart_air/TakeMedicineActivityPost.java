@@ -197,9 +197,7 @@ public class TakeMedicineActivityPost extends AppCompatActivity {
                     }
                 }
             }
-        }).addOnFailureListener(e -> {
-            Toast.makeText(TakeMedicineActivityPost.this, "Failed to update inventory.", Toast.LENGTH_SHORT).show();
-        });
+        }).addOnFailureListener(e -> Toast.makeText(TakeMedicineActivityPost.this, "Failed to update inventory.", Toast.LENGTH_SHORT).show());
     }
 
 
