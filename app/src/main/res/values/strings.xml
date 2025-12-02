@@ -77,6 +77,12 @@
         <item>Parent</item>
         <item>Healthcare Provider</item>
     </string-array>
+    <string name="recent_alerts">"Recent Alerts</string>
+    <string name="no_alerts">"No new alerts."</string>
+    <string name="alert_message">"Alert Message"</string>
+    <string name="alert_timestamp">"Timestamp"</string>
+    <string name="no_timestamp">"No timestamp"</string>
+    <string name="fail_load_alerts">"Failed to load alerts."</string>
     <string name="budding_star_desc">"Budding Star Badge"</string>
     <string name="shining_star_desc">"Shining Star Badge"</string>
     <string name="lucky_star_desc">"Lucky Star Badge"</string>
@@ -256,8 +262,6 @@
     • Emergency events appear at the top in dark red.\n
     • You can zoom or drag to explore the timeline.
     </string>
-
-
 
 
 </resources>

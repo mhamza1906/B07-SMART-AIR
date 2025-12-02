@@ -26,6 +26,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.SetOptions;
 
@@ -111,7 +112,38 @@ public class ParentDashboardActivity extends AppCompatActivity {
 
         findViewById(R.id.tabMyChildren).performClick();
 
+        // --- NEW CODE: Check for missed alerts when the dashboard starts ---
+        checkForMissedAlerts(parentId);
+        // --------------------------------------------------------------------
+
     }
+
+    // --- NEW METHOD: Checks for unread alerts when the activity starts ---
+    private void checkForMissedAlerts(String parentId) {
+        db.collection("parent_alerts")
+                .whereEqualTo("parentId", parentId)
+                .whereEqualTo("isRead", false) // Look for alerts we haven't seen yet
+                .orderBy("timestamp", Query.Direction.DESCENDING) // Get the most recent one first
+                .get() // Use .get() for a one-time fetch
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        // We found one or more missed alerts.
+                        // We can just show a generic toast for the most recent one.
+                        String mostRecentMessage = queryDocumentSnapshots.getDocuments().get(0).getString("message");
+
+                        Toast.makeText(this, "New Alert: " + mostRecentMessage, Toast.LENGTH_LONG).show();
+
+                        // IMPORTANT: Now, mark these alerts as "read" so the toast doesn't show every single time the app opens.
+                        for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                            doc.getReference().update("isRead", true);
+                        }
+                    } else {
+                        Log.d(TAG, "No new unread alerts found for parent.");
+                    }
+                })
+                .addOnFailureListener(e -> Log.e(TAG, "Error checking for missed alerts", e));
+    }
+    // --------------------------------------------------------------------
 
     private void setupRecyclerView() {
         childSummaryList = new ArrayList<>();
@@ -119,6 +151,7 @@ public class ParentDashboardActivity extends AppCompatActivity {
         childSummariesRecyclerView.setAdapter(adapter);
         childSummariesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
+
 
 
     @SuppressLint("NotifyDataSetChanged")
@@ -428,18 +461,23 @@ public class ParentDashboardActivity extends AppCompatActivity {
     }
 
     private void loadChildrenForSelector() {
-        FirebaseFirestore.getInstance()
-                .collection("parent-child")
-                .document(parentId)
-                .collection("child")
-                .get()
-                .addOnSuccessListener(snap -> {
-                    cachedChildIds.clear();
-                    cachedChildNames.clear();
-                    for (DocumentSnapshot doc : snap) {
-                        cachedChildIds.add(doc.getId());
-                        cachedChildNames.add(doc.getString("username"));
+        FirebaseDatabase.getInstance().getReference("parent-child-lookup")
+                .child(parentId)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            for(DataSnapshot child: snapshot.getChildren()) {
+                                String childId = child.getKey();
+                                String childName = child.child("fName").getValue(String.class);
+                                cachedChildIds.add(childId);
+                                cachedChildNames.add(childName);
+                            }
+                        }
                     }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {}
                 });
     }
 

@@ -12,14 +12,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Smart_air">
         <activity
-            android:name=".MedlogActivity"
+            android:name=".ParentAlertsActivity"
             android:exported="false" />
-        <!-- Initiate Activity : Login Page -->
+        <activity
+            android:name=".MedlogActivity"
+            android:exported="false" /> <!-- Initiate Activity : Login Page -->
         <activity
             android:name=".LoginActivityView"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity> <!-- Sign Up Activity if user does not have an account -->
@@ -36,9 +39,6 @@
             android:name=".ParentDashboardActivity"
             android:exported="true"
             android:theme="@style/Theme.Smart_air" />
-        <activity
-            android:name=".ParentAlertActivity"
-            android:exported="false" />
         <activity
             android:name=".ParentSignOutActivity"
             android:exported="false" />
@@ -99,47 +99,36 @@
         <activity
             android:name=".ConfigurePEFSettingsActivity"
             android:exported="true" />
-
         <activity
             android:name=".ViewChildSummaryActivity"
             android:exported="true" />
-
         <activity
             android:name=".ControllerAdherenceSummaryActivity"
             android:exported="true" />
-
         <activity
             android:name=".PEFSummaryActivity"
             android:exported="true" />
-
         <activity
             android:name=".RescueLogsSummaryActivity"
             android:exported="true" />
-
         <activity
             android:name=".SymptomSummaryActivity"
             android:exported="true" />
-
         <activity
             android:name=".TriageIncidentSummaryActivity"
             android:exported="true" />
-
         <activity
             android:name=".TriggerSummaryActivity"
             android:exported="true" />
-
         <activity
             android:name=".HistoryBrowserActivity"
             android:exported="true" />
-
         <activity
             android:name=".ShareToProviderActivity"
             android:exported="true" />
-
         <activity
             android:name=".ExportChildHistoryActivity"
             android:exported="true" />
-
     </application>
 
 </manifest>
