@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 public class TriageIncidentSummaryActivity extends AppCompatActivity {
 
@@ -184,7 +185,7 @@ public class TriageIncidentSummaryActivity extends AppCompatActivity {
     }
 
     private int getColorForZone(String zone) {
-        if (zone == null) return Color.BLACK;
+        if (Objects.equals(zone, "Not yet calculated")) return Color.BLACK;
 
         switch (zone) {
             case "Green":
@@ -205,7 +206,7 @@ public class TriageIncidentSummaryActivity extends AppCompatActivity {
         ds.setDrawValues(false);
         ds.setScatterShape(ScatterChart.ScatterShape.CIRCLE);
 
-        ds.setScatterShapeSize(30f);
+        ds.setScatterShapeSize(45f);
 
 
         ds.setValueFormatter(new ValueFormatter() {

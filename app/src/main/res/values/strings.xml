@@ -10,7 +10,8 @@
     <string name="commonSignInButton">"SIGN IN"</string>
     <string name="credentialRecovery">"Forget Password?"</string>
     <string name="jumpIntoSignUp">"DON'T HAVE AN ACCOUNT?"</string>
-    <string name="childSignInButtonWithParentName">"SIGN IN WITH YOUR PARENT ACCOUNT"</string>
+    <string name="login_btn">"LOGIN"</string>
+    <string name="childSignInButtonWithParentName">"SIGN IN WITH YOUR USERNAME (CHILD)"</string>
     <string name="breathingBreaks">"Are you able to talk without taking breaks to breathe?"</string>
     <string name="hardToBreathe">"Does it feel like you have to work hard to breathe in?"</string>
     <string name="lipColorChange">"Have you noticed any changes in the colour of your lips or eyebrows?"</string>
@@ -27,7 +28,6 @@
     <string name="red_zone">Red Zone: Medical alert! Take 4 to 6 puffs of your rescue inhaler immediately.</string>
     <string name="safety_disclaimer">This is guidance, not a diagnosis. If in doubt, call emergency.</string>
     <string name="enter">Enter</string>
-    <string name="childSignInButtonWithParentName1">"SIGN IN WITH YOUR USERNAME (CHILD)"</string>
     <string name="DOB">"Birthday (YYYY-MM-DD)"</string>
     <string name="linkChildBtn">"LINK THIS CHILD"</string>
     <string name="technique_step1">"Technique Step 1 Animation"</string>
@@ -102,7 +102,7 @@
     <string name="select_child_hint">"Select a child"</string>
     <string name="arrow">" 〉"</string>
     <string name="link_child_page_btn">"LINK A NEW CHILD"</string>
-    <string name="select_child_btn">"Select A Child  〉〉〉"</string>
+    <string name="select_child_btn">"SELECT A CHILD    〉〉〉"</string>
     <string name="dummy_share_page">"Share Page TO DO"</string>
     <string name="manage_child">"Manage Child Activities"</string>
     <string name="configure_pb">"Configure PEF Settings"</string>
@@ -181,9 +181,9 @@
     <string name="view_triage_incidents">"Triage Incidents"</string>
     <string name="view_history_browser">"History Browser"</string>
     <string name="check_in_title">"Daily Check-In"</string>
-    <string name="night_waking_label">"Night Waking"</string>
-    <string name="cough_wheeze_label">"Cough / Wheeze"</string>
-    <string name="activity_limit_label">"Activity Limitations"</string>
+    <string name="night_waking_label">"Night Waking: 0 = No, 1 = Yes"</string>
+    <string name="cough_wheeze_label">"Cough / Wheeze: 0 = No, 1 = Yes"</string>
+    <string name="activity_limit_label">"Activity Limitations: 0 = No, 1 = Yes"</string>
     <string name="yes">"Yes"</string>
     <string name="no">"No"</string>
     <string name="none">"None"</string>
@@ -251,11 +251,12 @@
     Triage Timeline — How to Read This Chart:\n
     • Each dot represents a triage-related event.\n
     • The horizontal axis shows when the event happened.\n
-    • The vertical axis shows the severity (Green → Yellow → Red → Emergency).\n
+    • The vertical axis shows the PEF Zone (N/A → Green → Yellow → Red → Emergency).\n
     • Larger dots indicate red-flag symptoms.\n
-    • Emergency events appear at the top in dark red.\n
+    • Emergency events appear at the top in strong red.\n
     • You can zoom or drag to explore the timeline.
     </string>
+    <string name="parent_alerts_btn">"VIEW ALERTS HISTORY"</string>
 
 
 

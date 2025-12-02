@@ -203,8 +203,28 @@ public class ShareToProviderActivity extends AppCompatActivity {
         data.put("generated_at", Timestamp.now());
         data.put("summary_visibility", summaryMap);
 
-        ref.set(data, SetOptions.merge()).addOnSuccessListener(r -> showCodeOrLinkBottomSheet(providerUsername));
+        ref.set(data, SetOptions.merge()).addOnSuccessListener(r -> {
+
+            // another provider-child-index: provider-child-index -> providerUsername -> childIDs
+            Map<String, Object> reverse = new HashMap<>();
+            reverse.put("childId", childId);
+            reverse.put("provider_id", providerId);
+            reverse.put("availability", true);
+            reverse.put("generated_at", Timestamp.now());
+            reverse.put("code", null);
+            reverse.put("link", null);
+
+            db.collection("provider-child-index")
+                    .document(providerUsername)
+                    .collection("children")
+                    .document(childId)
+                    .set(reverse, SetOptions.merge());
+
+
+            showCodeOrLinkBottomSheet(providerUsername);
+        });
     }
+
 
     private void showCodeOrLinkBottomSheet(String providerUsername) {
 
@@ -257,10 +277,23 @@ public class ShareToProviderActivity extends AppCompatActivity {
         update.put("generated_at", Timestamp.now());
 
         ref.update(update).addOnSuccessListener(r -> {
+
+            Map<String, Object> reverseUpdate = new HashMap<>();
+            reverseUpdate.put("code", code);
+            reverseUpdate.put("link", null);
+            reverseUpdate.put("generated_at", Timestamp.now());
+
+            db.collection("provider-child-index")
+                    .document(providerUsername)
+                    .collection("children")
+                    .document(childId)
+                    .update(reverseUpdate);
+
             Toast.makeText(this, "Code generated: " + code, Toast.LENGTH_LONG).show();
             loadSharedProviders();
         });
     }
+
 
     private void generateSharingLink(String providerUsername) {
 
@@ -279,10 +312,23 @@ public class ShareToProviderActivity extends AppCompatActivity {
         update.put("generated_at", Timestamp.now());
 
         ref.update(update).addOnSuccessListener(r -> {
+
+            Map<String, Object> reverseUpdate = new HashMap<>();
+            reverseUpdate.put("code", code);
+            reverseUpdate.put("link", link);
+            reverseUpdate.put("generated_at", Timestamp.now());
+
+            db.collection("provider-child-index")
+                    .document(providerUsername)
+                    .collection("children")
+                    .document(childId)
+                    .update(reverseUpdate);
+
             Toast.makeText(this, "Link generated", Toast.LENGTH_LONG).show();
             loadSharedProviders();
         });
     }
+
 
     private void revokeSharing(String providerUsername) {
 
@@ -296,8 +342,16 @@ public class ShareToProviderActivity extends AppCompatActivity {
         update.put("availability", false);
 
         ref.update(update).addOnSuccessListener(r -> {
+
+            db.collection("provider-child-index")
+                    .document(providerUsername)
+                    .collection("children")
+                    .document(childId)
+                    .update("availability", false);
+
             Toast.makeText(this, "Sharing revoked", Toast.LENGTH_SHORT).show();
             loadSharedProviders();
         });
     }
+
 }

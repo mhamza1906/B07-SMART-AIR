@@ -109,6 +109,12 @@ public class ParentDashboardActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        Button btnViewAlertsHistory = findViewById(R.id.btnParentAlert);
+        btnViewAlertsHistory.setOnClickListener(v -> {
+            Intent intent = new Intent(this, ParentAlertsActivity.class);
+            startActivity(intent);
+        });
+
         findViewById(R.id.tabMyChildren).performClick();
 
     }
@@ -316,6 +322,7 @@ public class ParentDashboardActivity extends AppCompatActivity {
             childSummariesRecyclerView.setVisibility(View.VISIBLE);
             findViewById(R.id.btnSelectChild).setVisibility(View.VISIBLE);
             findViewById(R.id.btnCreateChild).setVisibility(View.VISIBLE);
+            findViewById(R.id.btnParentAlert).setVisibility(View.VISIBLE);
 
             shareContentPlaceholder.setVisibility(View.GONE);
             btnShareToProvider.setVisibility(View.GONE);
@@ -327,6 +334,7 @@ public class ParentDashboardActivity extends AppCompatActivity {
             childSummariesRecyclerView.setVisibility(View.GONE);
             findViewById(R.id.btnSelectChild).setVisibility(View.GONE);
             findViewById(R.id.btnCreateChild).setVisibility(View.GONE);
+            findViewById(R.id.btnParentAlert).setVisibility(View.GONE);
 
             shareContentPlaceholder.setVisibility(View.GONE);
             btnShareToProvider.setVisibility(View.VISIBLE);

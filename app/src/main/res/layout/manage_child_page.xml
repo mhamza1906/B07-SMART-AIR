@@ -19,7 +19,7 @@
         android:id="@+id/btnStart"
         android:layout_width="320dp"
         android:layout_height="wrap_content"
-        android:backgroundTint="#FF6978"
+        android:backgroundTint="#82FF73"
         android:text="@string/start_btn"
         android:textColor="#263238" />
 
