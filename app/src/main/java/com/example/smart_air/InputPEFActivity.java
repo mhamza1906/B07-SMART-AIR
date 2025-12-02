@@ -104,31 +104,30 @@ public class InputPEFActivity extends AppCompatActivity {
                 newZone = "yellow";
             else newZone = "red";
 
-            updateDailyLog(userDocRef, enteredValue, newPercent, newZone, finalPB);
+            updateDailyLog(userDocRef, enteredValue, newPercent, newZone);
             updateZoneHistory(userDocRef, newPercent, newZone);
 
         }).addOnFailureListener(e -> Toast.makeText(InputPEFActivity.this, "Could not verify PB.", Toast.LENGTH_SHORT).show());
     }
 
-    private void updateDailyLog(DocumentReference userDocRef, int value, int percent, String zone, long pb) {
+    private void updateDailyLog(DocumentReference userDocRef, int value, int percent, String zone) {
         String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         DocumentReference todayLogRef = userDocRef.collection("log").document(today);
 
         todayLogRef.get().addOnSuccessListener(logDoc -> {
-            long currentPercent = 0;
-            if (logDoc.exists() && logDoc.contains("percent")) {
-                Number num = (Number) logDoc.get("percent");
+            long currentValue = 0;
+            if (logDoc.exists() && logDoc.contains("value")) {
+                Number num = (Number) logDoc.get("value");
                 if (num != null) {
-                    currentPercent = num.longValue();
+                    currentValue = num.longValue();
                 }
             }
 
-            if (!logDoc.exists() || percent > currentPercent) {
+            if (!logDoc.exists() || value > currentValue) {
                 Map<String, Object> updateData = new HashMap<>();
                 updateData.put("value", value);
                 updateData.put("percent", percent);
                 updateData.put("zone", zone);
-                updateData.put("stored_PB", pb);
 
                 todayLogRef.set(updateData, SetOptions.merge()).addOnSuccessListener(aVoid -> {
                     Toast.makeText(InputPEFActivity.this, "New daily high PEF saved!", Toast.LENGTH_SHORT).show();

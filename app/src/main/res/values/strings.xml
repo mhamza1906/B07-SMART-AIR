@@ -198,7 +198,7 @@
     <string name="trigger_dust">"Dust"</string>
     <string name="trigger_pets">"Pets"</string>
     <string name="trigger_smoke">"Smoke"</string>
-    <string name="trigger_odors">"Strong odors / perfumes"</string>
+    <string name="trigger_odors">"Strong odor"</string>
     <string name="trigger_cold_air">"Cold air"</string>
     <string name="trigger_illness">"Illness"</string>
     <string name="trigger_exercise">"Exercise"</string>
@@ -307,6 +307,9 @@
     <string name="inventory_expiry_date">Expiry Date:</string>
     <string name="inventory_replacement_reminder">Replacement Reminder:</string>
     <string name="inventory_refill_button">Refill</string>
+    <string name="daily_check_in_NW">Did you experience Night Waking?</string>
+    <string name="daily_check_in_CW">Did you experience Coughing/Wheezing?</string>
+    <string name="daily_check_in_AL">Were your Activity Levels limited?</string>
 
 
 ]
