@@ -123,19 +123,19 @@ public class HistoryBrowserActivity extends AppCompatActivity {
         btnShowCheckinHistory.setOnClickListener(v -> {
             cardCheckinHistory.setVisibility(View.VISIBLE);
             cardPefHistory.setVisibility(View.GONE);
-            loadCheckinHistory(false); // Initial load without filters
+            loadCheckinHistory(false); //Initial load without filters
         });
 
-        // Filter toggles
+        //Filter toggles
         setupFilterToggleListener(btnToggleSymptoms, containerSymptomFilters, containerTriggerFilters, containerDateRangeFilter);
         setupFilterToggleListener(btnToggleTriggers, containerTriggerFilters, containerSymptomFilters, containerDateRangeFilter);
         setupFilterToggleListener(btnToggleDate, containerDateRangeFilter, containerSymptomFilters, containerTriggerFilters);
 
-        // Date pickers
+        //Date pickers
         btnStartDate.setOnClickListener(v -> showDatePickerDialog(true));
         btnEndDate.setOnClickListener(v -> showDatePickerDialog(false));
 
-        // Action buttons
+        //Action buttons
         btnApplyFilters.setOnClickListener(v -> {
             loadCheckinHistory(true);
             containerSymptomFilters.setVisibility(View.GONE);
@@ -191,7 +191,8 @@ public class HistoryBrowserActivity extends AppCompatActivity {
                     if (isStartDate) {
                         startDate = selectedDate;
                         btnStartDate.setText(dateFormat.format(startDate.getTime()));
-                    } else {
+                    }
+                    else {
                         endDate = selectedDate;
                         btnEndDate.setText(dateFormat.format(endDate.getTime()));
                     }
@@ -215,7 +216,8 @@ public class HistoryBrowserActivity extends AppCompatActivity {
                         pefHistoryList.add(new PefHistoryItem(doc.getDate("timestamp"), doc.getLong("percent").intValue(), doc.getString("zone")));
                     }
                     pefHistoryAdapter.notifyDataSetChanged();
-                }).addOnFailureListener(e -> {
+                })
+                .addOnFailureListener(e -> {
                     Log.e(TAG, "Error loading PEF history", e);
                     Toast.makeText(this, "Failed to load PEF history. Check Logcat for details.", Toast.LENGTH_LONG).show();
                 });
@@ -230,7 +232,6 @@ public class HistoryBrowserActivity extends AppCompatActivity {
         boolean hasSymptomOrTriggerFilter = !selectedSymptoms.isEmpty() || !selectedTriggers.isEmpty();
 
         if (applyFilters && (isDateFilterSet || hasSymptomOrTriggerFilter)) {
-            // --- Filtering Logic --- 
             if (isDateFilterSet) {
                 if (startDate.after(endDate)) {
                     Toast.makeText(this, "Start date must be before end date.", Toast.LENGTH_SHORT).show();
@@ -245,13 +246,14 @@ public class HistoryBrowserActivity extends AppCompatActivity {
                     return;
                 }
 
-                query = query.whereGreaterThanOrEqualTo(FieldPath.documentId(), dateFormat.format(startDate.getTime()))
-                             .whereLessThanOrEqualTo(FieldPath.documentId(), dateFormat.format(endDate.getTime()));
-            } else if (startDate != null || endDate != null) {
+                query = query.whereGreaterThanOrEqualTo(FieldPath.documentId(), dateFormat.format(startDate.getTime())).whereLessThanOrEqualTo(FieldPath.documentId(), dateFormat.format(endDate.getTime()));
+            }
+            else if (startDate != null || endDate != null) {
                 Toast.makeText(this, "Please select both a start and an end date.", Toast.LENGTH_SHORT).show();
                 return;
             }
-        } else {
+        }
+        else {
             // --- Default Query Logic ---
             query = query.orderBy(FieldPath.documentId(), Query.Direction.DESCENDING).limit(50);
         }
@@ -265,7 +267,6 @@ public class HistoryBrowserActivity extends AppCompatActivity {
             }
             checkinHistoryList.clear();
             for (QueryDocumentSnapshot doc : snapshots) {
-                // Client-side filtering
                 if (applyFilters && (isDateFilterSet || hasSymptomOrTriggerFilter)) {
                     boolean symptomsMatch = selectedSymptoms.isEmpty() || checkSymptomsMatch(doc, selectedSymptoms);
                     boolean triggersMatch = selectedTriggers.isEmpty() || checkTriggersMatch(doc, selectedTriggers);
@@ -293,16 +294,22 @@ public class HistoryBrowserActivity extends AppCompatActivity {
 
     private List<String> getSelectedSymptoms() {
         List<String> list = new ArrayList<>();
-        if (((CheckBox) findViewById(R.id.check_symptom_night_waking)).isChecked()) list.add("NightWaking");
-        if (((CheckBox) findViewById(R.id.check_symptom_cough_wheeze)).isChecked()) list.add("CoughWheeze");
-        if (((CheckBox) findViewById(R.id.check_symptom_activity_limit)).isChecked()) list.add("ActivityLimit");
+        if (((CheckBox) findViewById(R.id.check_symptom_night_waking)).isChecked()) {
+            list.add("NightWaking");
+        }
+        if (((CheckBox) findViewById(R.id.check_symptom_cough_wheeze)).isChecked()) {
+            list.add("CoughWheeze");
+        }
+        if (((CheckBox) findViewById(R.id.check_symptom_activity_limit)).isChecked()) {
+            list.add("ActivityLimit");
+        }
         return list;
     }
 
     private boolean checkSymptomsMatch(DocumentSnapshot doc, List<String> selected) {
         for (String symptomField : selected) {
             if (!"Yes".equals(doc.getString(symptomField))) {
-                return false; // If any selected symptom is not 'Yes', it's not a match
+                return false;
             }
         }
         return true;
@@ -310,13 +317,27 @@ public class HistoryBrowserActivity extends AppCompatActivity {
 
     private List<String> getSelectedTriggers() {
         List<String> list = new ArrayList<>();
-        if (((CheckBox) findViewById(R.id.check_trigger_dust)).isChecked()) list.add("Dust");
-        if (((CheckBox) findViewById(R.id.check_trigger_pets)).isChecked()) list.add("Pets");
-        if (((CheckBox) findViewById(R.id.check_trigger_smoke)).isChecked()) list.add("Smoke");
-        if (((CheckBox) findViewById(R.id.check_trigger_odors)).isChecked()) list.add("Strong odor");
-        if (((CheckBox) findViewById(R.id.check_trigger_cold_air)).isChecked()) list.add("Cold air");
-        if (((CheckBox) findViewById(R.id.check_trigger_illness)).isChecked()) list.add("Illness");
-        if (((CheckBox) findViewById(R.id.check_trigger_exercise)).isChecked()) list.add("Exercise");
+        if (((CheckBox) findViewById(R.id.check_trigger_dust)).isChecked()) {
+            list.add("Dust");
+        }
+        if (((CheckBox) findViewById(R.id.check_trigger_pets)).isChecked()) {
+            list.add("Pets");
+        }
+        if (((CheckBox) findViewById(R.id.check_trigger_smoke)).isChecked()) {
+            list.add("Smoke");
+        }
+        if (((CheckBox) findViewById(R.id.check_trigger_odors)).isChecked()) {
+            list.add("Strong odor");
+        }
+        if (((CheckBox) findViewById(R.id.check_trigger_cold_air)).isChecked()) {
+            list.add("Cold air");
+        }
+        if (((CheckBox) findViewById(R.id.check_trigger_illness)).isChecked()) {
+            list.add("Illness");
+        }
+        if (((CheckBox) findViewById(R.id.check_trigger_exercise)).isChecked()) {
+            list.add("Exercise");
+        }
         return list;
     }
 
