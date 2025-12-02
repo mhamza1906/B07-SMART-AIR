@@ -71,6 +71,14 @@ public class ChildDashboardActivity extends AppCompatActivity {
         setButtonListeners();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        loadParentInfoFromDatabase();
+        listenForTodayZone(childId);
+    }
+
     private void loadParentInfoFromDatabase() {
         FirebaseDatabase.getInstance().getReference("users")
                 .child(childId)
@@ -90,6 +98,8 @@ public class ChildDashboardActivity extends AppCompatActivity {
                     }
                 });
     }
+
+
 
     private void setupUserAvatar() {
         String initials = "U";

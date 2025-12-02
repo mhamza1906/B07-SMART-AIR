@@ -31,6 +31,15 @@
                 android:layout_height="32dp"
                 android:src="@drawable/menu_icon"
                 android:contentDescription="@string/menu"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Manage Child Activities"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginStart="8dp"
+                app:layout_constraintStart_toEndOf="@+id/btnMenu"
+                app:layout_constraintTop_toTopOf="@+id/btnMenu"/>
         </LinearLayout>
 
 

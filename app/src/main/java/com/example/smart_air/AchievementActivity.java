@@ -15,10 +15,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 
-import java.util.ArrayList;
-import java.util.Comparator;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class AchievementActivity extends AppCompatActivity {
@@ -31,7 +32,6 @@ public class AchievementActivity extends AppCompatActivity {
     private ImageView imgControllerStreak;
     private TextView txtControllerStreak;
 
-    // Badge views
     private TextView titleBuddingStar;
     private ImageView imgBuddingStar;
     private TextView txtBuddingStarDesc;
@@ -210,42 +210,102 @@ public class AchievementActivity extends AppCompatActivity {
         });
     }
 
-
     private void setupBuddingStarBadge(long weeksThreshold) {
 
         CollectionReference schedulesCol = db.collection("planned-schedule")
                 .document(childID)
-                .collection("schedules");
+                .collection("Schedules");
 
         schedulesCol.get().addOnSuccessListener(snap -> {
 
-            List<DocumentSnapshot> docs = new ArrayList<>(snap.getDocuments());
-            docs.sort(Comparator.comparing(DocumentSnapshot::getId));
+            if (snap.isEmpty()) {
+                setBuddingStarLocked(weeksThreshold);
+                return;
+            }
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            Map<String, Boolean> takenMap = new HashMap<>();
+
+            Calendar minCal = Calendar.getInstance();
+            Calendar maxCal = Calendar.getInstance();
+            boolean first = true;
+
+            for (DocumentSnapshot doc : snap.getDocuments()) {
+                String id = doc.getId();
+
+                try {
+                    Date date = sdf.parse(id);
+                    if (date == null) continue;
+
+                    Boolean taken = doc.getBoolean("taken");
+
+                    takenMap.put(id, taken != null && taken);
+
+                    if (first) {
+                        minCal.setTime(date);
+                        maxCal.setTime(date);
+                        first = false;
+                    } else {
+                        Calendar temp = Calendar.getInstance();
+                        temp.setTime(date);
+
+                        if (temp.before(minCal)) minCal.setTime(date);
+                        if (temp.after(maxCal)) maxCal.setTime(date);
+                    }
+
+                } catch (Exception ignore) { }
+            }
 
             int windowDays = (int) (7 * weeksThreshold);
+
+            long diffMillis = maxCal.getTimeInMillis() - minCal.getTimeInMillis();
+            long totalSpanDays = diffMillis / (24 * 60 * 60 * 1000) + 1;
+
+            if (totalSpanDays < windowDays) {
+                setBuddingStarLocked(weeksThreshold);
+                return;
+            }
+
             boolean unlocked = false;
 
-            if (docs.size() >= windowDays) {
-                for (int start = 0; start + windowDays - 1 < docs.size(); start++) {
+            Calendar start = (Calendar) minCal.clone();
+            Calendar endLimit = (Calendar) maxCal.clone();
+            endLimit.add(Calendar.DAY_OF_YEAR, -(windowDays - 1));
 
-                    boolean allTaken = true;
+            while (!start.after(endLimit)) {
 
-                    for (int i = 0; i < windowDays; i++) {
-                        DocumentSnapshot d = docs.get(start + i);
-                        Boolean taken = d.getBoolean("taken");
-                        if (taken == null || !taken) {
+                Calendar end = (Calendar) start.clone();
+                end.add(Calendar.DAY_OF_YEAR, windowDays - 1);
+
+                boolean allTaken = true;
+                boolean hasDoc = false;
+
+                for (Map.Entry<String, Boolean> entry : takenMap.entrySet()) {
+                    Date d;
+                    try {
+                        d = sdf.parse(entry.getKey());
+                    } catch (Exception e) {
+                        continue;
+                    }
+
+                    if (d == null) continue;
+
+                    if (!d.before(start.getTime()) && !d.after(end.getTime())) {
+                        hasDoc = true;
+                        if (!entry.getValue()) {
                             allTaken = false;
                             break;
                         }
                     }
-
-                    if (allTaken) {
-                        unlocked = true;
-                        break;
-                    }
                 }
-            }
 
+                if (hasDoc && allTaken) {
+                    unlocked = true;
+                    break;
+                }
+
+                start.add(Calendar.DAY_OF_YEAR, 1);
+            }
 
             updateBadgeCompletion("budding_star", unlocked);
 
@@ -256,19 +316,29 @@ public class AchievementActivity extends AppCompatActivity {
                         getString(R.string.budding_star_unlocked, weeksThreshold)
                 );
             } else {
-                imgBuddingStar.clearAnimation();
-                imgBuddingStar.setImageResource(R.drawable.budding_star_empty);
-                txtBuddingStarDesc.setText(
-                        getString(R.string.budding_star_locked, weeksThreshold)
-                );
+                setBuddingStarLocked(weeksThreshold);
             }
 
-        }).addOnFailureListener(e -> {
-            imgBuddingStar.clearAnimation();
-            imgBuddingStar.setImageResource(R.drawable.budding_star_empty);
-            txtBuddingStarDesc.setText(getString(R.string.budding_star_load_error));
-        });
+        }).addOnFailureListener(e -> setBuddingStarLoadError());
     }
+
+
+    private void setBuddingStarLocked(long weeksThreshold) {
+        imgBuddingStar.clearAnimation();
+        imgBuddingStar.setImageResource(R.drawable.budding_star_empty);
+        txtBuddingStarDesc.setText(
+                getString(R.string.budding_star_locked, weeksThreshold)
+        );
+    }
+
+    private void setBuddingStarLoadError() {
+        imgBuddingStar.clearAnimation();
+        imgBuddingStar.setImageResource(R.drawable.budding_star_empty);
+        txtBuddingStarDesc.setText(getString(R.string.budding_star_load_error));
+    }
+
+
+
 
 
     private void setupShiningStarBadge(long sessionsThreshold) {

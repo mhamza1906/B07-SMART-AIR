@@ -32,6 +32,7 @@ import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -42,16 +43,16 @@ public class HistoryBrowserActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private String childId;
 
-    // Main UI
+
     private Button btnShowCheckinHistory, btnShowPefHistory;
     private CardView cardCheckinHistory, cardPefHistory;
 
-    // PEF History
+
     private RecyclerView recyclerPefHistory;
     private PefHistoryAdapter pefHistoryAdapter;
     private List<PefHistoryItem> pefHistoryList;
 
-    // Check-in History
+
     private RecyclerView recyclerCheckinHistory;
     private DailyCheckinHistoryAdapter checkinHistoryAdapter;
     private List<DailyCheckinHistoryItem> checkinHistoryList;
@@ -59,7 +60,7 @@ public class HistoryBrowserActivity extends AppCompatActivity {
     private LinearLayout containerSymptomFilters, containerTriggerFilters, containerDateRangeFilter;
     private Button btnStartDate, btnEndDate;
     private Calendar startDate, endDate;
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -82,18 +83,16 @@ public class HistoryBrowserActivity extends AppCompatActivity {
     }
 
     private void bindViews() {
-        // Main toggle buttons
+
         btnShowCheckinHistory = findViewById(R.id.btn_show_checkin_history);
         btnShowPefHistory = findViewById(R.id.btn_show_pef_history);
 
-        // History section cards
+
         cardCheckinHistory = findViewById(R.id.card_checkin_history);
         cardPefHistory = findViewById(R.id.card_pef_history);
 
-        // PEF History
         recyclerPefHistory = findViewById(R.id.recycler_pef_history);
 
-        // Check-in History
         recyclerCheckinHistory = findViewById(R.id.recycler_checkin_history);
         btnToggleSymptoms = findViewById(R.id.btn_toggle_symptoms_filter);
         btnToggleTriggers = findViewById(R.id.btn_toggle_triggers_filter);
@@ -135,16 +134,14 @@ public class HistoryBrowserActivity extends AppCompatActivity {
             loadCheckinHistory(false); //Initial load without filters
         });
 
-        //Filter toggles
+
         setupFilterToggleListener(btnToggleSymptoms, containerSymptomFilters, containerTriggerFilters, containerDateRangeFilter);
         setupFilterToggleListener(btnToggleTriggers, containerTriggerFilters, containerSymptomFilters, containerDateRangeFilter);
         setupFilterToggleListener(btnToggleDate, containerDateRangeFilter, containerSymptomFilters, containerTriggerFilters);
 
-        //Date pickers
         btnStartDate.setOnClickListener(v -> showDatePickerDialog(true));
         btnEndDate.setOnClickListener(v -> showDatePickerDialog(false));
 
-        //Action buttons
         btnApplyFilters.setOnClickListener(v -> {
             loadCheckinHistory(true);
             containerSymptomFilters.setVisibility(View.GONE);
@@ -203,12 +200,11 @@ public class HistoryBrowserActivity extends AppCompatActivity {
     }
 
     private void clearFilters() {
-        // Clear symptom checkboxes
+
         ((CheckBox) findViewById(R.id.check_symptom_night_waking)).setChecked(false);
         ((CheckBox) findViewById(R.id.check_symptom_cough_wheeze)).setChecked(false);
         ((CheckBox) findViewById(R.id.check_symptom_activity_limit)).setChecked(false);
 
-        // Clear trigger checkboxes
         ((CheckBox) findViewById(R.id.check_trigger_dust)).setChecked(false);
         ((CheckBox) findViewById(R.id.check_trigger_pets)).setChecked(false);
         ((CheckBox) findViewById(R.id.check_trigger_smoke)).setChecked(false);
@@ -308,7 +304,6 @@ public class HistoryBrowserActivity extends AppCompatActivity {
             }
         }
         else {
-            // --- Default Query Logic ---
             query = query.orderBy(FieldPath.documentId(), Query.Direction.DESCENDING).limit(50);
         }
 
@@ -419,7 +414,7 @@ public class HistoryBrowserActivity extends AppCompatActivity {
 
     private boolean checkTriggersMatch(DocumentSnapshot doc, List<String> selected) {
         List<String> docTriggers = getStringList(doc, "Triggers");
-        return docTriggers.containsAll(selected);
+        return new HashSet<>(docTriggers).containsAll(selected);
     }
 
     private List<String> getStringList(DocumentSnapshot doc, String key) {

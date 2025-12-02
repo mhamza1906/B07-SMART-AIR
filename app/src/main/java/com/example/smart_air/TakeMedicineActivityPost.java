@@ -245,7 +245,7 @@ public class TakeMedicineActivityPost extends AppCompatActivity {
 
         DocumentReference todayPlanRef = db.collection("planned-schedule")
                 .document(childID)
-                .collection("schedules")
+                .collection("Schedules")
                 .document(date);
 
         todayPlanRef.get().addOnSuccessListener(todaySnap -> {
@@ -270,7 +270,7 @@ public class TakeMedicineActivityPost extends AppCompatActivity {
 
             db.collection("planned-schedule")
                     .document(childID)
-                    .collection("schedules")
+                    .collection("Schedules")
                     .get()
                     .addOnSuccessListener(allDatesSnap -> {
 
@@ -293,7 +293,7 @@ public class TakeMedicineActivityPost extends AppCompatActivity {
                         DocumentReference prevRef =
                                 db.collection("planned-schedule")
                                         .document(childID)
-                                        .collection("schedules")
+                                        .collection("Schedules")
                                         .document(prevDate);
 
                         prevRef.get().addOnSuccessListener(prevSnap -> {
