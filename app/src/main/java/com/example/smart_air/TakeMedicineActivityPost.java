@@ -179,8 +179,11 @@ public class TakeMedicineActivityPost extends AppCompatActivity {
         inventoryRef.get().addOnSuccessListener(snapshot -> {
             if (snapshot.exists() && snapshot.getData() != null){
                 Map<String, Object> data = snapshot.getData();
-                
-                data.put("amountLeft", doseNum);
+                Map<String, Object> medData = (Map<String, Object>) data.get(medType.toLowerCase());
+                int amountLeft = (int) medData.get("amountLeft");
+                medData.put("amountLeft", amountLeft - doseNum);
+                data.put(medType.toLowerCase(), medData);
+                inventoryRef.set(data, SetOptions.merge());
             }
 
 
