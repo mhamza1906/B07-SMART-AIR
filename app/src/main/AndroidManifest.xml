@@ -49,6 +49,9 @@
             android:name=".ChildScheduleActivity"
             android:exported="false" />
         <activity
+            android:name=".ParentScheduleActivity"
+            android:exported="false" />
+        <activity
             android:name=".ChildSignOutActivity"
             android:exported="false" />
         <activity

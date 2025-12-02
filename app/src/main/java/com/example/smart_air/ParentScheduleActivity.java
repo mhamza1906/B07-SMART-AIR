@@ -3,6 +3,7 @@ package com.example.smart_air;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,8 +19,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -39,6 +43,7 @@ public class ParentScheduleActivity extends AppCompatActivity implements DatePic
     Calendar calendar;
     Spinner childSpinner;
     String selectedChildID;
+    String parentID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +51,26 @@ public class ParentScheduleActivity extends AppCompatActivity implements DatePic
         setContentView(R.layout.activity_parent_schedule);
 
         calendar = Calendar.getInstance();
-        String parentID = getIntent().getStringExtra("parentID");
 
         firestore = FirebaseFirestore.getInstance();
+
+        String childID = getIntent().getStringExtra("childID");
+        DatabaseReference childUserRef = FirebaseDatabase.getInstance().getReference("users").child(childID);
+
+        childUserRef.child("parentID").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    setParentID(snapshot.getValue(String.class));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("ParentScheduleActivity","Database error when finding ParentID: "+error.getMessage());
+            }
+        });
+
         childSpinner = (Spinner) findViewById(R.id.childspinner);
         CollectionReference childCollection = firestore.collection("parent-child").document(parentID).collection("child");
 
@@ -152,5 +174,9 @@ public class ParentScheduleActivity extends AppCompatActivity implements DatePic
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    public void setParentID(String chosenID) {
+        parentID = chosenID;
     }
 }
