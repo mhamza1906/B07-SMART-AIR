@@ -198,7 +198,7 @@
     <string name="trigger_dust">"Dust"</string>
     <string name="trigger_pets">"Pets"</string>
     <string name="trigger_smoke">"Smoke"</string>
-    <string name="trigger_odors">"Strong odors / perfumes"</string>
+    <string name="trigger_odors">"Strong odor"</string>
     <string name="trigger_cold_air">"Cold air"</string>
     <string name="trigger_illness">"Illness"</string>
     <string name="trigger_exercise">"Exercise"</string>
@@ -274,6 +274,10 @@
     <string name="confirm_btn">"CONFIRM"</string>
     <string name="na">"N/A"</string>
     <string name="not_applicable">%1$s (N/A)</string>
+    <string name="dailycheckin_NW">"Experienced Night Waking"</string>
+    <string name="dailycheckin_CW">"Experienced Coughing/Wheezing"</string>
+    <string name="dailycheckin_AL">"Activity levels were limited"</string>
+
 
 
 </resources>

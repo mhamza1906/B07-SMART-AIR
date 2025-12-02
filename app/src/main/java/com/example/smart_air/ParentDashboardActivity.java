@@ -90,7 +90,7 @@ public class ParentDashboardActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
         setupRecyclerView();
-        fetchChildData(parentId);
+
 
 
         loadParentInfoFromDatabase();

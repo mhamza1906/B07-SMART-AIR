@@ -46,6 +46,7 @@ dependencies {
     implementation(libs.recyclerview)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+    implementation("androidx.gridlayout:gridlayout:1.0.0") // Added this line
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -67,5 +68,8 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:5.0.5")
     //noinspection UseTomlInstead
     annotationProcessor("com.github.bumptech.glide:compiler:5.0.5")
+
+    // iText7 for PDF Generation
+    implementation ("com.itextpdf:itext7-core:7.1.16")
     
 }
