@@ -174,7 +174,7 @@ public class TakeMedicineActivityPost extends AppCompatActivity {
             updateStreaks(childID, medType, date);
             updateRescueRolling30Days(childID, date);
             updateWeeklyRescueUsage(childID, date);
-            updateInventoryLog(childID, medType, doseNum);
+            updateInventoryLog(childID, medType, doseNum, date, postCheck);
 
             if (medType.equalsIgnoreCase("rescue")) {
                 updateLastRescueUse(childID);
@@ -184,7 +184,7 @@ public class TakeMedicineActivityPost extends AppCompatActivity {
     }
     
 
-    private void updateInventoryLog(String childID, String medType, int doseNum) {
+    private void updateInventoryLog(String childID, String medType, int doseNum, String date, String postCheck) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference inventoryRef = db.collection("inventory").document(childID);
 
@@ -197,17 +197,30 @@ public class TakeMedicineActivityPost extends AppCompatActivity {
                     Map<String, Object> medData = (Map<String, Object>) medDataObject;
 
                     Object amountObj = medData.get("amountLeft");
+
+                    if(postCheck != null && !postCheck.isEmpty()){
+                        if(postCheck.equalsIgnoreCase("worse")){
+                            createParentAlert(childID, "WorsePostcheck", "Child is not ok after taking medication");
+                        }
+                    }
+
                     String new_date = (String) medData.get("expiry");
 
-//                    DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-M-d");
-//
-//                    LocalDate d1 = LocalDate.parse(date, fmt);
-//                    LocalDate d2 = LocalDate.parse(new_date, fmt);
-//
-//                    // Check if date has passed new_date:
-//                    if (d1.isAfter(d2)) {
-//                        System.out.println("date has passed new_date");
-//                    }
+                    // Only perform date comparison if the expiry date exists.
+                    if (new_date != null && !new_date.isEmpty() && date != null && !date.isEmpty()) {
+                        try {
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                            Date d1 = sdf.parse(date);
+                            Date d2 = sdf.parse(new_date);
+
+                            if (d1.after(d2)) {
+                                System.out.println("date has passed new_date");
+                                createParentAlert(childID, "MedicationExpired", "The medication " + medType + " has expired.");
+                            }
+                        } catch (java.text.ParseException e) {
+                            Toast.makeText(this, "Could not parse expiry date.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
 
                     if (amountObj instanceof Number) {
                         long amountLeft = ((Number) amountObj).longValue();
