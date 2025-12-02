@@ -208,7 +208,7 @@ public class ChildDashboardActivity extends AppCompatActivity {
                 .collection("log")
                 .document(today);
 
-        // Assign the listener to the variable, and remove 'this' from the call
+
         zoneListener = todayRef.addSnapshotListener((snapshot, e) -> {
             if (e != null) return;
 
@@ -271,7 +271,7 @@ public class ChildDashboardActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         if (zoneListener != null) {
-            zoneListener.remove(); // Stop listening when the activity is no longer visible
+            zoneListener.remove();
         }
     }
 
