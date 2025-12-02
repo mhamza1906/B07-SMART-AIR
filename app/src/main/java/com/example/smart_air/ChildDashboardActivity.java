@@ -27,6 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+
 public class ChildDashboardActivity extends AppCompatActivity {
 
     private View zoneColorView;
@@ -38,6 +39,8 @@ public class ChildDashboardActivity extends AppCompatActivity {
     String childlName;
     String childUsername;
     String childDOB;
+
+    private com.google.firebase.firestore.ListenerRegistration zoneListener;
 
     private FirebaseFirestore db;
 
@@ -71,13 +74,6 @@ public class ChildDashboardActivity extends AppCompatActivity {
         setButtonListeners();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        loadParentInfoFromDatabase();
-        listenForTodayZone(childId);
-    }
 
     private void loadParentInfoFromDatabase() {
         FirebaseDatabase.getInstance().getReference("users")
@@ -212,7 +208,8 @@ public class ChildDashboardActivity extends AppCompatActivity {
                 .collection("log")
                 .document(today);
 
-        todayRef.addSnapshotListener(this, (snapshot, e) -> {
+
+        zoneListener = todayRef.addSnapshotListener((snapshot, e) -> {
             if (e != null) return;
 
             if (snapshot != null && snapshot.exists()) {
@@ -260,6 +257,22 @@ public class ChildDashboardActivity extends AppCompatActivity {
                 percentView.setText(R.string.dashboard_zone_percent_null);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        loadParentInfoFromDatabase();
+        listenForTodayZone(childId);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (zoneListener != null) {
+            zoneListener.remove();
+        }
     }
 
 }
