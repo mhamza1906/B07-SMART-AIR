@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="History Browser"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="24dp"/>
+
+        <!-- Main Toggle Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <Button
+                android:id="@+id/btn_show_checkin_history"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:text="Check-in History"/>
+
+            <Button
+                android:id="@+id/btn_show_pef_history"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:text="PEF History"/>
+        </LinearLayout>
+
+        <!-- Daily Check-in History Section (Initially Hidden) -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_checkin_history"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="8dp"
+            android:layout_marginBottom="24dp"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Daily Check-in History"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="16dp"/>
+
+                <!-- Filter Button Group -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <Button
+                        android:id="@+id/btn_toggle_symptoms_filter"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:text="Symptoms"/>
+                    <Button
+                        android:id="@+id/btn_toggle_triggers_filter"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:text="Triggers"/>
+                    <Button
+                        android:id="@+id/btn_toggle_date_filter"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:text="Date"/>
+                </LinearLayout>
+
+                <!-- Symptom Checkboxes (Initially hidden) -->
+                <LinearLayout
+                    android:id="@+id/container_symptom_filters"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    android:layout_marginTop="8dp">
+                    <CheckBox android:id="@+id/check_symptom_night_waking" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Night Waking"/>
+                    <CheckBox android:id="@+id/check_symptom_cough_wheeze" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Cough/Wheeze"/>
+                    <CheckBox android:id="@+id/check_symptom_activity_limit" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Activity Limit"/>
+                </LinearLayout>
+
+                <!-- Trigger Checkboxes (Initially hidden) -->
+                <LinearLayout
+                    android:id="@+id/container_trigger_filters"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    android:layout_marginTop="8dp">
+                    <CheckBox android:id="@+id/check_trigger_dust" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Dust"/>
+                    <CheckBox android:id="@+id/check_trigger_pets" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Pets"/>
+                    <CheckBox android:id="@+id/check_trigger_smoke" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Smoke"/>
+                    <CheckBox android:id="@+id/check_trigger_odors" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Strong odor"/>
+                    <CheckBox android:id="@+id/check_trigger_cold_air" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Cold air"/>
+                    <CheckBox android:id="@+id/check_trigger_illness" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Illness"/>
+                    <CheckBox android:id="@+id/check_trigger_exercise" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Exercise"/>
+                </LinearLayout>
+
+                <!-- Date Range Picker (Initially hidden) -->
+                <LinearLayout
+                    android:id="@+id/container_date_range_filter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center_vertical"
+                    android:visibility="gone">
+                    <Button
+                        android:id="@+id/btn_start_date"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Start Date"/>
+                    <TextView
+                        android:id="@+id/text_date_range_separator"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" - "/>
+                    <Button
+                        android:id="@+id/btn_end_date"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="End Date"/>
+                </LinearLayout>
+
+                <!-- Action Buttons -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="end"
+                    android:layout_marginTop="8dp">
+
+                    <Button
+                        android:id="@+id/btn_clear_filters"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Clear"/>
+
+                    <Button
+                        android:id="@+id/btn_apply_filters"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:textSize="12sp"
+                        android:text="Apply"/>
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_checkin_history"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"/>
+
+                <Button
+                    android:id="@+id/btn_export_pdf"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="Export as PDF" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- PEF Zone History Section (Initially Hidden) -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_pef_history"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="8dp"
+            android:layout_marginBottom="24dp"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:text="PEF Zone Change History"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_pef_history"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+</ScrollView>

@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -23,22 +24,22 @@ public class ChildDashboardActivity extends AppCompatActivity {
     private String childId;
 
     private TextView percentview;
-
     private TextView zoneTextView;
 
     private FirebaseFirestore db;
+    private ListenerRegistration zoneListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.child_dashboard);
 
-        childId = getIntent().getStringExtra("childID");
+        childId = "sampleUserID12345";
 
-
-        if(childId == null) {
+        if(childId == null || childId.isEmpty()) {
             Toast.makeText(this,"User ID not found",Toast.LENGTH_SHORT).show();
             finish();
+            return;
         }
 
         db = FirebaseFirestore.getInstance();
@@ -46,80 +47,78 @@ public class ChildDashboardActivity extends AppCompatActivity {
         percentview = findViewById(R.id.dashboard_zone_percentage);
         zoneTextView = findViewById(R.id.dashboard_zone_text);
 
-        listenForTodayZone(childId);
+        setupButtons();
+    }
 
-        Button takeMedButton = (Button)findViewById(R.id.takemedbutton);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        listenForTodayZone(childId);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (zoneListener != null) {
+            zoneListener.remove();
+        }
+    }
+
+    private void setupButtons() {
+        Button takeMedButton = findViewById(R.id.takemedbutton);
         takeMedButton.setOnClickListener(v -> {
             Intent childTakeMed = new Intent(ChildDashboardActivity.this, TakeMedicineActivity.class);
             childTakeMed.putExtra("childID",childId);
             startActivity(childTakeMed);
         });
 
-        Button triageButton = (Button)findViewById(R.id.triagebutton);
+        Button triageButton = findViewById(R.id.triagebutton);
         triageButton.setOnClickListener(v -> {
             Intent childTriage = new Intent(ChildDashboardActivity.this, TriageActivity.class);
             childTriage.putExtra("childID",childId);
             startActivity(childTriage);
         });
 
-        Button streakButton = (Button)findViewById(R.id.streakbutton);
-        streakButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent childStreak = new Intent(ChildDashboardActivity.this, AchievementActivity.class);
-                childStreak.putExtra("childID",childId);
-                startActivity(childStreak);
-            }
+        Button streakButton = findViewById(R.id.streakbutton);
+        streakButton.setOnClickListener(v -> {
+            Intent childStreak = new Intent(ChildDashboardActivity.this, AchievementActivity.class);
+            childStreak.putExtra("childID",childId);
+            startActivity(childStreak);
         });
 
-        Button medlogButton = (Button)findViewById(R.id.medicinelogbutton);
-        medlogButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent medlog = new Intent(ChildDashboardActivity.this, MedlogActivity.class);
-                medlog.putExtra("childID",childId);
-                startActivity(medlog);
-            }
+        Button medlogButton = findViewById(R.id.medicinelogbutton);
+        medlogButton.setOnClickListener(v -> {
+            Intent medlog = new Intent(ChildDashboardActivity.this, MedlogActivity.class);
+            medlog.putExtra("childID",childId);
+            startActivity(medlog);
         });
 
-        Button checkInButton = (Button)findViewById(R.id.checkinbutton);
-        checkInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent childCheckIn = new Intent(ChildDashboardActivity.this, DailyCheckInActivity.class);
-                childCheckIn.putExtra("childID",childId);
-                startActivity(childCheckIn);
-            }
+        Button checkInButton = findViewById(R.id.checkinbutton);
+        checkInButton.setOnClickListener(v -> {
+            Intent childCheckIn = new Intent(ChildDashboardActivity.this, DailyCheckInActivity.class);
+            childCheckIn.putExtra("childID",childId);
+            startActivity(childCheckIn);
         });
 
-        Button childScheduleButton = (Button)findViewById(R.id.childschedulebutton);
-        childScheduleButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent childSchedule = new Intent(ChildDashboardActivity.this, ChildScheduleActivity.class);
-                childSchedule.putExtra("childID",childId);
-                startActivity(childSchedule);
-            }
+        Button childScheduleButton = findViewById(R.id.childschedulebutton);
+        childScheduleButton.setOnClickListener(v -> {
+            Intent childSchedule = new Intent(ChildDashboardActivity.this, ChildScheduleActivity.class);
+            childSchedule.putExtra("childID",childId);
+            startActivity(childSchedule);
         });
 
-        Button pefButton = (Button)findViewById(R.id.pefbutton);
-        pefButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent childPEF = new Intent(ChildDashboardActivity.this, InputPEFActivity.class);
-                childPEF.putExtra("childID",childId);
-                startActivity(childPEF);
-            }
+        Button pefButton = findViewById(R.id.pefbutton);
+        pefButton.setOnClickListener(v -> {
+            Intent childPEF = new Intent(ChildDashboardActivity.this, InputPEFActivity.class);
+            childPEF.putExtra("childID",childId);
+            startActivity(childPEF);
         });
 
-        Button childSignOutButton = (Button)findViewById(R.id.childsignoutbutton);
-        childSignOutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent childSignOut = new Intent(ChildDashboardActivity.this, ChildSignOutActivity.class);
-                childSignOut.putExtra("childID",childId);
-                startActivity(childSignOut);
-            }
+        Button childSignOutButton = findViewById(R.id.childsignoutbutton);
+        childSignOutButton.setOnClickListener(v -> {
+            Intent childSignOut = new Intent(ChildDashboardActivity.this, ChildSignOutActivity.class);
+            childSignOut.putExtra("childID",childId);
+            startActivity(childSignOut);
         });
     }
 
@@ -127,7 +126,7 @@ public class ChildDashboardActivity extends AppCompatActivity {
         String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         final DocumentReference todayRef = db.collection("PEF").document(userID).collection("log").document(today);
 
-        todayRef.addSnapshotListener(this, (snapshot, e) -> {
+        zoneListener = todayRef.addSnapshotListener(this, (snapshot, e) -> {
             if (e != null) {
                 Toast.makeText(ChildDashboardActivity.this, "Failed to load today's zone", Toast.LENGTH_SHORT).show();
                 return;
@@ -171,4 +170,3 @@ public class ChildDashboardActivity extends AppCompatActivity {
         });
     }
 }
-

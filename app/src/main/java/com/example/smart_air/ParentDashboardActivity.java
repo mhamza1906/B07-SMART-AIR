@@ -72,7 +72,7 @@ public class ParentDashboardActivity extends AppCompatActivity {
 
 
         txtAvatar = findViewById(R.id.txtUserAvatar);
-        parentId = getIntent().getStringExtra("parentID");
+        parentId = "nyskpCwZVRPd5Xab3kUdD0nQAzV2";
         if (parentId == null) {
             Toast.makeText(this, "User ID missing.", Toast.LENGTH_SHORT).show();
             finish();
@@ -89,7 +89,6 @@ public class ParentDashboardActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
         setupRecyclerView();
-        fetchChildData(parentId);
 
 
         loadParentInfoFromDatabase();
@@ -111,6 +110,12 @@ public class ParentDashboardActivity extends AppCompatActivity {
 
         findViewById(R.id.tabMyChildren).performClick();
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fetchChildData(parentId);
     }
 
     private void setupRecyclerView() {
@@ -162,14 +167,14 @@ public class ParentDashboardActivity extends AppCompatActivity {
             if (medLogTask.isSuccessful() && medLogTask.getResult() != null && medLogTask.getResult().exists()) {
                 DocumentSnapshot medLogDoc = medLogTask.getResult();
 
-                // Format the last rescue time string for display
+
                 String lastUseTimestamp = medLogDoc.getString("last_rescue_use");
                 if (lastUseTimestamp != null && !lastUseTimestamp.isEmpty()) {
                     String[] parts = lastUseTimestamp.split(" ");
                     if (parts.length >= 2) {
                         String datePart = parts[0];
                         String timePart = parts[1];
-                        // Remove seconds for a cleaner look
+
                         if (timePart.lastIndexOf(':') > 0) {
                             timePart = timePart.substring(0, timePart.lastIndexOf(':'));
                         }

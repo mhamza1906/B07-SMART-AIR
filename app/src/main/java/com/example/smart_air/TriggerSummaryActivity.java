@@ -55,6 +55,10 @@ public class TriggerSummaryActivity extends AppCompatActivity {
         txtEmpty = findViewById(R.id.txt_trigger_empty);
         progressBar = findViewById(R.id.trigger_progress_bar);
         chkShare = findViewById(R.id.chk_share_chart);
+        boolean providerMode = getIntent().getBooleanExtra("providerMode", false);
+        if (providerMode) {
+            chkShare.setVisibility(View.GONE);
+        }
 
 
         loadShareState();
@@ -180,9 +184,7 @@ public class TriggerSummaryActivity extends AppCompatActivity {
         Map<String, Integer> triggerCounts = new HashMap<>();
 
         for (DocumentSnapshot doc : docs) {
-            addTriggerCounts(triggerCounts, getStringList(doc, "NWTrigger"));
-            addTriggerCounts(triggerCounts, getStringList(doc, "CWTrigger"));
-            addTriggerCounts(triggerCounts, getStringList(doc, "ALTrigger"));
+            addTriggerCounts(triggerCounts, getStringList(doc, "Triggers"));
         }
 
         if (triggerCounts.isEmpty()) {

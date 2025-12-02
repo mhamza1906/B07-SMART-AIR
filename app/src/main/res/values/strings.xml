@@ -192,7 +192,7 @@
     <string name="trigger_dust">"Dust"</string>
     <string name="trigger_pets">"Pets"</string>
     <string name="trigger_smoke">"Smoke"</string>
-    <string name="trigger_odors">"Strong odors / perfumes"</string>
+    <string name="trigger_odors">"Strong odor"</string>
     <string name="trigger_cold_air">"Cold air"</string>
     <string name="trigger_illness">"Illness"</string>
     <string name="trigger_exercise">"Exercise"</string>
@@ -256,6 +256,7 @@
     • Emergency events appear at the top in dark red.\n
     • You can zoom or drag to explore the timeline.
     </string>
+
 
 
 </resources>

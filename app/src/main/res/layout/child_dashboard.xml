@@ -1,34 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- Guideline to push entire layout downward -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/top_padding"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="55dp" />
+
+    <!-- HOME TITLE -->
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
         android:text="Home"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/top_padding"/>
 
-    <!-- This is the new PEF Zone display box -->
+    <!-- Streak Button -->
+    <Button
+        android:id="@+id/streakbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:text="Daily Streak"
+        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/top_padding" />
+
+    <!-- PEF Zone Display -->
     <FrameLayout
         android:id="@+id/PEFZone"
         android:layout_width="200dp"
         android:layout_height="217dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="40dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" >
+        app:layout_constraintTop_toBottomOf="@+id/textView">
 
         <View
             android:id="@+id/dashboard_zone_color"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#CCCCCC"/> <!-- Default gray background -->
+            android:background="#CCCCCC" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -43,7 +62,7 @@
                 android:text="Today's Zone"
                 android:textColor="@color/black"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/dashboard_zone_percentage"
@@ -51,22 +70,22 @@
                 android:layout_height="wrap_content"
                 android:text="--%"
                 android:textColor="@color/black"
-                android:textSize="20sp" />
-
+                android:textSize="20sp"/>
         </LinearLayout>
     </FrameLayout>
 
+    <!-- Take Medicine Button -->
     <Button
         android:id="@+id/takemedbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
         android:text="Take Medicine"
         app:layout_constraintEnd_toStartOf="@+id/PEFZone"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        android:layout_marginTop="40dp"/>
 
-    <!-- This is the new Medicine Log button -->
+    <!-- Medicine Log Button -->
     <Button
         android:id="@+id/medicinelogbutton"
         android:layout_width="0dp"
@@ -76,6 +95,7 @@
         app:layout_constraintStart_toStartOf="@+id/takemedbutton"
         app:layout_constraintEnd_toEndOf="@+id/takemedbutton" />
 
+    <!-- Enter PEF Button -->
     <Button
         android:id="@+id/pefbutton"
         android:layout_width="0dp"
@@ -85,6 +105,7 @@
         app:layout_constraintStart_toStartOf="@+id/medicinelogbutton"
         app:layout_constraintEnd_toEndOf="@+id/medicinelogbutton" />
 
+    <!-- Daily Check-in Button -->
     <Button
         android:id="@+id/checkinbutton"
         android:layout_width="0dp"
@@ -94,6 +115,7 @@
         app:layout_constraintStart_toStartOf="@+id/pefbutton"
         app:layout_constraintEnd_toEndOf="@+id/pefbutton" />
 
+    <!-- Planned Schedule Button -->
     <Button
         android:id="@+id/childschedulebutton"
         android:layout_width="0dp"
@@ -103,36 +125,25 @@
         app:layout_constraintStart_toStartOf="@+id/checkinbutton"
         app:layout_constraintEnd_toEndOf="@+id/checkinbutton" />
 
+    <!-- Emergency Triage Button -->
     <Button
         android:id="@+id/triagebutton"
         android:layout_width="184dp"
         android:layout_height="62dp"
-        android:layout_marginTop="360dp"
         android:text="Emergency Triage Mode"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
+        android:layout_marginTop="60dp"
+        app:layout_constraintTop_toBottomOf="@+id/childschedulebutton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-    <Button
-        android:id="@+id/streakbutton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="16dp"
-        android:text="Daily Streak"
-        app:layout_constraintBottom_toTopOf="@+id/PEFZone"
-        app:layout_constraintStart_toEndOf="@+id/textView"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
-
+    <!-- Sign Out Button -->
     <Button
         android:id="@+id/childsignoutbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Sign Out"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:text="Sign Out"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
