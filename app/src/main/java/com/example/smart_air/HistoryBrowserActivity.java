@@ -2,6 +2,7 @@ package com.example.smart_air;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -20,7 +21,14 @@ import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -47,7 +55,7 @@ public class HistoryBrowserActivity extends AppCompatActivity {
     private RecyclerView recyclerCheckinHistory;
     private DailyCheckinHistoryAdapter checkinHistoryAdapter;
     private List<DailyCheckinHistoryItem> checkinHistoryList;
-    private Button btnToggleSymptoms, btnToggleTriggers, btnToggleDate, btnApplyFilters, btnClearFilters;
+    private Button btnToggleSymptoms, btnToggleTriggers, btnToggleDate, btnApplyFilters, btnClearFilters, btnExportPdf;
     private LinearLayout containerSymptomFilters, containerTriggerFilters, containerDateRangeFilter;
     private Button btnStartDate, btnEndDate;
     private Calendar startDate, endDate;
@@ -92,6 +100,7 @@ public class HistoryBrowserActivity extends AppCompatActivity {
         btnToggleDate = findViewById(R.id.btn_toggle_date_filter);
         btnApplyFilters = findViewById(R.id.btn_apply_filters);
         btnClearFilters = findViewById(R.id.btn_clear_filters);
+        btnExportPdf = findViewById(R.id.btn_export_pdf);
         containerSymptomFilters = findViewById(R.id.container_symptom_filters);
         containerTriggerFilters = findViewById(R.id.container_trigger_filters);
         containerDateRangeFilter = findViewById(R.id.container_date_range_filter);
@@ -146,6 +155,52 @@ public class HistoryBrowserActivity extends AppCompatActivity {
             clearFilters();
             loadCheckinHistory(false);
         });
+        btnExportPdf.setOnClickListener(v -> exportCheckinHistoryToPdf());
+    }
+
+    private void exportCheckinHistoryToPdf() {
+        if (checkinHistoryList == null || checkinHistoryList.isEmpty()) {
+            Toast.makeText(this, "No history data to export.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        try {
+            // Create file
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Calendar.getInstance().getTime());
+            String fileName = "Check-in-History-" + timeStamp + ".pdf";
+            File downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+            File file = new File(downloadsDir, fileName);
+
+            // Setup iText
+            PdfWriter writer = new PdfWriter(file);
+            PdfDocument pdf = new PdfDocument(writer);
+            Document document = new Document(pdf);
+
+            // Add content
+            document.add(new Paragraph("Daily Check-in History").setBold().setFontSize(18));
+
+            Table table = new Table(4);
+            table.addHeaderCell("Date");
+            table.addHeaderCell("Author");
+            table.addHeaderCell("Symptoms");
+            table.addHeaderCell("Triggers");
+
+            for (DailyCheckinHistoryItem item : checkinHistoryList) {
+                table.addCell(item.getDate());
+                table.addCell(item.getAuthor());
+                table.addCell(String.join(", ", item.getSymptoms()));
+                table.addCell(String.join(", ", item.getTriggers()));
+            }
+
+            document.add(table);
+            document.close();
+
+            Toast.makeText(this, "PDF saved to Downloads folder: " + fileName, Toast.LENGTH_LONG).show();
+
+        } catch (FileNotFoundException e) {
+            Log.e(TAG, "Error creating PDF", e);
+            Toast.makeText(this, "Failed to create PDF. Check permissions and storage.", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void clearFilters() {
