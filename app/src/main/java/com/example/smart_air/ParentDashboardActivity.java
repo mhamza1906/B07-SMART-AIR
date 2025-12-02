@@ -128,15 +128,16 @@ public class ParentDashboardActivity extends AppCompatActivity {
         super.onResume();
         fetchChildData(parentId);
         loadChildrenForSelector();
+        checkForMissedAlerts(parentId);
     }
 
 
     private void checkForMissedAlerts(String parentId) {
         db.collection("parent_alerts")
                 .whereEqualTo("parentID", parentId)
-                .whereEqualTo("isRead", false)
-                .orderBy("timestamp", Query.Direction.DESCENDING)
-                .get()
+                .whereEqualTo("isRead", false) // Look for alerts we haven't seen yet
+//                .orderBy("timestamp", Query.Direction.DESCENDING) // Get the most recent one first
+                .get() // Use .get() for a one-time fetch
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     if (!queryDocumentSnapshots.isEmpty()) {
 
