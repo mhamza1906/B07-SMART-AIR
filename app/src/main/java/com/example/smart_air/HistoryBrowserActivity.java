@@ -58,7 +58,7 @@ public class HistoryBrowserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history_browser);
 
-        childId = "G33RNGaBTnTxCYDkhnlwTb2r3RE2";
+        childId = getIntent().getStringExtra("childID");
         if (childId == null || childId.isEmpty()) {
             Toast.makeText(this, "Child ID missing.", Toast.LENGTH_SHORT).show();
             finish();

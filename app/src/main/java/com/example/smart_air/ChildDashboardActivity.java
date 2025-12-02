@@ -34,7 +34,7 @@ public class ChildDashboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.child_dashboard);
 
-        childId = "sampleUserID12345";
+        childId = getIntent().getStringExtra("childID");
 
         if(childId == null || childId.isEmpty()) {
             Toast.makeText(this,"User ID not found",Toast.LENGTH_SHORT).show();

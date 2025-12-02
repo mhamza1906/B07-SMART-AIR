@@ -18,7 +18,7 @@
             android:name=".MedlogActivity"
             android:exported="false" /> <!-- Initiate Activity : Login Page -->
         <activity
-            android:name=".ChildDashboardActivity"
+            android:name=".LoginActivityView"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -124,7 +124,7 @@
             android:name=".TriggerSummaryActivity"
             android:exported="true" />
         <activity
-            android:name=".LoginActivityView"
+            android:name=".ChildDashboardActivity"
             android:exported="true" />
         <activity
             android:name=".ShareToProviderActivity"

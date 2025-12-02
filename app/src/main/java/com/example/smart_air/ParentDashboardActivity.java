@@ -72,7 +72,7 @@ public class ParentDashboardActivity extends AppCompatActivity {
 
 
         txtAvatar = findViewById(R.id.txtUserAvatar);
-        parentId = "nyskpCwZVRPd5Xab3kUdD0nQAzV2";
+        parentId = getIntent().getStringExtra("parentID");
         if (parentId == null) {
             Toast.makeText(this, "User ID missing.", Toast.LENGTH_SHORT).show();
             finish();
