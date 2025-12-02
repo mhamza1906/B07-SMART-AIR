@@ -13,6 +13,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -128,8 +129,13 @@
         <activity
             android:name=".ProviderViewChildSummaryActivity"
             android:exported="true" />
+        <activity
+            android:name=".InventoryLogActivity"
+            android:exported="true" />
 
-
+        <activity
+            android:name=".RefillActivity"
+            android:exported="true" />
     </application>
 
 </manifest>
