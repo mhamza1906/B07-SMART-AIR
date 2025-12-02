@@ -207,16 +207,16 @@ public class TriageActivity extends AppCompatActivity {
     private void createParentAlert(String childId, String alertType, String message) {
         DatabaseReference childUserRef = FirebaseDatabase.getInstance().getReference("users").child(childId);
 
-        childUserRef.child("parentId").addListenerForSingleValueEvent(new ValueEventListener() {
+        childUserRef.child("parentID").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                    String parentId = snapshot.getValue(String.class);
+                    String parentID = snapshot.getValue(String.class);
 
-                    if (parentId != null && !parentId.isEmpty()) {
+                    if (parentID != null && !parentID.isEmpty()) {
                         Map<String, Object> alertData = new HashMap<>();
                         alertData.put("childId", childId);
-                        alertData.put("parentId", parentId);
+                        alertData.put("parentID", parentID);
                         alertData.put("alertType", alertType);
                         alertData.put("message", message);
                         alertData.put("timestamp", new Date());
@@ -229,13 +229,13 @@ public class TriageActivity extends AppCompatActivity {
                         Log.e("TriageActivity", "Parent ID field is null or empty for child: " + childId);
                     }
                 } else {
-                    Log.e("TriageActivity", "Could not find parentId for child: " + childId);
+                    Log.e("TriageActivity", "Could not find parentID for child: " + childId);
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("TriageActivity", "Database error when finding parentId: " + error.getMessage());
+                Log.e("TriageActivity", "Database error when finding parentID: " + error.getMessage());
             }
         });
     }

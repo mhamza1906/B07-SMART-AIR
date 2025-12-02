@@ -69,7 +69,7 @@ public class ManageChildActivity extends AppCompatActivity {
 
         } else if (id == R.id.navSchedule) {
             loadPage(R.layout.manage_child_page,
-                    CreateScheduleActivity.class,
+                    ParentScheduleActivity.class,
                     "Press START to create planned controller schedule for this child.");
 
         } else if (id == R.id.navInventory) {
