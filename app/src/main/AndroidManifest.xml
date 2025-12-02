@@ -95,47 +95,39 @@
         <activity
             android:name=".ConfigurePEFSettingsActivity"
             android:exported="true" />
-
         <activity
             android:name=".ViewChildSummaryActivity"
             android:exported="true" />
-
         <activity
             android:name=".ControllerAdherenceSummaryActivity"
             android:exported="true" />
-
         <activity
             android:name=".PEFSummaryActivity"
             android:exported="true" />
-
         <activity
             android:name=".RescueLogsSummaryActivity"
             android:exported="true" />
-
         <activity
             android:name=".SymptomSummaryActivity"
             android:exported="true" />
-
         <activity
             android:name=".TriageIncidentSummaryActivity"
             android:exported="true" />
-
         <activity
             android:name=".TriggerSummaryActivity"
             android:exported="true" />
-
         <activity
             android:name=".HistoryBrowserActivity"
             android:exported="true" />
-
         <activity
             android:name=".ShareToProviderActivity"
             android:exported="true" />
-
         <activity
             android:name=".ExportChildHistoryActivity"
             android:exported="true" />
-
+        <activity
+            android:name=".ParentAlertsActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
