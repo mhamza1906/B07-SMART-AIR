@@ -40,6 +40,9 @@
             android:name=".ProviderDashboardActivity"
             android:exported="false" />
         <activity
+            android:name=".ParentScheduleActivity"
+            android:exported="false" />
+        <activity
             android:name=".ProviderSignOutActivity"
             android:exported="false" />
         <activity
