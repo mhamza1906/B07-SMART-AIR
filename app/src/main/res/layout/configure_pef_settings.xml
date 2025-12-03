@@ -15,6 +15,7 @@
         android:text="Configure PEF Settings"
         android:textSize="24sp"
         android:textStyle="bold"
+        android:layout_marginTop="24dp"
         android:layout_marginBottom="24dp" />
 
 
@@ -34,22 +35,22 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 android:text="Personal Best (PB)"
                 android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="8dp"/>
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="16dp"
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Current Value: "
-                    android:textSize="16sp"/>
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/text_current_pb_value"
@@ -65,9 +66,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="48dp"
+                android:layout_marginBottom="16dp"
                 android:hint="Enter New PEF Value"
-                android:inputType="number"
-                android:layout_marginBottom="16dp" />
+                android:inputType="number" />
 
             <Button
                 android:id="@+id/btn_save_pb"
@@ -95,29 +96,29 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
                 android:text="Trend Graph Display Range"
                 android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="16dp"/>
+                android:textStyle="bold" />
 
             <RadioGroup
                 android:id="@+id/radio_group_graph_range"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="16dp"
+                android:orientation="vertical">
 
                 <RadioButton
                     android:id="@+id/radio_7_days"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Last 7 Days"/>
+                    android:text="Last 7 Days" />
 
                 <RadioButton
                     android:id="@+id/radio_30_days"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Last 30 Days"/>
+                    android:text="Last 30 Days" />
             </RadioGroup>
 
             <Button

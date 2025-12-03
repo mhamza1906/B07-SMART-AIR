@@ -11,22 +11,28 @@
         android:textStyle="bold"
         android:layout_marginBottom="16dp"
         android:layout_width="wrap_content"
+        android:layout_gravity="center"
         android:layout_height="wrap_content"/>
 
     <EditText
         android:id="@+id/edtProviderUsername"
         android:layout_width="320dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:autofillHints="username"
+        android:hint="@string/provider_username"
         android:inputType="text"
         android:minHeight="48dp"
-        android:autofillHints="username"
-        android:hint="@string/provider_username"/>
+        android:textColorHint="#546E7A" />
 
     <Button
         android:id="@+id/btnFindProvider"
         android:layout_width="320dp"
+        android:backgroundTint="#82FF73"
+        android:textColor="#263238"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:layout_gravity="center"
         android:text="@string/next_btn"/>
 
 </LinearLayout>

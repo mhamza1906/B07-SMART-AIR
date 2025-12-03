@@ -34,6 +34,8 @@ import com.itextpdf.layout.element.Table;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -47,20 +49,20 @@ public class HistoryBrowserActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private String childId;
 
-    // Main UI
+
     private Button btnShowCheckinHistory, btnShowPefHistory;
     private CardView cardCheckinHistory, cardPefHistory;
 
-    // PEF History
+
     private RecyclerView recyclerPefHistory;
     private PefHistoryAdapter pefHistoryAdapter;
     private List<PefHistoryItem> pefHistoryList;
 
-    // Check-in History
+
     private RecyclerView recyclerCheckinHistory;
     private DailyCheckinHistoryAdapter checkinHistoryAdapter;
     private List<DailyCheckinHistoryItem> checkinHistoryList;
-    private Button btnToggleSymptoms, btnToggleTriggers, btnToggleDate, btnApplyFilters, btnClearFilters, btnExportPdf;
+    private Button btnToggleSymptoms, btnToggleTriggers, btnToggleDate, btnApplyFilters, btnClearFilters, btnExportPdf, btnExportCsv;
     private LinearLayout containerSymptomFilters, containerTriggerFilters, containerDateRangeFilter;
     private Button btnStartDate, btnEndDate;
     private Calendar startDate, endDate;
@@ -87,18 +89,18 @@ public class HistoryBrowserActivity extends AppCompatActivity {
     }
 
     private void bindViews() {
-        // Main toggle buttons
+        //main toggle buttons
         btnShowCheckinHistory = findViewById(R.id.btn_show_checkin_history);
         btnShowPefHistory = findViewById(R.id.btn_show_pef_history);
 
-        // History section cards
+        //history section cards
         cardCheckinHistory = findViewById(R.id.card_checkin_history);
         cardPefHistory = findViewById(R.id.card_pef_history);
 
-        // PEF History
+        //PEF history
         recyclerPefHistory = findViewById(R.id.recycler_pef_history);
 
-        // Check-in History
+        //Check-in history
         recyclerCheckinHistory = findViewById(R.id.recycler_checkin_history);
         btnToggleSymptoms = findViewById(R.id.btn_toggle_symptoms_filter);
         btnToggleTriggers = findViewById(R.id.btn_toggle_triggers_filter);
@@ -106,6 +108,7 @@ public class HistoryBrowserActivity extends AppCompatActivity {
         btnApplyFilters = findViewById(R.id.btn_apply_filters);
         btnClearFilters = findViewById(R.id.btn_clear_filters);
         btnExportPdf = findViewById(R.id.btn_export_pdf);
+        btnExportCsv = findViewById(R.id.btn_export_csv);
         containerSymptomFilters = findViewById(R.id.container_symptom_filters);
         containerTriggerFilters = findViewById(R.id.container_trigger_filters);
         containerDateRangeFilter = findViewById(R.id.container_date_range_filter);
@@ -161,6 +164,7 @@ public class HistoryBrowserActivity extends AppCompatActivity {
             loadCheckinHistory(false);
         });
         btnExportPdf.setOnClickListener(v -> exportCheckinHistoryToPdf());
+        btnExportCsv.setOnClickListener(v -> exportCheckinHistoryToCsv());
     }
 
     private void exportCheckinHistoryToPdf() {
@@ -183,19 +187,20 @@ public class HistoryBrowserActivity extends AppCompatActivity {
                             nameParts.add(lName);
                         }
                         String childName = String.join(" ", nameParts);
-                        try {
 
+                        try {
+                            // Create file
                             String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Calendar.getInstance().getTime());
                             String fileName = "Check-in-History-" + childName.trim().replace(" ", "_") + "-" + timeStamp + ".pdf";
                             File downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
                             File file = new File(downloadsDir, fileName);
 
-
+                            // Setup iText
                             PdfWriter writer = new PdfWriter(file);
                             PdfDocument pdf = new PdfDocument(writer);
                             Document document = new Document(pdf);
 
-
+                            // Add content
                             document.add(new Paragraph("Daily Check-in History").setBold().setFontSize(18));
                             document.add(new Paragraph("Child: " + childName.trim()).setFontSize(12).setMarginBottom(20));
 
@@ -208,8 +213,8 @@ public class HistoryBrowserActivity extends AppCompatActivity {
                             for (DailyCheckinHistoryItem item : checkinHistoryList) {
                                 table.addCell(item.getDate());
                                 table.addCell(item.getAuthor());
-                                table.addCell(String.join(", ", item.getSymptoms()));
-                                table.addCell(String.join(", ", item.getTriggers()));
+                                table.addCell(String.join("; ", item.getSymptoms()));
+                                table.addCell(String.join("; ", item.getTriggers()));
                             }
 
                             document.add(table);
@@ -231,13 +236,72 @@ public class HistoryBrowserActivity extends AppCompatActivity {
                 });
     }
 
-    private void clearFilters() {
+    private void exportCheckinHistoryToCsv() {
+        if (checkinHistoryList == null || checkinHistoryList.isEmpty()) {
+            Toast.makeText(this, "No history data to export.", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
+        FirebaseDatabase.getInstance().getReference("users").child(childId)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        String fName = snapshot.child("fName").getValue(String.class);
+                        String lName = snapshot.child("lName").getValue(String.class);
+                        List<String> nameParts = new ArrayList<>();
+                        if (fName != null && !fName.isEmpty()) {
+                            nameParts.add(fName);
+                        }
+                        if (lName != null && !lName.isEmpty()) {
+                            nameParts.add(lName);
+                        }
+                        String childName = String.join(" ", nameParts);
+
+                        StringBuilder csvContent = new StringBuilder();
+                        csvContent.append("\"Date\",\"Author\",\"Symptoms\",\"Triggers\"\n");
+
+                        for (DailyCheckinHistoryItem item : checkinHistoryList) {
+                            csvContent.append("\"").append(item.getDate()).append("\",");
+                            csvContent.append("\"").append(item.getAuthor()).append("\",");
+                            csvContent.append("\"").append(String.join("; ", item.getSymptoms())).append("\",");
+                            csvContent.append("\"").append(String.join("; ", item.getTriggers())).append("\"\n");
+                        }
+
+                        try {
+                            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Calendar.getInstance().getTime());
+                            String fileName = "Check-in-History-" + childName.trim().replace(" ", "_") + "-" + timeStamp + ".csv";
+                            File downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                            File file = new File(downloadsDir, fileName);
+
+                            FileWriter writer = new FileWriter(file);
+                            writer.append(csvContent.toString());
+                            writer.flush();
+                            writer.close();
+
+                            Toast.makeText(HistoryBrowserActivity.this, "CSV saved to Downloads folder: " + fileName, Toast.LENGTH_LONG).show();
+
+                        } catch (IOException e) {
+                            Log.e(TAG, "Error writing CSV file", e);
+                            Toast.makeText(HistoryBrowserActivity.this, "Failed to save CSV.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.e(TAG, "Failed to read user name for CSV.", error.toException());
+                        Toast.makeText(HistoryBrowserActivity.this, "Could not fetch child's name for CSV.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+
+    private void clearFilters() {
+        // Clear symptom checkboxes
         ((CheckBox) findViewById(R.id.check_symptom_night_waking)).setChecked(false);
         ((CheckBox) findViewById(R.id.check_symptom_cough_wheeze)).setChecked(false);
         ((CheckBox) findViewById(R.id.check_symptom_activity_limit)).setChecked(false);
 
-
+        // Clear trigger checkboxes
         ((CheckBox) findViewById(R.id.check_trigger_dust)).setChecked(false);
         ((CheckBox) findViewById(R.id.check_trigger_pets)).setChecked(false);
         ((CheckBox) findViewById(R.id.check_trigger_smoke)).setChecked(false);
@@ -246,7 +310,7 @@ public class HistoryBrowserActivity extends AppCompatActivity {
         ((CheckBox) findViewById(R.id.check_trigger_illness)).setChecked(false);
         ((CheckBox) findViewById(R.id.check_trigger_exercise)).setChecked(false);
 
-
+        // Clear dates
         startDate = null;
         endDate = null;
         btnStartDate.setText("Start Date");
@@ -337,7 +401,7 @@ public class HistoryBrowserActivity extends AppCompatActivity {
             }
         }
         else {
-
+            // --- Default Query Logic ---
             query = query.orderBy(FieldPath.documentId(), Query.Direction.DESCENDING).limit(50);
         }
 
@@ -372,7 +436,7 @@ public class HistoryBrowserActivity extends AppCompatActivity {
                 if ("Yes".equals(doc.getString("CoughWheeze")))
                     symptoms.add("Cough/Wheeze");
                 if ("Yes".equals(doc.getString("ActivityLimit")))
-                    symptoms.add("Limited Activity");
+                    symptoms.add("Activity Limit");
 
                 if (symptoms.isEmpty()){
                     symptoms.add("None");

@@ -59,6 +59,8 @@
         android:layout_marginTop="12dp"
         android:layout_marginBottom="24dp"
         app:layout_constrainedHeight="false"
+        android:backgroundTint="#82FF73"
+        android:textColor="#263238"
         app:layout_constraintTop_toBottomOf="@id/txtTechniquePrompt"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

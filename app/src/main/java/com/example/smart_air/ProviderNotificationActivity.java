@@ -55,6 +55,10 @@ public class ProviderNotificationActivity extends AppCompatActivity {
                     list.clear();
                     if (snap != null) {
                         for (DocumentSnapshot doc : snap) {
+
+                            Boolean used = doc.getBoolean("used");
+                            if (Boolean.TRUE.equals(used)) continue;
+
                             String childId = doc.getString("childId");
                             String code = doc.getString("code");
                             String link = doc.getString("link");
@@ -65,6 +69,7 @@ public class ProviderNotificationActivity extends AppCompatActivity {
                     adapter.notifyDataSetChanged();
                 });
     }
+
 
     private void showCodeCheckSheet() {
         BottomSheetDialog dialog = new BottomSheetDialog(this);
@@ -112,6 +117,7 @@ public class ProviderNotificationActivity extends AppCompatActivity {
     }
 
     private void updateUsedAndChecked(String childId) {
+
         DocumentReference ref = db.collection("child-provider-share")
                 .document(childId)
                 .collection("providers")
@@ -121,8 +127,20 @@ public class ProviderNotificationActivity extends AppCompatActivity {
         m.put("used", true);
         m.put("code_checked", true);
 
-        ref.update(m).addOnSuccessListener(r -> Toast.makeText(this, "Code verified", Toast.LENGTH_SHORT).show());
+        ref.update(m).addOnSuccessListener(r -> {
+
+            db.collection("provider-child-index")
+                    .document(providerUsername)
+                    .collection("children")
+                    .document(childId)
+                    .update("used", true, "code_checked", true);
+
+            Toast.makeText(this,
+                    "Code verified! It will disappear.",
+                    Toast.LENGTH_LONG).show();
+        });
     }
+
 
     private void onLinkClick(String linkValue, String childId) {
 

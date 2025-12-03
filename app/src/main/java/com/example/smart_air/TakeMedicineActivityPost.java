@@ -3,14 +3,23 @@ package com.example.smart_air;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -36,6 +45,7 @@ public class TakeMedicineActivityPost extends AppCompatActivity {
     private EditText postBreathRatingInput;
     private EditText doseCount;
     private String postCheck;
+    private FirebaseFirestore mFirestore;
 
 
     @Override
@@ -65,6 +75,7 @@ public class TakeMedicineActivityPost extends AppCompatActivity {
         RadioGroup postCheckButton = findViewById(R.id.post_checkup_radio);
         postBreathRatingInput = findViewById(R.id.post_breath_rating_input);
         doseCount = findViewById(R.id.dose_input);
+        mFirestore = FirebaseFirestore.getInstance();
 
         postCheckButton.setOnCheckedChangeListener((group, checkedId)->{
             RadioButton selectedButton = findViewById(checkedId);
@@ -163,7 +174,7 @@ public class TakeMedicineActivityPost extends AppCompatActivity {
             updateStreaks(childID, medType, date);
             updateRescueRolling30Days(childID, date);
             updateWeeklyRescueUsage(childID, date);
-            updateInventoryLog(childID, medType, doseNum);
+            updateInventoryLog(childID, medType, doseNum, date, postCheck);
 
             if (medType.equalsIgnoreCase("rescue")) {
                 updateLastRescueUse(childID);
@@ -173,7 +184,7 @@ public class TakeMedicineActivityPost extends AppCompatActivity {
     }
     
 
-    private void updateInventoryLog(String childID, String medType, int doseNum) {
+    private void updateInventoryLog(String childID, String medType, int doseNum, String date, String postCheck) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference inventoryRef = db.collection("inventory").document(childID);
 
@@ -186,11 +197,41 @@ public class TakeMedicineActivityPost extends AppCompatActivity {
                     Map<String, Object> medData = (Map<String, Object>) medDataObject;
 
                     Object amountObj = medData.get("amountLeft");
+
+                    if(postCheck != null && !postCheck.isEmpty()){
+                        if(postCheck.equalsIgnoreCase("worse")){
+                            createParentAlert(childID, "WorsePostcheck", "Child is not ok after taking medication");
+                        }
+                    }
+
+                    String new_date = (String) medData.get("expiry");
+
+                    // Only perform date comparison if the expiry date exists.
+                    if (new_date != null && !new_date.isEmpty() && date != null && !date.isEmpty()) {
+                        try {
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                            Date d1 = sdf.parse(date);
+                            Date d2 = sdf.parse(new_date);
+
+                            if (d1.after(d2)) {
+                                System.out.println("date has passed new_date");
+                                createParentAlert(childID, "MedicationExpired", "The medication " + medType + " has expired.");
+                            }
+                        } catch (java.text.ParseException e) {
+                            Toast.makeText(this, "Could not parse expiry date.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
                     if (amountObj instanceof Number) {
                         long amountLeft = ((Number) amountObj).longValue();
+                        long newAmount = amountLeft - doseNum;
 
-
-                        medData.put("amountLeft", amountLeft - doseNum);
+                        if (newAmount < 0) {
+                            medData.put("amountLeft", 0);
+                            createParentAlert(childID, "RefillRequired", "You need to refill your inventory.");
+                        } else {
+                            medData.put("amountLeft", newAmount);
+                        }
 
                         data.put(medType.toLowerCase(), medData);
                         inventoryRef.set(data, SetOptions.merge());
@@ -198,6 +239,42 @@ public class TakeMedicineActivityPost extends AppCompatActivity {
                 }
             }
         }).addOnFailureListener(e -> Toast.makeText(TakeMedicineActivityPost.this, "Failed to update inventory.", Toast.LENGTH_SHORT).show());
+    }
+
+    private void createParentAlert(String childId, String alertType, String message) {
+        DatabaseReference childUserRef = FirebaseDatabase.getInstance().getReference("users").child(childId);
+
+        childUserRef.child("parentID").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    String parentID = snapshot.getValue(String.class);
+
+                    if (parentID != null && !parentID.isEmpty()) {
+                        Map<String, Object> alertData = new HashMap<>();
+                        alertData.put("childId", childId);
+                        alertData.put("parentID", parentID);
+                        alertData.put("alertType", alertType);
+                        alertData.put("message", message);
+                        alertData.put("timestamp", new Date());
+                        alertData.put("isRead", false);
+
+                        mFirestore.collection("parent_alerts").add(alertData)
+                                .addOnSuccessListener(aVoid -> Log.d("InventoryActivity", "Alert of type '" + alertType + "' created for parent."))
+                                .addOnFailureListener(e -> Log.e("InventoryActivity", "Failed to create parent alert.", e));
+                    } else {
+                        Log.e("InventoryActivity", "Parent ID field is null or empty for child: " + childId);
+                    }
+                } else {
+                    Log.e("InventoryActivity", "Could not find parentID for child: " + childId);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("TriageActivity", "Database error when finding parentID: " + error.getMessage());
+            }
+        });
     }
 
 
@@ -245,7 +322,7 @@ public class TakeMedicineActivityPost extends AppCompatActivity {
 
         DocumentReference todayPlanRef = db.collection("planned-schedule")
                 .document(childID)
-                .collection("schedules")
+                .collection("Schedules")
                 .document(date);
 
         todayPlanRef.get().addOnSuccessListener(todaySnap -> {
@@ -270,7 +347,7 @@ public class TakeMedicineActivityPost extends AppCompatActivity {
 
             db.collection("planned-schedule")
                     .document(childID)
-                    .collection("schedules")
+                    .collection("Schedules")
                     .get()
                     .addOnSuccessListener(allDatesSnap -> {
 
@@ -293,7 +370,7 @@ public class TakeMedicineActivityPost extends AppCompatActivity {
                         DocumentReference prevRef =
                                 db.collection("planned-schedule")
                                         .document(childID)
-                                        .collection("schedules")
+                                        .collection("Schedules")
                                         .document(prevDate);
 
                         prevRef.get().addOnSuccessListener(prevSnap -> {
