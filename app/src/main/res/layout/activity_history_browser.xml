@@ -205,14 +205,33 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"/>
 
-                <Button
-                    android:id="@+id/btn_export_pdf"
+                <!-- Export Buttons -->
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:backgroundTint="#82FF73"
-                    android:textColor="#263238"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
-                    android:text="Export as PDF" />
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btn_export_csv"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="8dp"
+                        android:backgroundTint="#82FF73"
+                        android:textColor="#263238"
+                        android:text="Export as CSV" />
+
+                    <Button
+                        android:id="@+id/btn_export_pdf"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:backgroundTint="#82FF73"
+                        android:textColor="#263238"
+                        android:text="Export as PDF" />
+                </LinearLayout>
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
