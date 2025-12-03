@@ -34,6 +34,9 @@
             android:name=".ProviderDashboardActivity"
             android:exported="false" />
         <activity
+            android:name=".ExportChildHistoryActivity"
+            android:exported="false" />
+        <activity
             android:name=".ChildDashboardActivity"
             android:exported="true" />
         <activity
