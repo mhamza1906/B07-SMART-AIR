@@ -23,6 +23,12 @@ The application is split into Three main user experiences: one for Child, one fo
 *   **Medicine Log:** A table containing information regarding, the type of the medicine the child took, the dose, time, pre breath rating, post breath rating and the post checkup. This gets updated everytime the child enters the take medicine activity
 *   **Daily Check Ins:** A screen for children to report daily symptoms and triggers, which are stored and displayed to Parents.
 *   **Planned Schedule:** A page where child users can see the days where a planned controller session is planned, as well as if they have already completed those controller sessions
+*   **Take Medicine:** allows children to record medication intake. They select the medication type, complete a pre-dose check, follow an interactive technique helper to ensure proper usage, and finish with a post-dose check. All data is recorded to medicine log.
+*   **Achievements/Streak:** Children can earn badges based on different, parent-configurable achievements(eg: 0 rescue days per Month) and they also have a streak feature for consecutive technique helper sessions and planned controller days.
+
+
+
+
 
 ### Parent Features:
 *   **Parent Dashboard:** A central hub for parents to view summaries of their children's recent asthma activity.
@@ -60,8 +66,11 @@ This project utilizes a modern Android development stack.
     *   **Firebase BoM (`firebase-bom`):** Ensures all Firebase libraries are version-compatible.
     *   **AndroidX Libraries (`appcompat`, `recyclerview`, `constraintlayout`):** For UI components and modern Android features.
     *   **Google Material Design (`material`):** For UI elements like BottomSheetDialogs.
-    *   **MPAndroidChart:** For displaying graphical representations of PEF data.
     *   **Glide:** For image loading (though may be used for future avatar features).
+    *   **MPAndroidChart:** For displaying graphical representations of PEF and Zone Distribution data.
+    *   **iText7:** For generating and exporting user history data as PDF files.
+
+
 
 ---
 
