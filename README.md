@@ -34,6 +34,7 @@ The application is split into Three main user experiences: one for Child, one fo
         3.  A high frequency of use (3 or more triage incidents within 3 hours).
 *   **Account Management:** Parents can create and manage accounts for their children.
 *   **Inventory Log:** Allows the parent to see information regarding the amount left and the purchase and expiry date for the controller and rescue medicine in the form of a simple table
+* **Manage Child Activities:** A menu consisting of features like setting PEF settings, creating a controller schedule, configure rewards and perform daily check in
 
 ---
 
