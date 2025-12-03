@@ -5,9 +5,8 @@ import java.util.Date;
 
 public class Alert {
     private String message;
-    private @ServerTimestamp Date timestamp; // Use annotation for Firestore server time
+    private @ServerTimestamp Date timestamp;
 
-    // IMPORTANT: A public no-argument constructor is required for Firestore deserialization
     @SuppressWarnings("unused")
     public Alert() {}
 

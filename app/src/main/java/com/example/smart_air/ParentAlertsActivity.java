@@ -46,14 +46,12 @@ public class ParentAlertsActivity extends AppCompatActivity {
         alertsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         alertsRecyclerView.setAdapter(alertAdapter);
 
-        // --- The authentication check that was here has been removed ---
 
         fetchParentAlerts();
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private void fetchParentAlerts() {
-        // This line will now cause a crash if currentUser is null.
         String parentId = currentUser.getUid();
 
         db.collection("parent_alerts")

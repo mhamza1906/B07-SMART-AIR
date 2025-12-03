@@ -47,7 +47,7 @@ public class TriageActivity extends AppCompatActivity {
     // Logic
     private CountDownTimer tenMinuteTimer;
     private boolean isEmergencyState = false;
-    private String currentIncidentId; // Stores the Document ID for the current rescue event
+    private String currentIncidentId;
     private String currentPefZone = "Not yet calculated";
     private Integer personalBestPEF = null;
 
@@ -75,20 +75,19 @@ public class TriageActivity extends AppCompatActivity {
             return;
         }
 
-        // --- CORE FUNCTIONALITY ---
-        // 1. Create the initial incident log in Firestore when the activity starts.
+        //Create the initial incident log in Firestore when the activity starts.
         createInitialIncidentLog(childId);
         startTenMinuteTimer(childId);
 
-        // 2. Setup UI listeners
+        //Setup UI listeners
         setupRedFlagListeners(childId);
 
         btnEnterPEF.setOnClickListener(v -> {
-            // First, calculate the PEF zone and save it to the class variable
+            // calculate the PEF zone and save it to the class variable
             calculateAndSavePefZone();
-            // Second, attempt to display the UI (this will do nothing if in an emergency)
+            // attempt to display the UI (this will do nothing if in an emergency)
             determineActionPlanFromPEF();
-            // Third, update the Firestore log with the newly calculated data
+            // update the Firestore log with the newly calculated data
             updateLogWithCurrentState(childId, "PEFEntered");
         });
 
@@ -106,7 +105,7 @@ public class TriageActivity extends AppCompatActivity {
                         .addOnFailureListener(e -> Log.e("TriageActivity", "Error confirming emergency call.", e));
             }
 
-            // Then, open the dialer
+            // open the dialer
             Intent intent = new Intent(Intent.ACTION_DIAL);
             intent.setData(Uri.parse("tel:911"));
             try {
