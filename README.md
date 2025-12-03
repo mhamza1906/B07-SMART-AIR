@@ -22,7 +22,7 @@ The application is split into Three main user experiences: one for Child, one fo
 *   **PEF Logging:** A dedicated screen for children to log their daily PEF readings, which are used to display their daily zone and record zone change history
 *   **Medicine Log:** A table containing information regarding, the type of the medicine the child took, the dose, time, pre breath rating, post breath rating and the post checkup. This gets updated everytime the child enters the take medicine activity
 *   **Daily Check Ins:** A screen for children to report daily symptoms and triggers, which are stored and displayed to Parents.
-*   **Planned Schedule** A page where child users can see the days where a planned controller session is planned, as well as if they have already completed those controller sessions
+*   **Planned Schedule:** A page where child users can see the days where a planned controller session is planned, as well as if they have already completed those controller sessions
 
 ### Parent Features:
 *   **Parent Dashboard:** A central hub for parents to view summaries of their children's recent asthma activity.
@@ -36,8 +36,8 @@ The application is split into Three main user experiences: one for Child, one fo
 *   **Account Management:** Parents can create and manage accounts for their children.
 *   **Inventory Log:** Allows the parent to see information regarding the amount left and the purchase and expiry date for the controller and rescue medicine in the form of a simple table
 *   **Manage Child Activities:** A menu consisting of features like setting PEF settings, creating a controller schedule, configure rewards and perform daily check in
-*   **Planned Schedule** Allows the parent to set planned controller sessions for chosen days, determining the number of controller sessions on those days for linked children to follow
-*   **Provider Report** Allows the parent to export a PDF of important details for a child user, including rescue frequency, controller adherence, zone distribution, symptom burden, and notable triage incidents within a 3-6 month range as decided by the parent
+*   **Planned Schedule:** Allows the parent to set planned controller sessions for chosen days, determining the number of controller sessions on those days for linked children to follow
+*   **Provider Report:** Allows the parent to export a PDF of important details for a child user, including rescue frequency, controller adherence, zone distribution, symptom burden, and notable triage incidents within a 3-6 month range as decided by the parent
 
 ---
 
