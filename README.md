@@ -2,7 +2,7 @@
 
 ## 1. Project Overview
 
-Smart Air is a mobile application designed to help children and their parents manage asthma more effectively. The app provides real-time guidance during asthma-related events, logs critical health data, and facilitates communication between the child, parent, and healthcare providers. The core functionality revolves around a "Triage Mode" that guides a child through assessing their symptoms and provides an appropriate action plan based on their personal best Peak Expiratory Flow (PEF) readings.
+Smart Air is a mobile application designed to help children and their parents manage asthma more effectively. The core functionality of the app revolves around providing real-time guidance during asthma-related events, logging critical health data, and facilitate communication between the child, parent, and healthcare providers. 
 
 The project is built using native Android (Java) and leverages the Firebase suite for its backend, including Authentication, Firestore, and Realtime Database.
 
@@ -32,6 +32,7 @@ The application is split into Three main user experiences: one for Child, one fo
 
 ### Parent Features:
 *   **Parent Dashboard:** A central hub for parents to view summaries of their children's recent asthma activity.
+*   **Dashboard Tiles:** Displays a summary card for each child, providing a quick, at-a-glance overview of their key asthma metrics including weekly rescue count, last rescue use, Today's zone, and a graph showing daily PEF % for the past week/month.
 *   **Alerts System:**
     *   **Real-time Toasts:** Parents receive an in-app toast notification when they open the app if new alerts have been generated since they last checked.
     *   **Alerts History Page:** A dedicated screen that displays a chronological list of all alerts, with the newest at the top.
@@ -39,11 +40,27 @@ The application is split into Three main user experiences: one for Child, one fo
         1.  The start of a child's triage session.
         2.  The triggering of an emergency state.
         3.  A high frequency of use (3 or more triage incidents within 3 hours).
-*   **Account Management:** Parents can create and manage accounts for their children.
+*   **Account Management:** Parents create and manage accounts for their children.
 *   **Inventory Log:** Allows the parent to see information regarding the amount left and the purchase and expiry date for the controller and rescue medicine in the form of a simple table
-*   **Manage Child Activities:** A menu consisting of features like setting PEF settings, creating a controller schedule, configure rewards and perform daily check in
-*   **Planned Schedule:** Allows the parent to set planned controller sessions for chosen days, determining the number of controller sessions on those days for linked children to follow
-*   **Provider Report:** Allows the parent to export a PDF of important details for a child user, including rescue frequency, controller adherence, zone distribution, symptom burden, and notable triage incidents within a 3-6 month range as decided by the parent
+*   **Go to Child Dashboard:** A feature allowing parents to directly access their children's dashboard from the parent dashboard. Allows children to navigate to their own dashboard without credential authentication.
+*   **Manage Child Activities:** A menu consisting of features like configure PEF settings, creating a planned controller schedule, configure rewards and perform daily check in
+*   **Planned Schedule:** Allows the parent to set planned controller sessions for chosen days, determining the number of controller sessions on those days for linked children to follow.
+*   **Configure PEF Settings:** Lets the Parent set the PEF PB for their child and toggle the date range for the PEF % graph on dashboard tiles.
+*   **Configure Rewards:** Allows the Parent to set the benchmark for badges and achievements their children can earn.
+*   **Perform Daily Check In:** Lets the Parent to perform daily symptom and trigger check in on behalf of their child.
+*   **View Child Summary:** A menu consisting of summaries for different Child Data such as Rescue Logs, Controller Adherance, Symptoms and Triggers summary charts, Triage Incidents, Daily PEF Zone chart and a History Browser, with in-page checkboxes for quick datasharing with Provider.
+*   **History Browser:** A screen allowing parents to see their Child's PEF Zone Change History and and Daily Check In history, which they can filter by Date range, Triggers and Symptoms. Parents also have the option of exporting history data as PDF/CSV files to externally share with Providers.
+*   **Provider Report:** Allows the Parent to export a PDF of important details for a child user, including rescue frequency, controller adherence, zone distribution, symptom burden, and notable triage incidents within a 3-6 month range as decided by the parent.
+*   **In App Data sharing with Providers:** Enables parents to search for healthcare providers within the app, use intuitive toggles to select specific data to share, and generate a secure, time-limited link for read-only access which can be revoked at any time.
+
+
+
+
+
+
+### Provider Features:
+*   **Provider Dashboard:** 
+
 
 ---
 
