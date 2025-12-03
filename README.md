@@ -20,6 +20,7 @@ The application is split into two main user experiences: one for the child and o
 *   **Dynamic Action Plans:** Based on the entered PEF value compared to their personal best, the app displays a Green, Yellow, or Red zone action plan.
 *   **Emergency State:** Automatically triggers an emergency state if red flag symptoms are checked or if a 10-minute timer expires without improvement, displaying a prominent "Call Emergency Services" button.
 *   **PEF Logging:** A dedicated screen for children to log their daily PEF readings, which are stored and used to track their personal best.
+*   **Medicine Log:** A table containing information regarding, the type of the medicine the child took, the dose, time, pre breath rating, post breath rating and the post checkup. This gets updated everytime the child enters the take medicine activity
 
 ### Parent Features:
 *   **Parent Dashboard:** A central hub for parents to view summaries of their children's recent asthma activity.
@@ -31,6 +32,7 @@ The application is split into two main user experiences: one for the child and o
         2.  The triggering of an emergency state.
         3.  A high frequency of use (3 or more triage incidents within 3 hours).
 *   **Account Management:** Parents can create and manage accounts for their children.
+*   **Inventory Log:** Allows the parent to see information regarding the amount left and the purchase and expiry date for the controller and rescue medicine in the form of a simple table
 
 ---
 
