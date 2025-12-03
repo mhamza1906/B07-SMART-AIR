@@ -57,6 +57,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.HashMap;
 
 public class ExportChildHistoryActivity extends AppCompatActivity {
     private FirebaseFirestore firestore;
@@ -65,7 +66,18 @@ public class ExportChildHistoryActivity extends AppCompatActivity {
     private Calendar calendar;
     int monthRange;
     PieChart zoneChart;
-    Map<String,Integer> zoneMap;
+    Map<String,Integer> zoneMap = new HashMap<>();
+    private int greenCount = 0;
+    private int yellowCount = 0;
+    private int redCount = 0;
+
+    private int rescueNum = 0;
+    private int controllerAdherence = 0;
+    private int symptoms = 0;
+    private int activityLimit = 0;
+    private int coughWheeze = 0;
+    private int nightWaking = 0;
+    private int triage = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -96,9 +108,6 @@ public class ExportChildHistoryActivity extends AppCompatActivity {
             }
         });
 
-        int greenCount = 0;
-        int yellowCount = 0;
-        int redCount = 0;
         calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
@@ -158,16 +167,18 @@ public class ExportChildHistoryActivity extends AppCompatActivity {
                             compareCalendar.set(Calendar.SECOND, 0);
                             compareCalendar.set(Calendar.MILLISECOND, 0);
                             int difference = (int) Duration.between(calendar.toInstant(),compareCalendar.toInstant()).toDays();
-                            if(difference<=30*monthRange) {
-                                if((String) document.get("zone")=="green") {
-                                    updateCount(greenCount,1);
-                                    zoneMap.put("Green",greenCount);
-                                } else if((String) document.get("zone")=="yellow") {
-                                    updateCount(yellowCount,1);
-                                    zoneMap.put("Yellow",yellowCount);
-                                } else {
-                                    updateCount(redCount,1);
-                                    zoneMap.put("Red",redCount);
+                            if (difference <= 30 * monthRange) {
+                                String zone = (String) document.get("zone");
+
+                                if ("green".equalsIgnoreCase(zone)) {
+                                    greenCount++;
+                                    zoneMap.put("Green", greenCount);
+                                } else if ("yellow".equalsIgnoreCase(zone)) {
+                                    yellowCount++;
+                                    zoneMap.put("Yellow", yellowCount);
+                                } else if ("red".equalsIgnoreCase(zone)) {
+                                    redCount++;
+                                    zoneMap.put("Red", redCount);
                                 }
                             }
                         }
@@ -188,11 +199,11 @@ public class ExportChildHistoryActivity extends AppCompatActivity {
 
             // Display controller adherence over time as a time-series line chart
             // Display zone distribution as a pie chart
-            int rescueNum = 0;
-            int controllerAdherence = 0;
-            int symptoms = 0;
-            int activityLimit = 0,coughWheeze = 0,nightWaking = 0;
-            int triage = 0;
+//            int rescueNum = 0;
+//            int controllerAdherence = 0;
+//            int symptoms = 0;
+//            int activityLimit = 0,coughWheeze = 0,nightWaking = 0;
+//            int triage = 0;
 
             firestore.collection("medlog").document(childID).collection("log").orderBy("rescue").get()
                     .addOnCompleteListener(task -> {
@@ -215,7 +226,7 @@ public class ExportChildHistoryActivity extends AppCompatActivity {
                                int difference = (int) Duration.between(calendar.toInstant(),compareCalendar.toInstant()).toDays();
                                if(difference<=30*monthRange) {
                                    Map rescues = (Map) document.get("rescue");
-                                   updateCount(rescueNum,rescues.size());
+                                   rescueNum += rescues.size();
                                }
                            }
                        }
@@ -248,7 +259,8 @@ public class ExportChildHistoryActivity extends AppCompatActivity {
                                 }
                             }
                             int adheredPercent = adhered/total * 100;
-                            updateCount(controllerAdherence,adheredPercent);
+//                            updateCount(controllerAdherence,adheredPercent);
+                            controllerAdherence+= adheredPercent;
                         }
                     });
 
@@ -278,17 +290,22 @@ public class ExportChildHistoryActivity extends AppCompatActivity {
                                     String nightWake = (String) document.get("NightWaking");
                                     if(activity=="Yes") {
                                         problem = true;
-                                        updateCount(activityLimit,1);
+//                                        updateCount(activityLimit,1);
+                                        activityLimit++;
                                     }
                                     if(cough=="Yes") {
                                         problem = true;
-                                        updateCount(coughWheeze,1);
+//                                        updateCount(coughWheeze,1);
+                                        coughWheeze++;
                                     }
                                     if(nightWake=="Yes") {
                                         problem = true;
-                                        updateCount(nightWaking,1);
+//                                        updateCount(nightWaking,1);
+                                        nightWaking++;
                                     }
-                                    if(problem) updateCount(symptoms,1);
+                                    if(problem){
+                                        symptoms++;
+                                    }
                                 }
                             }
                         }
@@ -310,7 +327,8 @@ public class ExportChildHistoryActivity extends AppCompatActivity {
                                     Map redFlags = (Map) document.get("redFlagsPresent");
                                     for (Object key : redFlags.keySet()) {
                                         if((Boolean) redFlags.get(key)) {
-                                            updateCount(triage,1);
+//                                            updateCount(triage++,1);
+                                            triage++;
                                             break;
                                         }
                                     }
@@ -332,8 +350,12 @@ public class ExportChildHistoryActivity extends AppCompatActivity {
         monthRange = newMonth;
     }
 
-    public void updateCount(int count, int update) {
-        count = count + update;
+//    public void updateCount(int count, int update) {
+//        count = count + update;
+//    }
+
+    public int updateCount(int count, int update) {
+        return count + update;
     }
 
     public void setUpPieChart() {

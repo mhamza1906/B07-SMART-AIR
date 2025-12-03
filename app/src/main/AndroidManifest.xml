@@ -103,9 +103,6 @@
             android:name=".ShareToProviderActivity"
             android:exported="true" />
         <activity
-            android:name=".ExportChildHistoryActivity"
-            android:exported="true" />
-        <activity
             android:name=".ParentAlertsActivity"
             android:exported="true" />
         <activity
