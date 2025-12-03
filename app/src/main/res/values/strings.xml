@@ -10,10 +10,308 @@
     <string name="commonSignInButton">"SIGN IN"</string>
     <string name="credentialRecovery">"Forget Password?"</string>
     <string name="jumpIntoSignUp">"DON'T HAVE AN ACCOUNT?"</string>
+    <string name="login_btn">"LOGIN"</string>
     <string name="childSignInButtonWithParentName">"SIGN IN WITH YOUR USERNAME (CHILD)"</string>
+    <string name="breathingBreaks">"Are you able to talk without taking breaks to breathe?"</string>
+    <string name="hardToBreathe">"Does it feel like you have to work hard to breathe in?"</string>
+    <string name="lipColorChange">"Have you noticed any changes in the colour of your lips or eyebrows?"</string>
+    <string name="currentPEF">"What is your current PEF? (Optional)"</string>
+    <string name="rescueMed">"Have you taken rescue medication today?"</string>
+    <string name="actionPlan">"Your action plan will appear here"</string>
+    <string name="emergencyCallButton">"CALL EMERGENCY SERVICES"</string>
+    <string name="howLongAgo">"How long ago? (e.g., 5 mins)"</string>
+    <string name="triageMode">"Red Flag Symptoms"</string>
+    <string name="prompt_enter_current_pef">Please enter your current PEF to see your action plan.</string>
+    <string name="pb_not_set">Your PEF Personal Best is not set. Cannot determine action plan.</string>
+    <string name="green_zone">Green Zone: Your asthma is well-controlled. Continue your current medication plan.</string>
+    <string name="yellow_zone">Yellow Zone: Your asthma is worsening. Take 2 to 4 puffs of your rescue inhaler immediately.</string>
+    <string name="red_zone">Red Zone: Medical alert! Take 4 to 6 puffs of your rescue inhaler immediately.</string>
+    <string name="safety_disclaimer">This is guidance, not a diagnosis. If in doubt, call emergency.</string>
+    <string name="enter">Enter</string>
+    <string name="DOB">"Birthday (YYYY-MM-DD)"</string>
+    <string name="linkChildBtn">"LINK THIS CHILD"</string>
+    <string name="technique_step1">"Technique Step 1 Animation"</string>
+    <string name="technique_step2_if_empty">"Technique Step 2 Empty Animation"</string>
+    <string name="technique_step2_if_not_empty">"Technique Step 2 Not Empty Animation"</string>
+    <string name="technique_step3_if_empty">"Technique Step 3 Empty Animation"</string>
+    <string name="technique_step3_if_not_empty">"Technique Step 3 Not Empty Animation"</string>
+    <string name="technique_step4">"Technique Step 4 Animation"</string>
+    <string name="technique_step5">"Technique Step 5 Animation"</string>
+    <string name="technique_step6">"Technique Step 6 Animation"</string>
+    <string name="technique_step7">"Technique Step 7 Animation"</string>
+    <string name="technique_step_rest">"Technique Step Rest Animation"</string>
+    <string name="technique_step1_prompt">"Check the dose counter on the inhaler, do not use if it says zero.\n
+        Zero means the inhaler is empty and needs to be replaced."</string>
+    <string name="technique_step1_button_empty">"I got a new inhaler, let's start!"</string>
+    <string name="technique_step1_button_not_empty">"The inhaler isn't empty, let's start!"</string>
+    <string name="technique_step2_if_empty_prompt">"Prime the brand new inhaler by shaking for 10 seconds."</string>
+    <string name="technique_step_button_general">"I did it!"</string>
+    <string name="technique_step3_if_empty_prompt">"Spray 2 or 4 puffs into the air based on your medicine instructions."</string>
+    <string name="technique_step2_if_not_empty_prompt">"Prime the inhaler by shaking for 10 seconds."</string>
+    <string name="technique_step3_if_not_empty_prompt">"Take the cap off the inhaler.\n
+        Make sure the mouthpiece and valved holding chamber are clean."</string>
+    <string name="technique_step4_prompt">"Place the mouthpiece into the open end of the valved holding chamber.\n
+        Remove the valved holding chamber mouthpiece cap.\n
+        Prepare your body by sitting or standing up straight.\n"</string>
+    <string name="technique_step5_prompt">"Breathe out all the way from the holding chamber.\n
+        Put the mouthpiece into your mouth above your tongue.\n
+        Close your lips tightly around the mouthpiece"</string>
+    <string name="technique_step6_prompt">"Press down the top of the inhaler once to release the medicine.\n
+        Breathe in for 3 to 5 seconds using one deep and steady breath to pull the medicine into your lungs.\n
+        If the holding chamber whistles, you are breathing in too fast!"</string>
+    <string name="technique_step7_prompt">"Remove the chamber from your mouth.\n
+        Hold your breath for up to 10 seconds.\n
+        Then breathe out slowly through your mouth.\n"</string>
+    <string name="technique_step_rest_prompt">"If you need another puff, wait with the cat for 1 minute,
+        then proceed with the 'Another Puff' button.\n
+        Or you can proceed with 'Finish Taking Medicine'."</string>
+    <string name="technique_step_rest_button_another">"Another Puff"</string>
+    <string name="technique_step_rest_button_finish">"Finish Taking Medicine"</string>
+    <string name="technique_streak_desc">Technique Streak Flame</string>
+    <string name="controller_streak_desc">Controller Streak Flame</string>
+    <string name="empty_streak_desc">Empty Streak Icon</string>
+    <string name="technique_streak_text">"Consecutive Technique-Session Completed: %1$d"</string>
+    <string name="controller_streak_text">Consecutive Controller Days Completed: %1$d</string>
     <string-array name="accountType">
         <item>Select Account Type</item>
         <item>Parent</item>
         <item>Healthcare Provider</item>
     </string-array>
+    <string name="recent_alerts">"Recent Alerts</string>
+    <string name="no_alerts">"No new alerts."</string>
+    <string name="alert_message">"Alert Message"</string>
+    <string name="alert_timestamp">"Timestamp"</string>
+    <string name="no_timestamp">"No timestamp"</string>
+    <string name="fail_load_alerts">"Failed to load alerts."</string>
+    <string name="budding_star_desc">"Budding Star Badge"</string>
+    <string name="shining_star_desc">"Shining Star Badge"</string>
+    <string name="lucky_star_desc">"Lucky Star Badge"</string>
+    <string name="budding_star_title">"Budding Star"</string>
+    <string name="shining_star_title">"Shining Star"</string>
+    <string name="lucky_star_title">"Lucky Star"</string>
+    <string name="budding_star_condition">"You can change the condition of the Budding Star to first &apos;n&apos; perfect controller weeks."</string>
+    <string name="shining_star_condition">"You can change the condition of the Shining Star to first &apos;n&apos; high-quality technique sessions."</string>
+    <string name="lucky_star_condition">"You can change the condition of the Lucky Star to low-rescue month (≤ n rescue days / 30 days)."</string>
+    <string name="edittext_hint_number">"Enter a value (≥ 1)"</string>
+    <string name="toast_invalid_number">"Please enter a valid integer ≥ 1."</string>
+    <string name="toast_saved_successfully">"Threshold updated successfully."</string>
+    <string name="save_button_text">Save</string>
+    <string name="achievements_title">Achievements</string>
+    <string name="streaks_title">Streaks</string>
+    <string name="badges_title">Badges</string>
+    <string name="sign_out_btn">"SIGN OFF"</string>
+    <string name="display_email">Email: %1$s</string>
+    <string name="display_username">Username: %1$s</string>
+    <string name="display_full_name">Name: %1$s %2$s</string>
+    <string name="page_my_children">"MY CHILDREN"</string>
+    <string name="page_share">"SHARE"</string>
+    <string name="select_child_hint">"Select a child"</string>
+    <string name="arrow">" 〉"</string>
+    <string name="link_child_page_btn">"LINK A NEW CHILD"</string>
+    <string name="select_child_btn">"SELECT A CHILD    〉〉〉"</string>
+    <string name="dummy_share_page">"Share Page TO DO"</string>
+    <string name="manage_child">"Manage Child Activities"</string>
+    <string name="configure_pb">"Configure PEF Settings"</string>
+    <string name="configure_rewards">"Configure Rewards"</string>
+    <string name="create_schedule">"Create Schedule"</string>
+    <string name="manage_inventory">"Manage Inventory"</string>
+    <string name="start_btn">"START"</string>
+    <string name="start_clicked_message">%1$s\n\nStart clicked (To Do)</string>
+    <string name="menu">"Menu"</string>
+    <string name="view_history">View History</string>
+    <string name="save_pef">Save</string>
+    <string name="enter_pef">Enter Pef:</string>
+    <string name="enter_pef_prompt">Enter Here</string>
+    <string name="pb_pef">PB: -</string>
+    <string name="today_pef_zone">Today\'s Zone:</string>
+    <string name="null_zone_percentage">-%</string>
+    <string name="no_zone_yet">no zone yet</string>
+    <string name="no_zone">no zone</string>
+    <string name="zone_percentage_symbol">%</string>
+    <string name="invalid_pef_entry">Invalid PEF Entry</string>
+    <string name="db_pef_error">Unable to read Database</string>
+    <string name="shared_with_provider">Shared with provider</string>
+    <string name="medType">"Medicine Type"</string>
+    <string name="controller">"Controller"</string>
+    <string name="rescue">"Rescue"</string>
+    <string name="breath_rating">"Breath Rating"</string>
+    <string name="one_to_ten">"1–10"</string>
+    <string name="continue_btn">"CONTINUE"</string>
+    <string name="feeling">"How do you feel?"</string>
+    <string name="feeling_better">"Better"</string>
+    <string name="feeling_same">"Same"</string>
+    <string name="feeling_worse">"Worse"</string>
+    <string name="does_amount">"How many doses did you take?"</string>
+    <string name="finish_btn">"FINISH MEDICINE TAKING"</string>
+    <string name="does_amount_hint">"integer ≥ 1"</string>
+    <string name="manage_child_page_subtitle">"Title"</string>
+    <string name="badge_budding_star">"Badge: BUDDING STAR"</string>
+    <string name="badge_shining_star">"Badge: SHINING STAR"</string>
+    <string name="badge_lucky_star">"Badge: LUCKY STAR"</string>
+    <string name="budding_intro">"This badge is awarded to the child who perfectly completed the first"</string>
+    <string name="budding_after_n">"week(s) of Controllers according to your schedule."</string>
+    <string name="shining_intro">"This badge is awarded to the child who has completed"</string>
+    <string name="shining_after_n">"technique sessions for medicine taking."</string>
+    <string name="lucky_intro">"This badge is awarded to the child who has ≤"</string>
+    <string name="lucky_after_n">"rescue(s) in this month."</string>
+    <string name="default_budding">"1"</string>
+    <string name="default_shining">"10"</string>
+    <string name="default_lucky">"4"</string>
+    <string name="badge_budding_star_title">Badge: BUDDING STAR</string>
+    <string name="badge_shining_star_title">Badge: SHINING STAR</string>
+    <string name="badge_lucky_star_title">Badge: LUCKY STAR</string>
+    <string name="tech_streak_interrupted">"Your consecutive technique-helper usage days have been interrupted."</string>
+    <string name="tech_streak_unable_to_load">"Unable to load technique streak."</string>
+    <string name="tech_streak_success">"You have used the technique helper as planned for %1$d consecutive day(s). Great job!"</string>
+    <string name="controller_streak_interrupted">"Your consecutive planned controller days have been interrupted."</string>
+    <string name="controller_streak_interrupted_parent">"This child's consecutive planned controller days have been interrupted."</string>
+    <string name="controller_streak_unable_to_load">"Unable to load controller streak."</string>
+    <string name="controller_streak_success">"You have completed your planned controller days for %1$d day(s) in a row. Amazing!"</string>
+    <string name="controller_streak_success_parent">"This child has completed your planned controller days for %1$d day(s) in a row. Amazing!"</string>
+    <string name="budding_star_unlocked">"You perfectly completed your planned controller schedule for %1$d week(s). Budding Star unlocked!"</string>
+    <string name="budding_star_locked">"Complete your planned controller schedule perfectly for %1$d full week(s) to unlock the Budding Star badge."</string>
+    <string name="budding_star_load_error">"Unable to load controller history for Budding Star."</string>
+    <string name="shining_star_unlocked">"You completed high-quality technique sessions for %1$d day(s) or more. Shining Star unlocked!"</string>
+    <string name="shining_star_locked">"Complete high-quality technique sessions on %1$d day(s) to unlock the Shining Star badge."</string>
+    <string name="shining_star_load_error">"Unable to load technique streak for Shining Star."</string>
+    <string name="lucky_star_unlocked">"Only %1$d rescue day(s) in the past 30 days. Lucky Star unlocked!"</string>
+    <string name="lucky_star_locked">"Keep rescue days at or below %1$d in any 30-day window to unlock the Lucky Star badge."</string>
+    <string name="lucky_star_load_error">"Unable to load rescue statistics for Lucky Star."</string>
+    <string name="select_child_title">"Please select your child."</string>
+    <string name="perform_daily_checkIn">"Perform Daily Check-In"</string>
+    <string name="view_rescue_logs">"Rescue Logs"</string>
+    <string name="view_controller_adherence">"Controller Adherence"</string>
+    <string name="view_symptoms">"Symptoms"</string>
+    <string name="view_triggers">"Triggers"</string>
+    <string name="view_pef">"Peak-Flow (PEF)"</string>
+    <string name="view_triage_incidents">"Triage Incidents"</string>
+    <string name="view_history_browser">"History Browser"</string>
+    <string name="check_in_title">"Daily Check-In"</string>
+    <string name="night_waking_label">"Night Waking: 0 = No, 1 = Yes"</string>
+    <string name="cough_wheeze_label">"Cough / Wheeze: 0 = No, 1 = Yes"</string>
+    <string name="activity_limit_label">"Activity Limitations: 0 = No, 1 = Yes"</string>
+    <string name="yes">"Yes"</string>
+    <string name="no">"No"</string>
+    <string name="none">"None"</string>
+    <string name="some">"Some"</string>
+    <string name="a_lot">"A lot"</string>
+    <string name="trigger_dust">"Dust"</string>
+    <string name="trigger_pets">"Pets"</string>
+    <string name="trigger_smoke">"Smoke"</string>
+    <string name="trigger_odors">"Strong odor"</string>
+    <string name="trigger_cold_air">"Cold air"</string>
+    <string name="trigger_illness">"Illness"</string>
+    <string name="trigger_exercise">"Exercise"</string>
+    <string name="scroll_right_hint">"Scroll right -> See more triggers"</string>
+    <string name="submit">"Submit"</string>
+    <string name="edit">"Edit"</string>
+    <string name="activity_none">"None: Played normally"</string>
+    <string name="activity_mild">"Mild: Slowed down but still played"</string>
+    <string name="activity_significant">"Significant: Had to stop activity"</string>
+    <string name="activity_could_not">"Couldn't play at all"</string>
+    <string name="trigger_label">"Select Triggers"</string>
+    <string name="symptom_summary_title">"Symptom Summary"</string>
+    <string name="symptom_summary_subtitle">"See how symptoms changed over recent days."</string>
+    <string name="symptom_empty">"No symptom data available."</string>
+    <string name="symptom_loading_failed">"Failed to load symptom data."</string>
+    <string name="symptom_na">"No symptom check-ins yet."</string>
+    <string name="no_symptoms">"No valid symptom records."</string>
+    <string name="trigger_summary_title">"Trigger Summary"</string>
+    <string name="trigger_summary_subtitle">"See which triggers show up most often across check-ins."</string>
+    <string name="trigger_empty">"No trigger data available."</string>
+    <string name="trigger_loading_failed">"Failed to load trigger data."</string>
+    <string name="trigger_na">"No trigger data recorded."</string>
+    <string name="no_triggers">"No triggers selected in check-ins."</string>
+    <string name="share_with_provider">"Share These Summaries"</string>
+    <string name="share_chart_hint">"This chart will be shared with selected provider"</string>
+    <string name="last_rescue_use">"Last Rescue Use: -"</string>
+    <string name="rescue_7_day_title">"Rescue usage in last 7 days"</string>
+    <string name="rescue_30_day_title">"Rescue usage in last 30 days"</string>
+    <string name="last_rescue_use_format">"Last Rescue Use: %1$s"</string>
+    <string name="today_zone">"Today's Zone"</string>
+    <string name="chart_default_range">"Showing past %1$d days"</string>
+    <string name="controller_adherence_title">"Controller Adherence Summary"</string>
+    <string name="no_adherence_data">"No adherence data available"</string>
+    <string name="adherence_loading_failed">"Failed to load adherence data"</string>
+    <string name="share_content_placeholder">"Share Contents Placeholder"</string>
+    <string name="share_to_provider_btn">Share To Provider/Export Child History</string>
+    <string name="share_to_provider_recycler">"Share this child to provider:"</string>
+    <string name="link_provider">"Link A New Provider And Share"</string>
+    <string name="revoke_btn">"Revoke Sharing"</string>
+    <string name="provider_username">"provider_username"</string>
+    <string name="enter_provider_username">"Enter Provider Username"</string>
+    <string name="next_btn">"NEXT"</string>
+    <string name="invite_title">"Choose Invite Type"</string>
+    <string name="generate_code">"Generate Code    〉"</string>
+    <string name="generate_link">"Generate Link    〉"</string>
+    <string name="share_decision">"Choose What To Share"</string>
+    <string name="symptom_share">"Symptoms Summary"</string>
+    <string name="trigger_share">"Triggers Summary"</string>
+    <string name="rescue_share">"Rescues Summary"</string>
+    <string name="adherence_share">"Controller Adherence Summary"</string>
+    <string name="pef_share">"PEF &amp; Zone Summary"</string>
+    <string name="triage_share">"Triage Incidents Summary"</string>
+    <string name="label_code">Code: %1$s</string>
+    <string name="label_link">Link: %1$s</string>
+    <string name="triage_timeline_explanation">
+    Triage Timeline — How to Read This Chart:\n
+    • Each dot represents a triage-related event.\n
+    • The horizontal axis shows when the event happened.\n
+    • The vertical axis shows the PEF Zone (if applicable) or Emergency\n (N/A → Green → Yellow → Red → Emergency).\n
+    • Larger dots indicate red-flag symptoms.\n where black dots mean PEF = N/A
+    • Emergency events appear at the top in dark red.\n
+    • You can zoom or drag to explore the timeline.
+    </string>
+    <string name="parent_alerts_btn">"VIEW ALERTS HISTORY"</string>
+    <string name="notification">"Codes/Links"</string>
+    <string name="code_link">"Codes / Links"</string>
+    <string name="check_code">"CHECK CODE"</string>
+    <string name="invite_type">"Code: "</string>
+    <string name="link">"Link: "</string>
+    <string name="random_code">"ABC1234D"</string>
+    <string name="enter_code">"Enter code to invoke the child summary:"</string>
+    <string name="edited_code">"Enter the code here"</string>
+    <string name="confirm_btn">"CONFIRM"</string>
+    <string name="na">"N/A"</string>
+    <string name="not_applicable">%1$s (N/A)</string>
+    <string name="schedule_title">Controller Schedule</string>
+    <string name="selected_date_default">Date</string>
+    <string name="select_date_btn">Select Date</string>
+    <string name="how_many_controllers">How many controller usages today?</string>
+    <string name="schedule_for_day">Schedule Controller Usage on This Day</string>
+    <string name="number_one">1</string>
+    <string name="increase">"+"</string>
+    <string name="decrease">"-"</string>
+    <string name="dob">"Date of birth: %1$s"</string>
+    <string name="child_menu">"What would you like to do?"</string>
+    <string name="dashboard_daily_activities">Daily Activities</string>
+    <string name="dashboard_emergency_triage">EMERGENCY TRIAGE MODE</string>
+    <string name="dashboard_zone_label">"Today's Zone"</string>
+    <string name="dashboard_zone_placeholder">--%</string>
+    <string name="dashboard_zone_label_in_java">"Today's Zone: %1$s"</string>
+    <string name="dashboard_zone_no_zone">No Zone</string>
+    <string name="dashboard_zone_no_data">No Zone Yet</string>
+    <string name="dashboard_zone_percent"> %1$d%%</string>
+    <string name="dashboard_zone_percent_null">--%</string>
+    <string name="menu_take_medicine">Take Medicine</string>
+    <string name="menu_medicine_log">Medicine Log</string>
+    <string name="menu_daily_checkin">Daily Check-In</string>
+    <string name="menu_enter_pef">Enter PEF</string>
+    <string name="menu_schedule">Planned Schedule</string>
+    <string name="menu_achievements">My Achievements</string>
+    <string name="schedule">Schedule</string>
+    <string name="inventory_controller_title">Controller</string>
+    <string name="inventory_rescue_title">Rescue</string>
+    <string name="inventory_purchase_date">Purchase Date:</string>
+    <string name="inventory_amount_left">Amount Left:</string>
+    <string name="inventory_expiry_date">Expiry Date:</string>
+    <string name="inventory_replacement_reminder">Replacement Reminder:</string>
+    <string name="inventory_refill_button">Refill</string>
+    <string name="daily_check_in_NW">Did you experience Night Waking?</string>
+    <string name="daily_check_in_CW">Did you experience Coughing/Wheezing?</string>
+    <string name="daily_check_in_AL">Were your Activity Levels limited?</string>
+
+
+]
+
 </resources>

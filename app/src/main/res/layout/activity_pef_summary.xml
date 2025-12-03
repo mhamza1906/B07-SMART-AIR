@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="32dp"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/today_zone"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+        <View
+            android:id="@+id/pef_zone_view"
+            android:layout_width="60dp"
+            android:layout_height="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="#808080"/>
+
+
+        <TextView
+            android:id="@+id/txt_range_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/chart_default_range"
+            android:textSize="15sp"
+            android:layout_marginBottom="12dp"/>
+
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/chart_pef"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"/>
+
+
+        <CheckBox
+            android:id="@+id/chk_share_pef"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxWidth="320dp"
+            android:text="@string/share_chart_hint"
+            android:layout_marginTop="20dp"/>
+
+    </LinearLayout>
+</ScrollView>

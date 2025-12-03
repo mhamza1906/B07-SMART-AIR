@@ -76,9 +76,30 @@ public class SignUpActivity extends AppCompatActivity {
                 Toast.makeText(SignUpActivity.this, "Please fill all fields and select an account type", Toast.LENGTH_LONG).show();
                 return;
             }
+
+            if (!checkPasswordStrength(password)){
+                passwordEditText.setError("Password must contain upper, lower, digit, !@#$%^&*(),.?\":{}|<>, and ≥ 8 chars");
+                return;
+            }
+
             checkUsernameUniqueness(username, fName, lName, email, password, selectedAccountType);
         });
     }
+
+    private boolean checkPasswordStrength(String password) {
+
+        if (password == null || password.isEmpty()) {
+            return false;
+        }
+        if (password.length() < 8) return false;
+        boolean hasUpper = password.matches(".*[A-Z].*");
+        boolean hasLower = password.matches(".*[a-z].*");
+        boolean hasDigit = password.matches(".*[0-9].*");
+        boolean hasSpecial = password.matches(".*[!@#$%^&*(),.?\":{}|<>].*");
+
+        return hasUpper && hasLower && hasDigit && hasSpecial;
+    }
+
 
     private void checkUsernameUniqueness(String username, String fName, String lName, String email, String password, String accountType) {
         mDatabase.child("users")
@@ -100,6 +121,11 @@ public class SignUpActivity extends AppCompatActivity {
                         registerNewUser(fName, lName, username, email, password, accountType);
                     }
                 });
+    }
+
+    private String getTodayDate() {
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.US);
+        return sdf.format(new java.util.Date());
     }
 
     private void switchToTutorialSession(String userId) {
@@ -137,10 +163,17 @@ public class SignUpActivity extends AppCompatActivity {
                         FirebaseUser firebaseUser = mAuth.getCurrentUser();
                         if (firebaseUser != null) {
                             String userId = firebaseUser.getUid();
-                            User newUser = new User(fName, lName, email, username, accountType);
+                            String registerDate = getTodayDate();
+                            java.util.Map<String, Object> userData = new java.util.HashMap<>();
+                            userData.put("fName", fName);
+                            userData.put("lName", lName);
+                            userData.put("email", email);
+                            userData.put("username", username);
+                            userData.put("accountType", accountType);
+                            userData.put("registerDate", registerDate);
 
                             // LAMBDA in use here
-                            mDatabase.child("users").child(userId).setValue(newUser)
+                            mDatabase.child("users").child(userId).setValue(userData)
                                     .addOnCompleteListener(databaseTask -> {
                                         if (databaseTask.isSuccessful()) {
                                             Toast.makeText(SignUpActivity.this, "Registration successful!", Toast.LENGTH_SHORT).show();

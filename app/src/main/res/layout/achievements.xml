@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_marginTop="32dp"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:paddingTop="32dp">
+
+
+    <ImageView
+            android:id="@+id/imgTechniqueStreak"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:contentDescription="@string/technique_streak_desc"
+            android:src="@drawable/empty_streak"
+            android:layout_marginTop="32dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/txtTechniqueStreak"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@id/imgTechniqueStreak"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/imgTechniqueStreak"
+            app:layout_constraintBottom_toBottomOf="@id/imgTechniqueStreak" />
+
+        <!-- Controller Streak row -->
+        <ImageView
+            android:id="@+id/imgControllerStreak"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="36dp"
+            android:src="@drawable/empty_streak"
+            android:contentDescription="@string/controller_streak_desc"
+            app:layout_constraintTop_toBottomOf="@id/imgTechniqueStreak"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/txtControllerStreak"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@id/imgControllerStreak"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/imgControllerStreak"
+            app:layout_constraintBottom_toBottomOf="@id/imgControllerStreak" />
+
+
+        <!-- Budding Star -->
+        <TextView
+            android:id="@+id/titleBuddingStar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/imgControllerStreak"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/imgBuddingStar"
+            android:layout_width="88dp"
+            android:layout_height="88dp"
+            android:layout_marginTop="12dp"
+            android:src="@drawable/budding_star_empty"
+            android:contentDescription="@string/budding_star_desc"
+            app:layout_constraintTop_toBottomOf="@id/titleBuddingStar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/txtBuddingStarDesc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textSize="14sp"
+            app:layout_constraintTop_toBottomOf="@id/imgBuddingStar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+
+        <!-- Shining Star -->
+        <TextView
+            android:id="@+id/titleShiningStar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/txtBuddingStarDesc"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/imgShiningStar"
+            android:layout_width="88dp"
+            android:layout_height="88dp"
+            android:layout_marginTop="12dp"
+            android:src="@drawable/shining_star_empty"
+            android:contentDescription="@string/shining_star_desc"
+            app:layout_constraintTop_toBottomOf="@id/titleShiningStar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/txtShiningStarDesc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textSize="14sp"
+            app:layout_constraintTop_toBottomOf="@id/imgShiningStar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+
+        <!-- Lucky Star -->
+        <TextView
+            android:id="@+id/titleLuckyStar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/txtShiningStarDesc"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/imgLuckyStar"
+            android:layout_width="88dp"
+            android:layout_height="88dp"
+            android:layout_marginTop="12dp"
+            android:src="@drawable/lucky_star_empty"
+            android:contentDescription="@string/lucky_star_desc"
+            app:layout_constraintTop_toBottomOf="@id/titleLuckyStar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/txtLuckyStarDesc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textSize="14sp"
+            app:layout_constraintTop_toBottomOf="@id/imgLuckyStar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#EEEEEE">
+
+
+    <TextView
+        android:id="@+id/headerDate"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="Date"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:padding="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/divider1"/>
+
+    <View
+        android:id="@+id/divider1"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="#CCCCCC"
+        app:layout_constraintStart_toEndOf="@id/headerDate"
+        app:layout_constraintEnd_toStartOf="@id/headerControllers"/>
+
+    <TextView
+        android:id="@+id/headerControllers"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="Controllers"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:padding="8dp"
+        app:layout_constraintStart_toEndOf="@+id/divider1"
+        app:layout_constraintEnd_toStartOf="@+id/divider2"/>
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="#CCCCCC"
+        app:layout_constraintStart_toEndOf="@id/headerControllers"
+        app:layout_constraintEnd_toStartOf="@id/headerTaken"/>
+
+    <TextView
+        android:id="@+id/headerTaken"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="Taken?"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:padding="8dp"
+        app:layout_constraintStart_toEndOf="@id/divider2"
+        app:layout_constraintEnd_toEndOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.googleServices)
 
+
 }
 
 android {
@@ -37,26 +38,39 @@ android {
 
 dependencies {
     implementation(platform(libs.firebase.bom))
-
+    //noinspection UseTomlInstead
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
     implementation(libs.appcompat)
     implementation(libs.material)
-    implementation(libs.google.firebase.firestore)
+    implementation(libs.firebase.firestore)
     implementation(libs.recyclerview)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+    implementation("androidx.gridlayout:gridlayout:1.0.0") // Added this line
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
-    implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.auth)
     implementation(libs.firebase.database)
+    implementation("com.itextpdf:itext7-core:7.1.15")
 
-    // Unit Tests
+
+
     testImplementation(libs.junit)
     testImplementation(libs.mockito.core)
 
-    // Android Instrumentation Tests
+
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+
+    //noinspection UseTomlInstead
+    implementation("com.github.bumptech.glide:glide:5.0.5")
+    //noinspection UseTomlInstead
+    annotationProcessor("com.github.bumptech.glide:compiler:5.0.5")
+
+    // iText7 for PDF Generation
+    implementation ("com.itextpdf:itext7-core:7.1.16")
+    
 }

@@ -70,7 +70,7 @@ public class ChildLoginActivityPresenterTest {
 
         presenter.onSignInComplete(task);
 
-        verify(mockView).toastMessage("Login successful!");
+        verify(mockView).toastMessage("Welcome to SMART-AIR!");
         verify(mockModel).getUserFromRTDB("child123");
 
     }

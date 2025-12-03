@@ -1,16 +1,26 @@
 package com.example.smart_air;
 
+
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 
+import java.util.regex.Pattern;
+
 public class LoginActivityPresenter {
 
     private final LoginActivityView view;
     private final LoginActivityModel model;
     private String pendingPassword;
+
+    private static final Pattern SIMPLE_EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
+
+    private boolean isValidEmail(String email) {
+        if (email == null) return false;
+        return SIMPLE_EMAIL_PATTERN.matcher(email).matches();
+    }
 
     public LoginActivityPresenter(LoginActivityView view, LoginActivityModel model) {
         this.view = view;
@@ -20,6 +30,11 @@ public class LoginActivityPresenter {
 
     // Presenter calls Model to login
     public void loginUser(String email, String password) {
+        if (!isValidEmail(email)) {
+            view.toastMessage("Invalid email format.");
+            return;
+        }
+
         pendingPassword = password;
         model.getUserEmail(email);
     }
@@ -43,7 +58,7 @@ public class LoginActivityPresenter {
         }
 
         if (!emailExists) {
-            view.toastMessage("You don't have an account yet. Redirecting to Sign Up...");
+            view.toastMessage("Your account is not found. Redirecting to Sign Up...");
             view.redirectToSignUp();
         } else {
             // login if email exits
@@ -68,7 +83,7 @@ public class LoginActivityPresenter {
         if (task.isSuccessful()) {
             FirebaseUser app_user = model.getSuccessfulLoginUser();
             if (app_user != null) {
-                view.toastMessage("Login successful!");
+                view.toastMessage("Welcome to SMART-AIR!");
                 model.getUserFromRTDB(app_user.getUid());
             }
         } else {
@@ -120,17 +135,16 @@ public class LoginActivityPresenter {
         if (exception instanceof FirebaseAuthException) {
             String errorCode = ((FirebaseAuthException) exception).getErrorCode();
 
-            switch (errorCode) {
-                case "ERROR_INVALID_CREDENTIAL":
-                    errorMsg = "Incorrect password. Please try again.";
-                    view.showForgotPasswordLink();
-                    break;
-                case "ERROR_INVALID_EMAIL":
-                    errorMsg = "Invalid email format.";
-                    break;
-                default:
-                    errorMsg = "Login failed: " + exception.getMessage();
-                    break;
+            if ("ERROR_INVALID_CREDENTIAL".equals(errorCode)) {
+                errorMsg = "Incorrect password. Please try again.";
+                view.showForgotPasswordLink();
+            }
+            else if ("ERROR_INVALID_EMAIL".equals(errorCode)) {
+                errorMsg = "Invalid email format.";
+            }
+
+            else {
+                errorMsg = "Login failed: " + exception.getMessage();
             }
         } else if (exception != null) {
             errorMsg = "Login failed: " + exception.getMessage();

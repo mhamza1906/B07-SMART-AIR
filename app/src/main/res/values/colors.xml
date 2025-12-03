@@ -12,5 +12,9 @@
     <color name="blue_safe">#1976D2</color>
     <color name="black_contrast">#000000</color>
     <color name="white_contrast">#FFFFFF</color>
+    <color name="dark_words">#333333</color>
+    <color name="chart_line_color">#3F51B5</color>
+    <color name="tab_selected">#000000</color>
+    <color name="tab_unselected">#888888</color>
 
 </resources>
