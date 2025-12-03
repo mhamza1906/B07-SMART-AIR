@@ -59,7 +59,9 @@ The application is split into Three main user experiences: one for Child, one fo
 
 
 ### Provider Features:
-*   **Provider Dashboard:** 
+*   **Provider Dashboard:** Provides healthcare providers with a centralized view of all child patients whose parents have actively shared health data, allowing for quick access to monitor their progress and history.
+*   **Code/Link Sharing:**  A central dashboard for healthcare providers to view and manage all incoming data sharing requests from parents in the form of codes and links, and a dedicated area to enter provided codes to securely link accounts.
+*   **Child Summary Menu:** Offers healthcare providers a detailed, at-a-glance dashboard for each linked child, visualizing key health metrics including PEF zone distribution, rescue medication usage, controller adherence percentages, symptom burdens, and notable triage incidents.
 
 
 ---
