@@ -10,7 +10,7 @@ The project is built using native Android (Java) and leverages the Firebase suit
 
 ## 2. Core Features
 
-The application is split into two main user experiences: one for the child and one for the parent.
+The application is split into Three main user experiences: one for Child, one for Parent, one for Provider
 
 ### Child Features:
 *   **Triage Mode:** A step-by-step process to assess symptoms during an asthma event. The child can log:
@@ -19,8 +19,9 @@ The application is split into two main user experiences: one for the child and o
     *   Whether they have recently taken rescue medication.
 *   **Dynamic Action Plans:** Based on the entered PEF value compared to their personal best, the app displays a Green, Yellow, or Red zone action plan.
 *   **Emergency State:** Automatically triggers an emergency state if red flag symptoms are checked or if a 10-minute timer expires without improvement, displaying a prominent "Call Emergency Services" button.
-*   **PEF Logging:** A dedicated screen for children to log their daily PEF readings, which are stored and used to track their personal best.
+*   **PEF Logging:** A dedicated screen for children to log their daily PEF readings, which are used to display their daily zone and record zone change history
 *   **Medicine Log:** A table containing information regarding, the type of the medicine the child took, the dose, time, pre breath rating, post breath rating and the post checkup. This gets updated everytime the child enters the take medicine activity
+*   **Daily Check Ins:** A screen for children to report daily symptoms and triggers, which are stored and displayed to Parents.
 
 ### Parent Features:
 *   **Parent Dashboard:** A central hub for parents to view summaries of their children's recent asthma activity.
