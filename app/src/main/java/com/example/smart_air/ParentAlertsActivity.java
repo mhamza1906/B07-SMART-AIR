@@ -57,8 +57,8 @@ public class ParentAlertsActivity extends AppCompatActivity {
         String parentId = currentUser.getUid();
 
         db.collection("parent_alerts")
-                .whereEqualTo("parentId", parentId)
-                .orderBy("timestamp", Query.Direction.DESCENDING) // Show newest alerts first
+                .whereEqualTo("parentID", parentId)
+//                .orderBy("timestamp", Query.Direction.DESCENDING) // Show newest alerts first
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     if (queryDocumentSnapshots.isEmpty()) {
